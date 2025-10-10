@@ -152,17 +152,17 @@
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-cyan-300 mr-3"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
                         <h3 class="text-xl font-bold text-white">名額限制</h3>
                     </div>
-                    <p class="text-gray-300 text-base md:text-lg">限 70 位（院內 50 位、院外 20 位）</p>
+                    <p class="text-gray-300 text-base md:text-lg">限 60 位（院內 40 位、院外 20 位）</p>
                 </div>
                 <!-- 聯絡資訊 -->
                  <div class="card rounded-xl p-6">
                     <div class="flex items-center mb-3">
-                       <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-cyan-300 mr-3"><circle cx="12" cy="12" r="4"></circle><path d="M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-3.92 7.94"></path></svg>
+                       <svg xmlns="http://www.w3.org/2000/svg" class="text-cyan-300 mr-3" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-3.92 7.94"></path></svg>
                         <h3 class="text-xl font-bold text-white">聯絡資訊</h3>
                     </div>
                     <p class="text-gray-300 text-base md:text-lg">奇美醫院教學部</p>
                     <p class="text-gray-300 text-base md:text-lg">楊依玲教學行政管理員</p>
-                    <p class="text-gray-300 text-sm mt-2"><span class="text-cyan-300">📞</span> 06-2812811 分機 57426</p>
+                    <p class="text-gray-300 text-sm mt-2"><span class="inline-block text-lg text-[#9CDCFE] transform scale-125">📞</span> 06-2812811 分機 57426</p>
                     <a href="mailto:a41202@mail.chimei.org.tw" class="text-cyan-400 text-sm break-all hover:underline">✉️ a41202@mail.chimei.org.tw</a>
                 </div>
             </section>
@@ -182,7 +182,7 @@
                                     <div class="radio-circle rounded-full mr-4 flex-shrink-0"></div>
                                     <div class="flex-grow">
                                         <h3 class="text-lg md:text-xl font-bold text-white">奇美醫院同仁</h3>
-                                        <p class="text-gray-400 mt-1 text-sm">總名額 50 位</p>
+                                        <p class="text-gray-400 mt-1 text-sm">總名額 40 位</p>
                                     </div>
                                     <div id="internal-slots-display" class="w-16 h-16 sm:w-20 sm:h-20 rounded-full flex flex-col items-center justify-center bg-cyan-500/20 border-2 border-cyan-400 text-white transition-all duration-300 flex-shrink-0 ml-2">
                                          <span class="font-black text-xl sm:text-2xl">--</span>
@@ -304,10 +304,10 @@
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             // !!! IMPORTANT !!!
-            // 將您從全新 Google Apps Script 取得的網址貼在下方
+            // 已為您填入最新的 Google Apps Script 網址
             const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyQM5FHAPh8VdcO5if26_tU2DpxDka_ddPjN9U3-JY320-l2myI9J5ZbfXiN2R0JZbp/exec';
             
-            const INTERNAL_QUOTA = 50;
+            const INTERNAL_QUOTA = 40; // <-- Updated from 50
             const EXTERNAL_QUOTA = 20;
 
             const identityRadios = document.querySelectorAll('input[name="identity"]');
@@ -364,77 +364,54 @@
                 }
             }
             
-            async function fetchWithTimeout(resource, options = {}) {
-                const { timeout = 8000 } = options;
-                
-                const controller = new AbortController();
-                const id = setTimeout(() => controller.abort(), timeout);
+            function fetchRegistrationCounts() {
+                // 我們 append 一個 dummy 參數避免快取
+                fetch(`${SCRIPT_URL}?t=${new Date().getTime()}`, { method: 'GET' })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.result === 'success') {
+                            const internalRegistered = data.internal || 0;
+                            const externalRegistered = data.external || 0;
 
-                const response = await fetch(resource, {
-                    ...options,
-                    signal: controller.signal  
-                });
-                clearTimeout(id);
+                            const internalRemaining = INTERNAL_QUOTA - internalRegistered;
+                            const externalRemaining = EXTERNAL_QUOTA - externalRegistered;
 
-                return response;
-            }
+                            updateSlotDisplay(internalSlotsDisplay, internalRemaining, 'internal');
+                            updateSlotDisplay(externalSlotsDisplay, externalRemaining, 'external');
 
-            async function fetchRegistrationCounts() {
-                try {
-                    const response = await fetchWithTimeout(`${SCRIPT_URL}?t=${new Date().getTime()}`, { 
-                        method: 'GET',
-                        timeout: 8000
+                            if (internalRemaining <= 0) {
+                                internalRadio.disabled = true;
+                                internalRadioLabel.classList.add('disabled');
+                                if(internalRadio.checked && !externalRadio.disabled) {
+                                    externalRadio.checked = true;
+                                    toggleForms();
+                                }
+                            }
+
+                            if (externalRemaining <= 0) {
+                                externalRadio.disabled = true;
+                                externalRadioLabel.classList.add('disabled');
+                                if(externalRadio.checked && !internalRadio.disabled) {
+                                    internalRadio.checked = true;
+                                    toggleForms();
+                                }
+                            }
+                            
+                            if (internalRemaining <= 0 && externalRemaining <= 0) {
+                                submitButton.disabled = true;
+                                submitButton.textContent = '已額滿';
+                                document.getElementById('registration-form').querySelector('h2').textContent = '報名已額滿';
+                            }
+
+                        } else {
+                           throw new Error(data.message || 'Failed to parse data.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('查詢名額時發生錯誤!', error.message);
+                        internalSlotsDisplay.querySelector('span:first-child').textContent = 'N/A';
+                        externalSlotsDisplay.querySelector('span:first-child').textContent = 'N/A';
                     });
-                    
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-
-                    const data = await response.json();
-
-                    if (data.result === 'success') {
-                        const internalRegistered = data.internal || 0;
-                        const externalRegistered = data.external || 0;
-
-                        const internalRemaining = INTERNAL_QUOTA - internalRegistered;
-                        const externalRemaining = EXTERNAL_QUOTA - externalRegistered;
-
-                        updateSlotDisplay(internalSlotsDisplay, internalRemaining, 'internal');
-                        updateSlotDisplay(externalSlotsDisplay, externalRemaining, 'external');
-
-                        if (internalRemaining <= 0) {
-                            internalRadio.disabled = true;
-                            internalRadioLabel.classList.add('disabled');
-                            if(internalRadio.checked && !externalRadio.disabled) {
-                                externalRadio.checked = true;
-                                toggleForms();
-                            }
-                        }
-
-                        if (externalRemaining <= 0) {
-                            externalRadio.disabled = true;
-                            externalRadioLabel.classList.add('disabled');
-                            if(externalRadio.checked && !internalRadio.disabled) {
-                                internalRadio.checked = true;
-                                toggleForms();
-                            }
-                        }
-                        
-                        if (internalRemaining <= 0 && externalRemaining <= 0) {
-                            submitButton.disabled = true;
-                            submitButton.textContent = '已額滿';
-                            document.getElementById('registration-form').querySelector('h2').textContent = '報名已額滿';
-                        }
-
-                    } else {
-                       throw new Error(data.message || '無法解析伺服器回應。');
-                    }
-                } catch (error) {
-                    console.error('查詢名額時發生錯誤!', error.name === 'AbortError' ? '連線逾時' : error.message);
-                    internalSlotsDisplay.querySelector('span:first-child').textContent = 'N/A';
-                    externalSlotsDisplay.querySelector('span:first-child').textContent = 'N/A';
-                    showErrorMessage('無法讀取剩餘名額，請檢查您的網路連線。');
-                }
             }
 
 
@@ -442,7 +419,7 @@
                 radio.addEventListener('change', toggleForms);
             });
 
-            workshopForm.addEventListener('submit', async function (event) {
+            workshopForm.addEventListener('submit', function (event) {
                 event.preventDefault();
                 
                 if (!SCRIPT_URL.startsWith("https://script.google.com/macros/s/")) {
@@ -454,34 +431,26 @@
                 submitButton.disabled = true;
                 submitButton.textContent = '傳送中...';
 
-                try {
-                    const response = await fetchWithTimeout(SCRIPT_URL, { 
-                        method: 'POST', 
-                        body: new FormData(workshopForm),
-                        timeout: 10000 
+                fetch(SCRIPT_URL, { method: 'POST', body: new FormData(workshopForm)})
+                    .then(response => response.json())
+                    .then(data => {
+                        if(data.result === 'success') {
+                            showSuccessMessage();
+                            workshopForm.reset();
+                            toggleForms();
+                            fetchRegistrationCounts(); // 報名成功後，重新整理名額
+                        } else {
+                            throw new Error(data.message || '報名資料送出失敗');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error!', error.message);
+                        showErrorMessage(error.message);
+                    })
+                    .finally(() => {
+                        submitButton.disabled = false;
+                        submitButton.textContent = originalButtonText;
                     });
-
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-
-                    const data = await response.json();
-                    
-                    if(data.result === 'success') {
-                        showSuccessMessage();
-                        workshopForm.reset();
-                        toggleForms();
-                        fetchRegistrationCounts(); // 報名成功後，重新整理名額
-                    } else {
-                        throw new Error(data.message || '報名資料送出失敗');
-                    }
-                } catch (error) {
-                    console.error('送出表單時發生錯誤!', error.name === 'AbortError' ? '連線逾時' : error.message);
-                    showErrorMessage(error.name === 'AbortError' ? '送出逾時，請檢查網路連線。' : error.message);
-                } finally {
-                    submitButton.disabled = false;
-                    submitButton.textContent = originalButtonText;
-                }
             });
 
             function showSuccessMessage() {
@@ -508,5 +477,3 @@
     </script>
 </body>
 </html>
-
-
