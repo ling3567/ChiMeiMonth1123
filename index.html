@@ -1,4 +1,4 @@
-
+<!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
     <meta charset="UTF-8">
@@ -20,10 +20,11 @@
         /* 設置中文字體 (Noto Sans TC)，確保清爽專業感 */
         body {
             font-family: 'Noto Sans TC', 'Inter', 'Microsoft JhengHei', sans-serif;
+            font-size: 16px; /* 參考基準字級 */
         }
 
         /* ---------------------------------- */
-        /* 🧩 表格結構樣式與層級對應 */
+        /* 🧩 表格結構樣式與層級對應 (優化版) */
         .agenda-table {
             border-collapse: collapse; /* 移除雙線邊框 */
             box-shadow: none; /* 移除外層陰影，強調扁平化 */
@@ -34,9 +35,8 @@
             background-color: var(--color-deep-blue);
             color: white;
             @apply font-bold uppercase tracking-wider border-r border-white/20;
-            height: 40px;
-            padding: 6px 10px;
-            line-height: 1.4;
+            padding: 12px 16px; /* 增加內距 */
+            line-height: 1.8;   /* 增加行高 */
             vertical-align: middle;
         }
         
@@ -46,9 +46,8 @@
             @apply border-b border-gray-200;
             color: var(--color-body-text); /* 使用深色字體 */
             font-weight: 500;
-            height: 40px;
-            padding: 6px 10px;
-            line-height: 1.4;
+            padding: 12px 16px; /* 增加內距 */
+            line-height: 1.8;   /* 增加行高 */
             vertical-align: middle;
         }
         .agenda-table tr:last-child td {
@@ -65,7 +64,7 @@
         .group-discussion-title td {
             background-color: var(--color-soft-cyan) !important; /* #D6ECF3 */
             color: var(--color-deep-blue);
-            @apply font-extrabold text-lg text-center; 
+            @apply font-bold text-base text-center; /* 調整字級與粗細 */
         }
 
         /* 凸顯活動內容 */
@@ -77,7 +76,7 @@
         .break-row td {
             background-color: var(--color-cream-yellow) !important; /* #FFF9E5 */
             color: var(--color-body-text);
-            @apply text-center font-extrabold;
+            @apply text-center font-bold; /* 調整粗細 */
         }
 
         /* 組別之間的分隔線 */
@@ -93,7 +92,7 @@
         /* 亮黃強調 (重點提示) */
         .highlight-yellow {
             color: var(--color-bright-yellow);
-            @apply font-extrabold;
+            @apply font-bold; /* 調整粗細 */
         }
         
     </style>
@@ -265,7 +264,7 @@
                     </tr>
                     <tr class="group-item-divider">
                         <td class="main-activity">醫學人文組</td>
-                        <td>蘇慧真部長（召集人）／陳憶玲組長（執行秘書）</td>
+                        <td>蘇慧真部長（召集人）／陳憶玲組長（執行秘-秘書）</td>
                     </tr>
                     <tr class="group-item-divider">
                         <td class="main-activity">核心能力組</td>
@@ -284,25 +283,47 @@
 
                     <!-- 區塊標題 4: 規劃報告 -->
                     <tr class="group-discussion-title">
-                        <td colspan="3">各中心/功能小組未來規劃報告 <span class="text-sm font-semibold">(每組5-10分鐘)</span></td>
+                        <td colspan="3">各中心/功能小組未來規劃報告 <span class="text-sm font-normal">(每組5-10分鐘)</span></td>
                     </tr>
                     <!-- 報告時間 (純白底) -->
                     <tr>
-                        <td class="time-col">16:10-17:00</td>
-                        <td colspan="2" class="main-activity">
-                            <ul class="list-disc ml-6 space-y-1 font-normal text-gray-800">
-                                <li>一般科</li>
-                                <li>教師培育中心 及 臨床技能中心</li>
-                                <li>實證醫學中心 及 醫學圖書館</li>
-                                <li>視聽中心</li>
-                                <li>特殊事件組</li>
-                                <li>數位賦能組</li>
-                                <li>醫學人文組</li>
-                                <li>核心能力組</li>
-                                <li>教學品質稽核組</li>
-                            </ul>
-                        </td>
+                        <td class="time-col" rowspan="9">16:10-17:00</td>
+                        <td class="main-activity group-item-divider">一般科</td>
+                        <td class="group-item-divider"></td>
                     </tr>
+                    <tr class="group-item-divider">
+                        <td class="main-activity">教師培育中心 及 臨床技能中心</td>
+                        <td></td>
+                    </tr>
+                    <tr class="group-item-divider">
+                        <td class="main-activity">實證醫學中心 及 醫學圖書館</td>
+                        <td></td>
+                    </tr>
+                    <tr class="group-item-divider">
+                        <td class="main-activity">視聽中心</td>
+                        <td></td>
+                    </tr>
+                    <tr class="group-item-divider">
+                        <td class="main-activity">特殊事件組</td>
+                        <td></td>
+                    </tr>
+                    <tr class="group-item-divider">
+                        <td class="main-activity">數位賦능組</td>
+                        <td></td>
+                    </tr>
+                    <tr class="group-item-divider">
+                        <td class="main-activity">醫學人文組</td>
+                        <td></td>
+                    </tr>
+                    <tr class="group-item-divider">
+                        <td class="main-activity">核心能力組</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td class="main-activity">教學品質稽核組</td>
+                        <td></td>
+                    </tr>
+                    
 
                     <!-- 結尾 (白底) -->
                     <tr>
