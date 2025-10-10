@@ -91,6 +91,9 @@
         .message-box {
             transition: opacity 0.3s ease, transform 0.3s ease;
         }
+        .message-box .card {
+            height: auto;
+        }
     </style>
 </head>
 <body class="min-h-screen w-full p-4 md:p-8 flex items-center justify-center">
@@ -99,7 +102,7 @@
         <header class="text-center mb-10">
             <h1 class="text-4xl sm:text-5xl md:text-6xl font-black main-title tracking-wider">奇美月 ─ AI 數位賦能工作坊</h1>
             <h2 class="text-2xl md:text-3xl font-bold text-gray-200 mt-2">白手起家搭網站</h2>
-            <p class="mt-4 text-gray-300 max-w-3xl mx-auto">
+            <p class="mt-4 text-gray-300 max-w-3xl mx-auto text-base md:text-lg">
                 探索如何運用 AI 技術，從零開始打造屬於您的網站。本工作坊將結合理論與實戰，帶您一窺 AI 在醫學教育的創新應用，並親手完成您的第一個網頁作品！
             </p>
         </header>
@@ -109,13 +112,13 @@
             <!-- Workshop Information -->
             <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
                 <!-- 活動時間 -->
-                <a href="https://www.google.com/calendar/render?action=TEMPLATE&text=奇美月%20─%20AI%20數位賦能工作坊&dates=20251123T094500/20251123T121500&details=探索如何運用%20AI%20技術，從零開始打造屬於您的網站。&location=奇美博物館%20豐收廳&ctz=Asia/Taipei" target="_blank" rel="noopener noreferrer" class="block card rounded-xl p-6 hover:bg-white/10">
+                <a href="https://www.google.com/calendar/render?action=TEMPLATE&text=奇美月%20─%20AI%20數位賦능工作坊&dates=20251123T094500/20251123T121500&details=探索如何運用%20AI%20技術，從零開始打造屬於您的網站。&location=奇美博物館%20豐收廳&ctz=Asia/Taipei" target="_blank" rel="noopener noreferrer" class="block card rounded-xl p-6 hover:bg-white/10">
                     <div class="flex items-center mb-3">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-cyan-300 mr-3"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"></rect><line x1="16" x2="16" y1="2" y2="6"></line><line x1="8" x2="8" y1="2" y2="6"></line><line x1="3" x2="21" y1="10" y2="10"></line></svg>
                         <h3 class="text-xl font-bold text-white">活動時間</h3>
                     </div>
-                    <p class="text-gray-300">2025年11月23日（四）</p>
-                    <p class="text-gray-300">9:45–12:15 <span class="text-gray-400 text-sm">(9:30開始報到)</span></p>
+                    <p class="text-gray-300 text-base md:text-lg">2025年11月23日（日）</p>
+                    <p class="text-gray-300 text-base md:text-lg">9:45–12:15 <span class="text-gray-400 text-sm">(9:30開始報到)</span></p>
                     <p class="text-cyan-300 text-sm mt-2 font-semibold">加入行事曆</p>
                 </a>
                 <!-- 活動地點 -->
@@ -124,7 +127,7 @@
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-cyan-300 mr-3"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path><circle cx="12" cy="10" r="3"></circle></svg>
                         <h3 class="text-xl font-bold text-white">活動地點</h3>
                     </div>
-                    <p class="text-gray-300">奇美博物館 豐收廳</p>
+                    <p class="text-gray-300 text-base md:text-lg">奇美博物館 豐收廳</p>
                     <p class="text-cyan-300 text-sm mt-4 font-semibold">Google Map 導航 →</p>
                 </a>
                 <!-- 攜帶用品 -->
@@ -133,7 +136,7 @@
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-cyan-300 mr-3"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="2" y1="20" x2="22" y2="20"></line></svg>
                         <h3 class="text-xl font-bold text-white">攜帶用品</h3>
                     </div>
-                    <p class="text-gray-300">請自備可上網筆電，以利課程實作</p>
+                    <p class="text-gray-300 text-base md:text-lg">請自備可上網筆電，以利課程實作</p>
                 </div>
                 <!-- 報名截止 -->
                 <div class="card rounded-xl p-6">
@@ -141,7 +144,7 @@
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-cyan-300 mr-3"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
                         <h3 class="text-xl font-bold text-white">報名截止</h3>
                     </div>
-                    <p class="text-gray-300">報名至11月10日（一）截止，或額滿提前截止</p>
+                    <p class="text-gray-300 text-base md:text-lg">報名至11月10日（一）截止，或額滿提前截止</p>
                 </div>
                 <!-- 名額限制 -->
                 <div class="card rounded-xl p-6">
@@ -149,7 +152,7 @@
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-cyan-300 mr-3"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
                         <h3 class="text-xl font-bold text-white">名額限制</h3>
                     </div>
-                    <p class="text-gray-300">限 65 位（院內 45 位、院外 20 位）</p>
+                    <p class="text-gray-300 text-base md:text-lg">限 70 位（院內 50 位、院外 20 位）</p>
                 </div>
                 <!-- 聯絡資訊 -->
                  <div class="card rounded-xl p-6">
@@ -157,9 +160,9 @@
                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-cyan-300 mr-3"><circle cx="12" cy="12" r="4"></circle><path d="M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-3.92 7.94"></path></svg>
                         <h3 class="text-xl font-bold text-white">聯絡資訊</h3>
                     </div>
-                    <p class="text-gray-300 text-sm">奇美醫院教學部 楊依玲 教學行政管理員</p>
-                    <p class="text-gray-300 text-sm mt-2">☎️ 06-2812811 分機 57426</p>
-                    <a href="mailto:a41202@mail.chimei.org.tw" class="text-cyan-400 text-sm break-all hover:underline">✉️ a41202@mail.chimei.org.tw</a>
+                    <p class="text-gray-300 text-base md:text-lg">奇美醫院教學部<br>楊依玲 教學行政管理員</p>
+                    <p class="text-gray-300 text-base md:text-lg mt-2">☎️ 06-2812811 分機 57426</p>
+                    <a href="mailto:a41202@mail.chimei.org.tw" class="text-cyan-400 text-base md:text-lg break-all hover:underline">✉️ a41202@mail.chimei.org.tw</a>
                 </div>
             </section>
             
@@ -178,7 +181,7 @@
                                     <div class="radio-circle rounded-full mr-4 flex-shrink-0"></div>
                                     <div class="flex-grow">
                                         <h3 class="text-lg md:text-xl font-bold text-white">奇美醫院同仁</h3>
-                                        <p class="text-gray-400 mt-1 text-sm">總名額 45 位</p>
+                                        <p class="text-gray-400 mt-1 text-sm">總名額 50 位</p>
                                     </div>
                                     <div id="internal-slots-display" class="w-16 h-16 sm:w-20 sm:h-20 rounded-full flex flex-col items-center justify-center bg-cyan-500/20 border-2 border-cyan-400 text-white transition-all duration-300 flex-shrink-0 ml-2">
                                          <span class="font-black text-xl sm:text-2xl">--</span>
@@ -207,27 +210,27 @@
                     <!-- Internal Staff Form -->
                     <div id="internal-form" class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4 fade-in">
                         <div>
-                            <label for="internal-id" class="block text-sm font-medium text-gray-300 mb-1">人事號</label>
+                            <label for="internal-id" class="block text-base md:text-lg font-medium text-gray-300 mb-1">人事號</label>
                             <input type="text" id="internal-id" name="internal-id" class="form-input w-full rounded-md p-2" required>
                         </div>
                         <div>
-                            <label for="internal-name" class="block text-sm font-medium text-gray-300 mb-1">姓名</label>
+                            <label for="internal-name" class="block text-base md:text-lg font-medium text-gray-300 mb-1">姓名</label>
                             <input type="text" id="internal-name" name="internal-name" class="form-input w-full rounded-md p-2" required>
                         </div>
                         <div>
-                            <label for="internal-dept" class="block text-sm font-medium text-gray-300 mb-1">部門</label>
+                            <label for="internal-dept" class="block text-base md:text-lg font-medium text-gray-300 mb-1">部門</label>
                             <input type="text" id="internal-dept" name="internal-dept" class="form-input w-full rounded-md p-2" required>
                         </div>
                         <div>
-                            <label for="internal-title" class="block text-sm font-medium text-gray-300 mb-1">職稱</label>
+                            <label for="internal-title" class="block text-base md:text-lg font-medium text-gray-300 mb-1">職稱</label>
                             <input type="text" id="internal-title" name="internal-title" class="form-input w-full rounded-md p-2" required>
                         </div>
                         <div class="sm:col-span-2">
-                            <label for="internal-email" class="block text-sm font-medium text-gray-300 mb-1">Email</label>
+                            <label for="internal-email" class="block text-base md:text-lg font-medium text-gray-300 mb-1">Email</label>
                             <input type="email" id="internal-email" name="internal-email" class="form-input w-full rounded-md p-2" required>
                         </div>
                          <div class="sm:col-span-2">
-                            <label for="internal-phone" class="block text-sm font-medium text-gray-300 mb-1">連絡電話</label>
+                            <label for="internal-phone" class="block text-base md:text-lg font-medium text-gray-300 mb-1">連絡電話</label>
                             <input type="tel" id="internal-phone" name="internal-phone" class="form-input w-full rounded-md p-2" required>
                         </div>
                     </div>
@@ -235,27 +238,27 @@
                     <!-- External Staff Form -->
                     <div id="external-form" class="hidden grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4 fade-in">
                          <div>
-                            <label for="external-name" class="block text-sm font-medium text-gray-300 mb-1">姓名</label>
+                            <label for="external-name" class="block text-base md:text-lg font-medium text-gray-300 mb-1">姓名</label>
                             <input type="text" id="external-name" name="external-name" class="form-input w-full rounded-md p-2" required>
                         </div>
                         <div>
-                            <label for="external-unit" class="block text-sm font-medium text-gray-300 mb-1">服務單位</label>
+                            <label for="external-unit" class="block text-base md:text-lg font-medium text-gray-300 mb-1">服務單位</label>
                             <input type="text" id="external-unit" name="external-unit" class="form-input w-full rounded-md p-2" required>
                         </div>
                         <div>
-                            <label for="external-dept" class="block text-sm font-medium text-gray-300 mb-1">服務部門</label>
+                            <label for="external-dept" class="block text-base md:text-lg font-medium text-gray-300 mb-1">服務部門</label>
                             <input type="text" id="external-dept" name="external-dept" class="form-input w-full rounded-md p-2" required>
                         </div>
                         <div>
-                            <label for="external-title" class="block text-sm font-medium text-gray-300 mb-1">職稱</label>
+                            <label for="external-title" class="block text-base md:text-lg font-medium text-gray-300 mb-1">職稱</label>
                             <input type="text" id="external-title" name="external-title" class="form-input w-full rounded-md p-2" required>
                         </div>
                         <div class="sm:col-span-2">
-                            <label for="external-email" class="block text-sm font-medium text-gray-300 mb-1">Email</label>
+                            <label for="external-email" class="block text-base md:text-lg font-medium text-gray-300 mb-1">Email</label>
                             <input type="email" id="external-email" name="external-email" class="form-input w-full rounded-md p-2" required>
                         </div>
                         <div class="sm:col-span-2">
-                            <label for="external-phone" class="block text-sm font-medium text-gray-300 mb-1">連絡手機</label>
+                            <label for="external-phone" class="block text-base md:text-lg font-medium text-gray-300 mb-1">連絡手機</label>
                             <input type="tel" id="external-phone" name="external-phone" class="form-input w-full rounded-md p-2" required>
                         </div>
                     </div>
@@ -303,7 +306,7 @@
             // 請將您從 Google Apps Script 取得的網址貼在下方
             const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwfJ-iyIUBP0Ar8EotwavLSeYmPrUO7HED6DWGOvR_bdowBCK_KfntYgNjszFB041CP/exec';
             
-            const INTERNAL_QUOTA = 45;
+            const INTERNAL_QUOTA = 50;
             const EXTERNAL_QUOTA = 20;
 
             const identityRadios = document.querySelectorAll('input[name="identity"]');
@@ -473,4 +476,3 @@
     </script>
 </body>
 </html>
-
