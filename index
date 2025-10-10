@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>奇美月─教學共識營議程表</title>
+    <!-- 引入 Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* 🎨 色系設定與變數 */
+        :root {
+            --color-deep-blue: #004F7C;      /* 深海藍 */
+            --color-light-gray: #E9F4FA;     /* 輔助淺藍灰 */
+            --color-soft-cyan: #D6ECF3;      /* 柔和藍綠 - 用於區塊標題底色 */
+            --color-bright-yellow: #F9C74F;  /* 亮黃 - 用於重點提示 */
+            --color-cream-yellow: #FFF9E5;   /* 奶油黃 - 用於 Break 底色 */
+            --color-body-text: #2c3e50;      /* 深灰藍字體 */
+        }
+
+        /* 設置中文字體 (Noto Sans TC)，確保清爽專業感 */
+        body {
+            font-family: 'Noto Sans TC', 'Inter', 'Microsoft JhengHei', sans-serif;
+        }
+
+        /* ---------------------------------- */
+        /* 🧩 表格結構樣式與層級對應 */
+        .agenda-table {
+            border-collapse: collapse; /* 移除雙線邊框 */
+            box-shadow: none; /* 移除外層陰影，強調扁平化 */
+        }
+
+        /* 表頭列 (TH) - 深藍底白字 */
+        .agenda-table th {
+            background-color: var(--color-deep-blue);
+            color: white;
+            @apply font-bold uppercase tracking-wider border-r border-white/20;
+            height: 40px;
+            padding: 6px 10px;
+            line-height: 1.4;
+            vertical-align: middle;
+        }
+        
+        /* 一般單元格 (TD) - 確保白底 */
+        .agenda-table td {
+            background-color: white !important; 
+            @apply border-b border-gray-200;
+            color: var(--color-body-text); /* 使用深色字體 */
+            font-weight: 500;
+            height: 40px;
+            padding: 6px 10px;
+            line-height: 1.4;
+            vertical-align: middle;
+        }
+        .agenda-table tr:last-child td {
+            @apply border-b-0; 
+        }
+
+        /* 時間欄樣式 */
+        .agenda-table .time-col {
+            @apply text-center font-semibold;
+            color: var(--color-body-text);
+        }
+        
+        /* 主要段落標題列 (分隔線) - 柔和藍綠底、深藍粗體字 */
+        .group-discussion-title td {
+            background-color: var(--color-soft-cyan) !important; /* #D6ECF3 */
+            color: var(--color-deep-blue);
+            @apply font-extrabold text-lg text-center; 
+        }
+
+        /* 凸顯活動內容 */
+        .main-activity {
+            @apply font-semibold text-base; 
+        }
+
+        /* Break 段落 - 奶油黃底 */
+        .break-row td {
+            background-color: var(--color-cream-yellow) !important; /* #FFF9E5 */
+            color: var(--color-body-text);
+            @apply text-center font-extrabold;
+        }
+
+        /* 組別之間的分隔線 */
+        .group-item-divider td {
+            border-bottom: 1px solid #E0E0E0;
+        }
+        
+        /* 維持時間欄位的預設框線顏色 */
+        .group-item-divider td.time-col {
+            border-bottom-color: #e5e7eb; /* Tailwind gray-200 */
+        }
+
+        /* 亮黃強調 (重點提示) */
+        .highlight-yellow {
+            color: var(--color-bright-yellow);
+            @apply font-extrabold;
+        }
+        
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen py-10 px-4 sm:px-6 lg:px-8">
+
+    <div class="max-w-6xl mx-auto">
+        <!-- 主標題區塊 -->
+        <header class="bg-white shadow-lg rounded-xl p-6 mb-8 border-t-4 border-[#004F7C]">
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-2 text-center">
+                奇美月─教學共識營議程表
+            </h1>
+            <p class="text-xl text-center text-[#004F7C] font-medium">
+                Medical Education Consensus Camp
+            </p>
+        </header>
+
+        <!-- 報名區塊 (Call to Action) - 維持主視覺深藍色塊 -->
+        <section class="bg-[#0A5B87] text-white p-6 sm:p-8 rounded-xl shadow-lg mb-10 flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+            <div class="text-center md:text-left">
+                <h2 class="text-2xl font-bold">重要資訊與出席回覆</h2>
+                <p class="text-white/80 mt-1">請與會成員完成出席回覆，以利後續分組與行政安排。</p>
+            </div>
+            <a href="https://forms.office.com/r/GYZYtJPd2A" target="_blank" class="bg-amber-400 hover:bg-amber-300 text-[#004F7C] font-bold py-3 px-8 rounded-full transition duration-300 transform hover:scale-105 shadow-md whitespace-nowrap">
+                立即回覆(點擊處)
+            </a>
+        </section>
+
+        <!-- 基本資訊卡片 -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+            <div class="bg-white p-6 rounded-xl shadow-md border-l-4 border-[var(--color-deep-blue)]">
+                <p class="text-sm font-semibold text-gray-500">日期</p>
+                <p class="text-xl font-bold text-gray-800 mb-2">114年11月23日 (日)</p>
+                <!-- 加入 Google 行事曆連結 -->
+                <a href="https://calendar.google.com/calendar/u/0/r/eventedit?dates=20251123T124500/20251123T171000&text=奇美月─教學共識營&details=請參考議程表詳情。&location=奇美博物館%20豐收廳" 
+                   target="_blank" 
+                   class="text-sm text-[var(--color-deep-blue)] hover:text-[var(--color-deep-blue)] font-semibold flex items-center transition duration-200">
+                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                    加入行事曆
+                </a>
+            </div>
+            <div class="bg-white p-6 rounded-xl shadow-md border-l-4 border-[var(--color-deep-blue)]">
+                <p class="text-sm font-semibold text-gray-500">地點</p>
+                <p class="text-xl font-bold text-gray-800 mb-2">奇美博物館 豐收廳</p>
+                <!-- 加入 Google Map 連結 -->
+                <a href="https://www.google.com/maps/search/?api=1&query=奇美博物館+豐收廳" 
+                   target="_blank" 
+                   class="text-sm text-[var(--color-deep-blue)] hover:text-[var(--color-deep-blue)] font-semibold flex items-center transition duration-200">
+                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.828 0l-4.243-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                    Google Map 導航
+                </a>
+            </div>
+            <div class="bg-white p-6 rounded-xl shadow-md border-l-4 border-[var(--color-deep-blue)]">
+                <p class="text-sm font-semibold text-gray-500">與會人員</p>
+                <p class="text-base font-bold text-gray-800">院級主管、醫學教育委員會委員（含功能小組成員）、教學部各中心與功能小組成員、各科部及職類教學負責人、佳里與柳營教學單位</p>
+            </div>
+        </div>
+
+        <!-- 議程表格 -->
+        <div class="bg-white rounded-xl overflow-hidden border border-gray-200">
+            <table class="min-w-full agenda-table">
+                <thead>
+                    <tr>
+                        <th class="w-1/6">時間</th>
+                        <th class="w-1/3">活動內容</th> 
+                        <th class="w-1/2 border-r-0">負責人 / 主講人</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    <!-- 開場/致詞 (白底) -->
+                    <tr>
+                        <td class="time-col">12:45-13:00</td>
+                        <td class="main-activity">報到及入場</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td class="time-col">13:00-13:10</td>
+                        <td class="main-activity">長官致詞</td>
+                        <td>林宏榮院長、陳志成副院長</td>
+                    </tr>
+                    <tr>
+                        <td class="time-col">13:10-13:25</td>
+                        <td class="main-activity">醫學教育前瞻與未來</td>
+                        <td>林宏榮院長 (邀請中)</td> 
+                    </tr>
+
+                    <!-- 區塊標題 1: 醫學教育制度轉型與計畫報告 -->
+                    <tr class="group-discussion-title">
+                        <td colspan="3">醫學教育制度轉型與教學計畫報告</td>
+                    </tr>
+                    <!-- 制度轉型與計畫報告 (純白底) -->
+                    <tr class="group-item-divider">
+                        <td class="time-col" rowspan="4">13:25-14:20</td>
+                        <td class="main-activity">醫學教育制度轉型 <span class="highlight-yellow">(10分)</span></td>
+                        <td>教學部 廖家德部長</td>
+                    </tr>
+                    <tr class="group-item-divider">
+                        <td class="main-activity">教學型主治醫師未來教學計畫報告 <span class="highlight-yellow">(15分)</span> <br><span class="text-sm font-normal text-gray-600">CBME規劃(含美國醫教參訪)</span></td>
+                        <td>教學部 一般科 郭妍伶主任</td>
+                    </tr>
+                    <tr class="group-item-divider">
+                        <td class="main-activity">教學型主治醫師未來教學計畫報告 <span class="highlight-yellow">(15分)</span></td>
+                        <td>教學部 陳伯榕教學型主治醫師</td>
+                    </tr>
+                    <tr>
+                        <td class="main-activity">教學型主治醫師未來教學計畫報告 <span class="highlight-yellow">(15分)</span></td>
+                        <td>一般內科 黃琪雅醫師</td>
+                    </tr>
+
+                    <!-- Break 1 (奶油黃底) -->
+                    <tr class="break-row">
+                        <td class="time-col">14:20-14:30</td>
+                        <td colspan="2">Break</td>
+                    </tr>
+
+                    <!-- 區塊標題 2: 分組討論 / 策略擬定 (I) -->
+                    <tr class="group-discussion-title">
+                        <td colspan="3">分組討論 / 策略擬定</td>
+                    </tr>
+                    <!-- 分組討論 I (純白底) -->
+                    <tr class="group-item-divider">
+                        <td class="time-col" rowspan="5">14:30-15:10</td>
+                        <td class="main-activity">教學行政組 <span class="text-sm font-normal text-gray-600">(活動列表、總召安排)</span></td>
+                        <td>劉雯副部長</td>
+                    </tr>
+                    <tr class="group-item-divider">
+                        <td class="main-activity">一般科</td>
+                        <td>郭妍伶主任／黃琪雅醫師（執行秘書）</td>
+                    </tr>
+                    <tr class="group-item-divider">
+                        <td class="main-activity">教師培育中心 及 臨床技能中心</td>
+                        <td>
+                            教師培育中心：郭進榮主任／陳伯榕醫師（執行秘書）<br>
+                            臨床技能中心：蔡長志主任／林昱惠醫師（執行秘書）
+                        </td>
+                    </tr>
+                    <tr class="group-item-divider">
+                        <td class="main-activity">實證醫學中心 及 醫學圖書館</td>
+                        <td>
+                            實證醫學中心：廖家德部長／李美娟小組長（執行秘書）<br>
+                            醫學圖書館：王藍浣主任／陳憶玲組長（執行秘書）
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="main-activity">視聽中心</td>
+                        <td>陳志金主任／許召玟小組長、林雨蕎小組長（執行秘書）</td>
+                    </tr>
+
+                    <!-- Break 2 (奶油黃底) -->
+                    <tr class="break-row">
+                        <td class="time-col">15:10-15:20</td>
+                        <td colspan="2">Break</td>
+                    </tr>
+
+                    <!-- 區塊標題 3: 分組討論 / 策略擬定 (II) -->
+                    <tr class="group-discussion-title">
+                        <td colspan="3">分組討論 / 策略擬定</td>
+                    </tr>
+                    <!-- 分組討論 II (純白底) -->
+                    <tr class="group-item-divider">
+                        <td class="time-col" rowspan="5">15:20-16:00</td>
+                        <td class="main-activity">特殊事件組</td>
+                        <td>謝孟倉主任（召集人）／黃琪雅醫師（執行秘書）</td>
+                    </tr>
+                    <tr class="group-item-divider">
+                        <td class="main-activity">數位賦能組</td>
+                        <td>劉忠峰主任（召集人）／黃博裕醫師（執行秘書）</td>
+                    </tr>
+                    <tr class="group-item-divider">
+                        <td class="main-activity">醫學人文組</td>
+                        <td>蘇慧真部長（召集人）／陳憶玲組長（執行秘書）</td>
+                    </tr>
+                    <tr class="group-item-divider">
+                        <td class="main-activity">核心能力組</td>
+                        <td>陳志偉主任（召集人）／陳伯榕醫師（執行秘書）</td>
+                    </tr>
+                    <tr>
+                        <td class="main-activity">教學品質稽核組</td>
+                        <td>陳志金主任（召集人）／蔡長志主任（執行秘書）</td>
+                    </tr>
+
+                    <!-- Break 3 (奶油黃底) -->
+                    <tr class="break-row">
+                        <td class="time-col">16:00-16:10</td>
+                        <td colspan="2">Break</td>
+                    </tr>
+
+                    <!-- 區塊標題 4: 規劃報告 -->
+                    <tr class="group-discussion-title">
+                        <td colspan="3">各中心/功能小組未來規劃報告 <span class="text-sm font-semibold">(每組5-10分鐘)</span></td>
+                    </tr>
+                    <!-- 報告時間 (純白底) -->
+                    <tr>
+                        <td class="time-col">16:10-17:00</td>
+                        <td colspan="2" class="main-activity">
+                            <ul class="list-disc ml-6 space-y-1 font-normal text-gray-800">
+                                <li>一般科</li>
+                                <li>教師培育中心 及 臨床技能中心</li>
+                                <li>實證醫學中心 及 醫學圖書館</li>
+                                <li>視聽中心</li>
+                                <li>特殊事件組</li>
+                                <li>數位賦能組</li>
+                                <li>醫學人文組</li>
+                                <li>核心能力組</li>
+                                <li>教學品質稽核組</li>
+                            </ul>
+                        </td>
+                    </tr>
+
+                    <!-- 結尾 (白底) -->
+                    <tr>
+                        <td class="time-col">17:00-17:10</td>
+                        <td class="main-activity">長官勉勵</td>
+                        <td>院級長官</td>
+                    </tr>
+                    
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 議程調整提醒 -->
+        <div class="text-center text-sm" style="margin-top: 12px; margin-bottom: 4px; color: #777;">
+            <p>※ 活動流程將依實際情況彈性調整，敬請以當日公告為準 ※</p>
+        </div>
+
+        <!-- 頁腳/聯絡資訊 -->
+        <footer class="mt-10 pt-6 border-t border-gray-300 text-center text-gray-500 text-sm">
+            <p>&copy; 奇美醫院 教學部 版權所有</p>
+            <p>如有任何疑問，請聯繫教學部 楊依玲教學行政管理員 (分機57426)。</p>
+        </footer>
+    </div>
+
+</body>
+</html>
