@@ -1,496 +1,331 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html lang="zh-Hant">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <!-- SEO & Social Sharing Meta Tags -->
-    <title>奇美月 ─ AI 數位賦能工作坊｜報名頁面</title>
-    <meta name="description" content="探索如何運用 AI 技術，從零開始打造屬於您的網站。本工作坊將結合理論與實作，帶領學員親手建置網站，體驗 AI 在醫學教育中的應用與創新。">
-    
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website">
-    <meta property="og:title" content="奇美月 ─ AI 數位賦能工作坊">
-    <meta property="og:description" content="活動時間：2025年11月23日（日）9:45–12:15">
-    
+    <title>奇美月─教學共識營議程表</title>
+    <!-- 引入 Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
     <style>
+        /* 🎨 色系設定與變數 */
+        :root {
+            --color-deep-blue: #004F7C;      /* 深海藍 */
+            --color-light-gray: #E9F4FA;     /* 輔助淺藍灰 */
+            --color-soft-cyan: #D6ECF3;      /* 柔和藍綠 - 用於區塊標題底色 */
+            --color-bright-yellow: #F9C74F;  /* 亮黃 - 用於重點提示 */
+            --color-cream-yellow: #FFF9E5;   /* 奶油黃 - 用於 Break 底色 */
+            --color-body-text: #2c3e50;      /* 深灰藍字體 */
+        }
+
+        /* 設置中文字體 (Noto Sans TC)，確保清爽專業感 */
         body {
-            font-family: 'Inter', 'Noto Sans TC', sans-serif;
-            background-color: #0f0c29;
-            background-image: linear-gradient(to right top, #0f0c29, #1a163a, #25204c, #302a5f, #3c3472);
-            color: #f0f0f0;
+            font-family: 'Noto Sans TC', 'Inter', 'Microsoft JhengHei', sans-serif;
+            font-size: 17px; /* 放大基準字級 */
         }
-        .main-title {
-            background: linear-gradient(90deg, #89f7fe, #66a6ff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            text-fill-color: transparent;
+
+        /* ---------------------------------- */
+        /* 🧩 表格結構樣式與層級對應 (優化版) */
+        .agenda-table {
+            border-collapse: collapse; /* 移除雙線邊框 */
+            box-shadow: none; /* 移除外層陰影，強調扁平化 */
         }
-        .card {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: all 0.3s ease;
-            height: 100%;
+
+        /* 表頭列 (TH) - 深藍底白字 */
+        .agenda-table th {
+            background-color: var(--color-deep-blue);
+            color: white;
+            @apply font-bold uppercase tracking-wider border-r border-white/20;
+            padding: 1rem 1.5rem; /* 增加內距 */
+            line-height: 1.8;   /* 增加行高 */
+            vertical-align: middle;
         }
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+        
+        /* 一般單元格 (TD) - 確保白底 */
+        .agenda-table td {
+            background-color: white !important; 
+            @apply border-b border-gray-200;
+            color: var(--color-body-text); /* 使用深色字體 */
+            font-weight: 500;
+            padding: 1rem 1.5rem; /* 增加內距 */
+            line-height: 1.8;   /* 增加行高 */
+            vertical-align: middle;
         }
-        .form-input {
-            background-color: rgba(0, 0, 0, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            transition: all 0.3s ease;
+        .agenda-table tr:last-child td {
+            @apply border-b-0; 
         }
-        .form-input:focus {
-            background-color: rgba(0, 0, 0, 0.3);
-            border-color: #89f7fe;
-            box-shadow: 0 0 15px rgba(137, 247, 254, 0.3);
-            outline: none;
+
+        /* 時間欄樣式 */
+        .agenda-table .time-col {
+            @apply text-center font-semibold;
+            color: var(--color-body-text);
         }
-        .submit-btn {
-            background: linear-gradient(90deg, #89f7fe, #66a6ff);
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(102, 166, 255, 0.4);
+        
+        /* 主要段落標題列 (分隔線) - 柔和藍綠底、深藍粗體字 */
+        .group-discussion-title td {
+            background-color: var(--color-soft-cyan) !important; /* #D6ECF3 */
+            color: var(--color-deep-blue);
+            @apply font-semibold text-base text-center; /* 調整字級與粗細 */
         }
-        .submit-btn:hover:not(:disabled) {
-            transform: scale(1.05);
-            box-shadow: 0 6px 20px rgba(137, 247, 254, 0.5);
+
+        /* 凸顯活動內容 */
+        .main-activity {
+            @apply font-semibold text-base; 
         }
-        .submit-btn:disabled {
-            cursor: not-allowed;
-            opacity: 0.7;
+
+        /* Break 段落 - 奶油黃底 */
+        .break-row td {
+            background-color: var(--color-cream-yellow) !important; /* #FFF9E5 */
+            color: var(--color-body-text);
+            @apply text-center font-semibold; /* 調整粗細 */
         }
-        .radio-label {
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            transition: all 0.3s ease;
+
+        /* 組別之間的分隔線 */
+        .group-item-divider td {
+            border-bottom: 1px solid #E0E0E0;
         }
-        .radio-label.disabled {
-            cursor: not-allowed;
-            opacity: 0.5;
+        
+        /* 維持時間欄位的預設框線顏色 */
+        .group-item-divider td.time-col {
+            border-bottom-color: #e5e7eb; /* Tailwind gray-200 */
         }
-        .radio-label-group input:checked + .radio-label {
-            border-color: #89f7fe;
-            box-shadow: 0 0 20px rgba(137, 247, 254, 0.4);
+
+        /* 亮黃強調 (重點提示) */
+        .highlight-yellow {
+            color: var(--color-bright-yellow);
+            @apply font-bold; /* 調整粗細 */
         }
-        .radio-circle {
-            width: 20px;
-            height: 20px;
-            border: 2px solid rgba(255, 255, 255, 0.4);
-            transition: all 0.2s ease;
-        }
-        .radio-label-group input:checked + .radio-label .radio-circle {
-            border-color: #89f7fe;
-            background-color: #89f7fe;
-            box-shadow: 0 0 0 3px rgba(137, 247, 254, 0.3);
-        }
-        .fade-in {
-            animation: fadeIn 0.5s ease-in-out forwards;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        /* Message Box */
-        .message-box {
-            transition: opacity 0.3s ease, transform 0.3s ease;
-        }
-        .message-box .card {
-            height: auto;
-        }
+        
     </style>
 </head>
-<body class="min-h-screen w-full p-4 md:p-8 flex items-center justify-center">
-    <div class="w-full max-w-5xl mx-auto">
-        <!-- Header Section -->
-        <header class="text-center mb-10">
-            <h1 class="text-4xl sm:text-5xl md:text-6xl font-black main-title tracking-wider">奇美月 ─ AI 數位賦能工作坊</h1>
-            <h2 class="text-2xl md:text-3xl font-bold text-gray-200 mt-2">白手起家搭網站</h2>
-            <p class="mt-4 text-gray-300 max-w-3xl mx-auto text-base md:text-lg">
-                探索如何運用 AI 技術，從零開始打造屬於您的網站。<br>本工作坊將結合理論與實作，帶領學員親手建置網站，體驗 AI 在醫學教育中的應用與創新。
+<body class="bg-gray-100 min-h-screen py-10 px-4 sm:px-6 lg:px-8">
+
+    <div class="max-w-6xl mx-auto">
+        <!-- 主標題區塊 -->
+        <header class="bg-white shadow-lg rounded-xl p-6 mb-8 border-t-4 border-[#004F7C]">
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-2 text-center">
+                奇美月─教學共識營
+            </h1>
+            <p class="text-xl text-center text-[#004F7C] font-medium">
+                Medical Education Consensus Camp
             </p>
         </header>
 
-        <!-- Main Content -->
-        <main>
-            <!-- Workshop Information -->
-            <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-                <!-- 活動時間 -->
-                <a href="https://www.google.com/calendar/render?action=TEMPLATE&text=奇美月%20─%20AI%20數位賦能工作坊&dates=20251123T094500/20251123T121500&details=探索如何運用%20AI%20技術，從零開始打造屬於您的網站。&location=奇美博物館%20豐收廳&ctz=Asia/Taipei" target="_blank" rel="noopener noreferrer" class="block card rounded-xl p-6 hover:bg-white/10">
-                    <div class="flex items-center mb-3">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-cyan-300 mr-3"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"></rect><line x1="16" x2="16" y1="2" y2="6"></line><line x1="8" x2="8" y1="2" y2="6"></line><line x1="3" x2="21" y1="10" y2="10"></line></svg>
-                        <h3 class="text-xl font-bold text-white">活動時間</h3>
-                    </div>
-                    <p class="text-gray-300 text-base md:text-lg">2025年11月23日（日）</p>
-                    <p class="text-gray-300 text-base md:text-lg">9:45–12:15 <span class="text-gray-400 text-sm">(9:30開始報到)</span></p>
-                    <p class="text-cyan-300 text-sm mt-2 font-semibold">加入行事曆</p>
+        <!-- 報名區塊 (Call to Action) - 維持主視覺深藍色塊 -->
+        <section class="bg-[#0A5B87] text-white p-6 sm:p-8 rounded-xl shadow-lg mb-10 flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+            <div class="text-center md:text-left">
+                <h2 class="text-2xl font-bold">重要資訊與出席回覆</h2>
+                <p class="text-white/80 mt-1">請與會成員於<strong class="text-amber-300">11月10日(一)前</strong>完成出席回覆，以利後續分組與行政安排。</p>
+            </div>
+            <a href="https://forms.office.com/r/GYZYtJPd2A" target="_blank" class="bg-amber-400 hover:bg-amber-300 text-[#004F7C] font-bold py-3 px-8 rounded-full transition duration-300 transform hover:scale-105 shadow-md whitespace-nowrap">
+                立即回覆(點擊處)
+            </a>
+        </section>
+
+        <!-- 基本資訊卡片 -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+            <div class="bg-white p-6 rounded-xl shadow-md border-l-4 border-[var(--color-deep-blue)]">
+                <p class="text-sm font-semibold text-gray-500">日期</p>
+                <p class="text-xl font-bold text-gray-800 mb-2">114年11月23日 (日)</p>
+                <!-- 加入 Google 行事曆連結 -->
+                <a href="https://calendar.google.com/calendar/u/0/r/eventedit?dates=20251123T124500/20251123T171000&text=奇美月─教學共識營&details=請參考議程表詳情。&location=奇美博物館%20豐收廳" 
+                   target="_blank" 
+                   class="text-sm text-[var(--color-deep-blue)] hover:text-[var(--color-deep-blue)] font-semibold flex items-center transition duration-200">
+                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 002-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                    加入行事曆
                 </a>
-                <!-- 活動地點 -->
-                <a href="https://www.google.com/maps/search/?api=1&query=奇美博物館" target="_blank" rel="noopener noreferrer" class="block card rounded-xl p-6 hover:bg-white/10">
-                    <div class="flex items-center mb-3">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-cyan-300 mr-3"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-                        <h3 class="text-xl font-bold text-white">活動地點</h3>
-                    </div>
-                    <p class="text-gray-300 text-base md:text-lg">奇美博物館 豐收廳</p>
-                    <p class="text-cyan-300 text-sm mt-4 font-semibold">Google Map 導航 →</p>
+            </div>
+            <div class="bg-white p-6 rounded-xl shadow-md border-l-4 border-[var(--color-deep-blue)]">
+                <p class="text-sm font-semibold text-gray-500">地點</p>
+                <p class="text-xl font-bold text-gray-800 mb-2">奇美博物館 豐收廳</p>
+                <!-- 加入 Google Map 連結 -->
+                <a href="https://www.google.com/maps/search/?api=1&query=奇美博物館+豐收廳" 
+                   target="_blank" 
+                   class="text-sm text-[var(--color-deep-blue)] hover:text-[var(--color-deep-blue)] font-semibold flex items-center transition duration-200">
+                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.828 0l-4.243-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                    Google Map 導航
                 </a>
-                <!-- 攜帶用品 -->
-                <div class="card rounded-xl p-6">
-                    <div class="flex items-center mb-3">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-cyan-300 mr-3"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="2" y1="20" x2="22" y2="20"></line></svg>
-                        <h3 class="text-xl font-bold text-white">攜帶用品</h3>
-                    </div>
-                    <p class="text-gray-300 text-base md:text-lg">請自備可上網筆電，以利課程實作</p>
-                </div>
-                <!-- 報名截止 -->
-                <div class="card rounded-xl p-6">
-                    <div class="flex items-center mb-3">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-cyan-300 mr-3"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                        <h3 class="text-xl font-bold text-white">報名截止</h3>
-                    </div>
-                    <p class="text-gray-300 text-base md:text-lg">報名至11月10日（一）截止，或額滿提前截止</p>
-                </div>
-                <!-- 名額限制 -->
-                <div class="card rounded-xl p-6">
-                    <div class="flex items-center mb-3">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-cyan-300 mr-3"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
-                        <h3 class="text-xl font-bold text-white">名額限制</h3>
-                    </div>
-                    <p class="text-gray-300 text-base md:text-lg">限 60 位（院內 40 位、院外 20 位）</p>
-                </div>
-                <!-- 聯絡資訊 -->
-                 <div class="card rounded-xl p-6">
-                    <div class="flex items-center mb-3">
-                       <svg xmlns="http://www.w3.org/2000/svg" class="text-cyan-300 mr-3" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-3.92 7.94"></path></svg>
-                        <h3 class="text-xl font-bold text-white">聯絡資訊</h3>
-                    </div>
-                    <p class="text-gray-300 text-base md:text-lg">奇美醫院教學部</p>
-                    <p class="text-gray-300 text-base md:text-lg">楊依玲教學行政管理員</p>
-                    <p class="text-gray-300 text-sm mt-2 flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[#9CDCFE] mr-2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
-                        06-2812811 分機 57426
-                    </p>
-                    <a href="mailto:a41202@mail.chimei.org.tw" class="text-cyan-400 text-sm break-all hover:underline flex items-center mt-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[#9CDCFE] mr-2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
-                        a41202@mail.chimei.org.tw
-                    </a>
-                </div>
-            </section>
-            
-            <!-- Registration Form -->
-            <section id="registration-form" class="card rounded-xl p-6 sm:p-8">
-                <h2 class="text-3xl font-black text-center mb-6 main-title">立即報名</h2>
-                <form id="workshopForm">
-                    <!-- Identity Selection -->
-                    <div class="mb-6">
-                        <label class="block text-lg font-bold mb-3 text-white">請選擇您的身分別</label>
-                        <div class="radio-label-group grid grid-cols-1 md:grid-cols-2 gap-4">
-                           <!-- Internal Staff Option -->
-                           <div>
-                                <input type="radio" name="identity" value="internal" id="internal-radio" class="hidden" checked>
-                                <label for="internal-radio" id="internal-radio-label" class="radio-label p-4 rounded-xl flex items-center w-full cursor-pointer hover:bg-white/10">
-                                    <div class="radio-circle rounded-full mr-4 flex-shrink-0"></div>
-                                    <div class="flex-grow">
-                                        <h3 class="text-lg md:text-xl font-bold text-white">奇美醫院同仁</h3>
-                                        <p class="text-gray-400 mt-1 text-sm">總名額 40 位</p>
-                                    </div>
-                                    <div id="internal-slots-display" class="w-16 h-16 sm:w-20 sm:h-20 rounded-full flex flex-col items-center justify-center bg-cyan-500/20 border-2 border-cyan-400 text-white transition-all duration-300 flex-shrink-0 ml-2">
-                                         <span class="font-black text-xl sm:text-2xl">--</span>
-                                         <span class="text-xs">剩餘名額</span>
-                                    </div>
-                                </label>
-                            </div>
-                           <!-- External Staff Option -->
-                           <div>
-                               <input type="radio" name="identity" value="external" id="external-radio" class="hidden">
-                                <label for="external-radio" id="external-radio-label" class="radio-label p-4 rounded-xl flex items-center w-full cursor-pointer hover:bg-white/10">
-                                    <div class="radio-circle rounded-full mr-4 flex-shrink-0"></div>
-                                    <div class="flex-grow">
-                                        <h3 class="text-lg md:text-xl font-bold text-white">院外人員</h3>
-                                        <p class="text-gray-400 mt-1 text-sm">總名額 20 位</p>
-                                    </div>
-                                    <div id="external-slots-display" class="w-16 h-16 sm:w-20 sm:h-20 rounded-full flex flex-col items-center justify-center bg-blue-500/20 border-2 border-blue-400 text-white transition-all duration-300 flex-shrink-0 ml-2">
-                                        <span class="font-black text-xl sm:text-2xl">--</span>
-                                        <span class="text-xs">剩餘名額</span>
-                                    </div>
-                                </label>
-                            </div>
-                        </div>
-                    </div>
+            </div>
+            <div class="bg-white p-6 rounded-xl shadow-md border-l-4 border-[var(--color-deep-blue)]">
+                <p class="text-sm font-semibold text-gray-500">與會人員</p>
+                <p class="text-base font-bold text-gray-800">院級主管、醫學教育委員會委員（含功能小組成員）、教學部各中心與功能小組成員、各科部及職類教學負責人、佳里與柳營教學單位</p>
+            </div>
+        </div>
 
-                    <!-- Internal Staff Form -->
-                    <div id="internal-form" class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4 fade-in">
-                        <div>
-                            <label for="internal-id" class="block text-base md:text-lg font-medium text-gray-300 mb-1">人事號</label>
-                            <input type="text" id="internal-id" name="internal-id" class="form-input w-full rounded-md p-2" required>
-                        </div>
-                        <div>
-                            <label for="internal-name" class="block text-base md:text-lg font-medium text-gray-300 mb-1">姓名</label>
-                            <input type="text" id="internal-name" name="internal-name" class="form-input w-full rounded-md p-2" required>
-                        </div>
-                        <div>
-                            <label for="internal-dept" class="block text-base md:text-lg font-medium text-gray-300 mb-1">部門</label>
-                            <input type="text" id="internal-dept" name="internal-dept" class="form-input w-full rounded-md p-2" required>
-                        </div>
-                        <div>
-                            <label for="internal-title" class="block text-base md:text-lg font-medium text-gray-300 mb-1">職稱</label>
-                            <input type="text" id="internal-title" name="internal-title" class="form-input w-full rounded-md p-2" required>
-                        </div>
-                        <div class="sm:col-span-2">
-                            <label for="internal-email" class="block text-base md:text-lg font-medium text-gray-300 mb-1">Email</label>
-                            <input type="email" id="internal-email" name="internal-email" class="form-input w-full rounded-md p-2" required>
-                        </div>
-                         <div class="sm:col-span-2">
-                            <label for="internal-phone" class="block text-base md:text-lg font-medium text-gray-300 mb-1">聯絡電話</label>
-                            <input type="tel" id="internal-phone" name="internal-phone" class="form-input w-full rounded-md p-2" required>
-                        </div>
-                    </div>
+        <!-- 議程表格 -->
+        <div class="bg-white rounded-xl overflow-hidden border border-gray-200">
+            <table class="min-w-full agenda-table">
+                <thead>
+                    <tr>
+                        <th class="w-1/6">時間</th>
+                        <th class="w-1/3">活動內容</th> 
+                        <th class="w-1/2 border-r-0">負責人 / 主講人</th>
+                    </tr>
+                </thead>
+                <tbody>
 
-                    <!-- External Staff Form -->
-                    <div id="external-form" class="hidden grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4 fade-in">
-                         <div>
-                            <label for="external-name" class="block text-base md:text-lg font-medium text-gray-300 mb-1">姓名</label>
-                            <input type="text" id="external-name" name="external-name" class="form-input w-full rounded-md p-2" required>
-                        </div>
-                        <div>
-                            <label for="external-unit" class="block text-base md:text-lg font-medium text-gray-300 mb-1">服務單位</label>
-                            <input type="text" id="external-unit" name="external-unit" class="form-input w-full rounded-md p-2" required>
-                        </div>
-                        <div>
-                            <label for="external-dept" class="block text-base md:text-lg font-medium text-gray-300 mb-1">服務部門</label>
-                            <input type="text" id="external-dept" name="external-dept" class="form-input w-full rounded-md p-2" required>
-                        </div>
-                        <div>
-                            <label for="external-title" class="block text-base md:text-lg font-medium text-gray-300 mb-1">職稱</label>
-                            <input type="text" id="external-title" name="external-title" class="form-input w-full rounded-md p-2" required>
-                        </div>
-                        <div class="sm:col-span-2">
-                            <label for="external-email" class="block text-base md:text-lg font-medium text-gray-300 mb-1">Email</label>
-                            <input type="email" id="external-email" name="external-email" class="form-input w-full rounded-md p-2" required>
-                        </div>
-                        <div class="sm:col-span-2">
-                            <label for="external-phone" class="block text-base md:text-lg font-medium text-gray-300 mb-1">聯絡手機</label>
-                            <input type="tel" id="external-phone" name="external-phone" class="form-input w-full rounded-md p-2" required>
-                        </div>
-                    </div>
+                    <!-- 開場/致詞 (白底) -->
+                    <tr>
+                        <td class="time-col">12:45-13:00</td>
+                        <td class="main-activity">報到及入場</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td class="time-col">13:00-13:10</td>
+                        <td class="main-activity">長官致詞</td>
+                        <td>林宏榮院長、陳志成副院長</td>
+                    </tr>
+                    <tr>
+                        <td class="time-col">13:10-13:25</td>
+                        <td class="main-activity">醫學教育前瞻與未來</td>
+                        <td>林宏榮院長 (邀請中)</td> 
+                    </tr>
 
-                    <!-- Submit Button -->
-                    <div class="mt-8 text-center">
-                        <button type="submit" class="submit-btn text-black font-bold py-3 px-12 rounded-full text-lg">
-                            確認送出
-                        </button>
-                    </div>
-                </form>
-            </section>
-        </main>
-        
-        <!-- Footer -->
-        <footer class="text-center mt-8">
-            <p class="text-gray-400 text-sm">&copy; 2025 Chi Mei Medical Center. All Rights Reserved.</p>
+                    <!-- 區塊標題 1: 醫學教育制度轉型與計畫報告 -->
+                    <tr class="group-discussion-title">
+                        <td colspan="3">醫學教育制度轉型與教學計畫報告</td>
+                    </tr>
+                    <!-- 制度轉型與計畫報告 (純白底) -->
+                    <tr class="group-item-divider">
+                        <td class="time-col" rowspan="4">13:25-14:20</td>
+                        <td class="main-activity">醫學教育制度轉型 <span class="highlight-yellow">(10分)</span></td>
+                        <td>教學部 廖家德部長</td>
+                    </tr>
+                    <tr class="group-item-divider">
+                        <td class="main-activity">教學型主治醫師未來教學計畫報告 <span class="highlight-yellow">(15分)</span> <br><span class="text-sm font-normal text-gray-600">CBME規劃(含美國醫教參訪)</span></td>
+                        <td>教學部 一般科 郭妍伶主任</td>
+                    </tr>
+                    <tr class="group-item-divider">
+                        <td class="main-activity">教學型主治醫師未來教學計畫報告 <span class="highlight-yellow">(15分)</span></td>
+                        <td>教學部 陳伯榕教學型主治醫師</td>
+                    </tr>
+                    <tr>
+                        <td class="main-activity">教學型主治醫師未來教學計畫報告 <span class="highlight-yellow">(15分)</span></td>
+                        <td>一般內科 黃琪雅醫師</td>
+                    </tr>
+
+                    <!-- Break 1 (奶油黃底) -->
+                    <tr class="break-row">
+                        <td class="time-col">14:20-14:30</td>
+                        <td colspan="2">Break</td>
+                    </tr>
+
+                    <!-- 區塊標題 2: 分組討論 / 策略擬定 (I) -->
+                    <tr class="group-discussion-title">
+                        <td colspan="3">分組討論 / 策略擬定</td>
+                    </tr>
+                    <!-- 分組討論 I (純白底) -->
+                    <tr class="group-item-divider">
+                        <td class="time-col" rowspan="5">14:30-15:10</td>
+                        <td class="main-activity">教學行政組 <span class="text-sm font-normal text-gray-600">(活動列表、總召安排)</span></td>
+                        <td>劉雯副部長</td>
+                    </tr>
+                    <tr class="group-item-divider">
+                        <td class="main-activity">一般科</td>
+                        <td>郭妍伶主任／黃琪雅醫師（執行秘書）</td>
+                    </tr>
+                    <tr class="group-item-divider">
+                        <td class="main-activity">教師培育中心 及 臨床技能中心</td>
+                        <td>
+                            教師培育中心：郭進榮主任／陳伯榕醫師（執行秘書）<br>
+                            臨床技能中心：蔡長志主任／林昱惠醫師（執行秘書）
+                        </td>
+                    </tr>
+                    <tr class="group-item-divider">
+                        <td class="main-activity">實證醫學中心 及 醫學圖書館</td>
+                        <td>
+                            實證醫學中心：廖家德部長／李美娟小組長（執行秘書）<br>
+                            醫學圖書館：王藍浣主任／陳憶玲組長（執行秘書）
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="main-activity">視聽中心</td>
+                        <td>陳志金主任／許召玟小組長、林雨蕎小組長（執行秘書）</td>
+                    </tr>
+
+                    <!-- Break 2 (奶油黃底) -->
+                    <tr class="break-row">
+                        <td class="time-col">15:10-15:20</td>
+                        <td colspan="2">Break</td>
+                    </tr>
+
+                    <!-- 區塊標題 3: 分組討論 / 策略擬定 (II) -->
+                    <tr class="group-discussion-title">
+                        <td colspan="3">分組討論 / 策略擬定</td>
+                    </tr>
+                    <!-- 分組討論 II (純白底) -->
+                    <tr class="group-item-divider">
+                        <td class="time-col" rowspan="5">15:20-16:00</td>
+                        <td class="main-activity">特殊事件組</td>
+                        <td>謝孟倉主任（召集人）／黃琪雅醫師（執行秘書）</td>
+                    </tr>
+                    <tr class="group-item-divider">
+                        <td class="main-activity">數位賦能組</td>
+                        <td>劉忠峰主任（召集人）／黃博裕醫師（執行秘書）</td>
+                    </tr>
+                    <tr class="group-item-divider">
+                        <td class="main-activity">醫學人文組</td>
+                        <td>蘇慧真部長（召集人）／陳憶玲組長（執行秘書）</td>
+                    </tr>
+                    <tr class="group-item-divider">
+                        <td class="main-activity">核心能力組</td>
+                        <td>陳志偉主任（召集人）／陳伯榕醫師（執行秘書）</td>
+                    </tr>
+                    <tr>
+                        <td class="main-activity">教學品質稽核組</td>
+                        <td>陳志金主任（召集人）／蔡長志主任（執行秘書）</td>
+                    </tr>
+
+                    <!-- Break 3 (奶油黃底) -->
+                    <tr class="break-row">
+                        <td class="time-col">16:00-16:10</td>
+                        <td colspan="2">Break</td>
+                    </tr>
+
+                    <!-- 區塊標題 4: 規劃報告 -->
+                    <tr class="group-discussion-title">
+                        <td colspan="3">各中心/功能小組未來規劃報告 <span class="text-sm font-normal">(每組5-10分鐘)</span></td>
+                    </tr>
+                    <!-- 報告時間 (純白底) -->
+                    <tr>
+                        <td class="time-col">16:10-17:00</td>
+                        <td class="main-activity" colspan="2">
+                            <ul class="list-disc list-inside space-y-3">
+                                <li>一般科</li>
+                                <li>教師培育中心 及 臨床技能中心</li>
+                                <li>實證醫學中心 及 醫學圖書館</li>
+                                <li>視聽中心</li>
+                                <li>特殊事件組</li>
+                                <li>數位賦能組</li>
+                                <li>醫學人文組</li>
+                                <li>核心能力組</li>
+                                <li>教學品質稽核組</li>
+                            </ul>
+                        </td>
+                    </tr>
+                    
+                    <!-- 結尾 (白底) -->
+                    <tr>
+                        <td class="time-col">17:00-17:10</td>
+                        <td class="main-activity">長官勉勵</td>
+                        <td>院級長官</td>
+                    </tr>
+                    
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 議程調整提醒 -->
+        <div class="text-center text-sm" style="margin-top: 12px; margin-bottom: 4px; color: #777;">
+            <p>※ 活動流程將依實際情況彈性調整，敬請以當日公告為準 ※</p>
+        </div>
+
+        <!-- 頁腳/聯絡資訊 -->
+        <footer class="mt-10 pt-6 border-t border-gray-300 text-center text-gray-500 text-sm">
+            <p>&copy; 奇美醫院 教學部 版權所有</p>
+            <p>若有相關問題，請洽教學部 楊依玲 教學行政管理員（分機57426）</p>
         </footer>
     </div>
 
-    <!-- Success Message Popup -->
-    <div id="success-message" class="message-box fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center p-4 opacity-0 -translate-y-4 pointer-events-none">
-        <div class="card rounded-xl p-8 max-w-sm w-full text-center">
-            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mx-auto mb-4 text-cyan-300"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
-            <h3 class="text-2xl font-bold mb-2 text-white">報名成功！</h3>
-            <p class="text-gray-300 mb-6">感謝您的報名，我們已收到您的資料。期待在工作坊與您相見！</p>
-            <button id="close-success-message" class="submit-btn text-black font-bold py-2 px-8 rounded-full">關閉</button>
-        </div>
-    </div>
-    
-    <!-- Error Message Popup -->
-    <div id="error-message" class="message-box fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center p-4 opacity-0 -translate-y-4 pointer-events-none">
-        <div class="card rounded-xl p-8 max-w-sm w-full text-center border-red-500/50">
-            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mx-auto mb-4 text-red-400"><circle cx="12" cy="12" r="10"></circle><line x1="12" x2="12" y1="8" y2="12"></line><line x1="12" x2="12.01" y1="16" y2="16"></line></svg>
-            <h3 class="text-2xl font-bold mb-2 text-white">報名失敗</h3>
-            <p id="error-text" class="text-gray-300 mb-6">抱歉，送出時發生問題，請檢查您的網路連線後再試一次。</p>
-            <button id="close-error-message" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-8 rounded-full transition-colors">再試一次</button>
-        </div>
-    </div>
-
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            // !!! IMPORTANT !!!
-            // 已為您填入最新的 Google Apps Script 網址
-            const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyQM5FHAPh8VdcO5if26_tU2DpxDka_ddPjN9U3-JY320-l2myI9J5ZbfXiN2R0JZbp/exec';
-            
-            const INTERNAL_QUOTA = 40; 
-            const EXTERNAL_QUOTA = 20;
-
-            const identityRadios = document.querySelectorAll('input[name="identity"]');
-            const internalForm = document.getElementById('internal-form');
-            const externalForm = document.getElementById('external-form');
-            const workshopForm = document.getElementById('workshopForm');
-            const submitButton = workshopForm.querySelector('button[type="submit"]');
-
-            const successMessage = document.getElementById('success-message');
-            const closeSuccessBtn = document.getElementById('close-success-message');
-            const errorMessage = document.getElementById('error-message');
-            const errorText = document.getElementById('error-text');
-            const closeErrorBtn = document.getElementById('close-error-message');
-            
-            const internalSlotsDisplay = document.getElementById('internal-slots-display');
-            const externalSlotsDisplay = document.getElementById('external-slots-display');
-            
-            const internalRadio = document.getElementById('internal-radio');
-            const externalRadio = document.getElementById('external-radio');
-            const internalRadioLabel = document.getElementById('internal-radio-label');
-            const externalRadioLabel = document.getElementById('external-radio-label');
-
-            function toggleForms() {
-                if (document.querySelector('input[name="identity"]:checked').value === 'internal') {
-                    internalForm.style.display = 'grid';
-                    externalForm.style.display = 'none';
-                    internalForm.querySelectorAll('input').forEach(input => input.required = true);
-                    externalForm.querySelectorAll('input').forEach(input => input.required = false);
-                } else {
-                    internalForm.style.display = 'none';
-                    externalForm.style.display = 'grid';
-                    internalForm.querySelectorAll('input').forEach(input => input.required = false);
-                    externalForm.querySelectorAll('input').forEach(input => input.required = true);
-                }
-            }
-            
-            function updateSlotDisplay(element, remaining, type) {
-                const countElement = element.querySelector('span:first-child');
-                const textElement = element.querySelector('span:last-child');
-                
-                if (remaining > 0) {
-                    countElement.textContent = remaining;
-                } else {
-                    countElement.textContent = '已';
-                    countElement.classList.remove('sm:text-2xl', 'text-xl');
-                    countElement.classList.add('text-2xl', 'sm:text-3xl');
-                    textElement.textContent = '額滿';
-                    element.classList.add('bg-gray-500/20', 'border-gray-400');
-                    if (type === 'internal') {
-                         element.classList.remove('bg-cyan-500/20', 'border-cyan-400');
-                    } else {
-                         element.classList.remove('bg-blue-500/20', 'border-blue-400');
-                    }
-                }
-            }
-            
-            function fetchRegistrationCounts() {
-                // 我們 append 一個 dummy 參數避免快取
-                fetch(`${SCRIPT_URL}?t=${new Date().getTime()}`, { method: 'GET' })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.result === 'success') {
-                            let internalRegistered = data.internal || 0;
-                            let externalRegistered = data.external || 0;
-
-                            const internalRemaining = INTERNAL_QUOTA - internalRegistered;
-                            const externalRemaining = EXTERNAL_QUOTA - externalRegistered;
-
-                            updateSlotDisplay(internalSlotsDisplay, internalRemaining, 'internal');
-                            updateSlotDisplay(externalSlotsDisplay, externalRemaining, 'external');
-
-                            if (internalRemaining <= 0) {
-                                internalRadio.disabled = true;
-                                internalRadioLabel.classList.add('disabled');
-                                if(internalRadio.checked && !externalRadio.disabled) {
-                                    externalRadio.checked = true;
-                                    toggleForms();
-                                }
-                            }
-
-                            if (externalRemaining <= 0) {
-                                externalRadio.disabled = true;
-                                externalRadioLabel.classList.add('disabled');
-                                if(externalRadio.checked && !internalRadio.disabled) {
-                                    internalRadio.checked = true;
-                                    toggleForms();
-                                }
-                            }
-                            
-                            if (internalRemaining <= 0 && externalRemaining <= 0) {
-                                submitButton.disabled = true;
-                                submitButton.textContent = '已額滿';
-                                document.getElementById('registration-form').querySelector('h2').textContent = '報名已額滿';
-                            }
-
-                        } else {
-                           throw new Error(data.message || 'Failed to parse data.');
-                        }
-                    })
-                    .catch(error => {
-                        console.error('查詢名額時發生錯誤!', error.message);
-                        internalSlotsDisplay.querySelector('span:first-child').textContent = 'N/A';
-                        externalSlotsDisplay.querySelector('span:first-child').textContent = 'N/A';
-                    });
-            }
-
-
-            identityRadios.forEach(radio => {
-                radio.addEventListener('change', toggleForms);
-            });
-
-            workshopForm.addEventListener('submit', function (event) {
-                event.preventDefault();
-                
-                if (!SCRIPT_URL.startsWith("https://script.google.com/macros/s/")) {
-                    alert("請先在程式碼中填入您從 Google Apps Script 取得的有效網址！");
-                    return;
-                }
-
-                const originalButtonText = submitButton.textContent;
-                submitButton.disabled = true;
-                submitButton.textContent = '傳送中...';
-
-                fetch(SCRIPT_URL, { method: 'POST', body: new FormData(workshopForm)})
-                    .then(response => response.json())
-                    .then(data => {
-                        if(data.result === 'success') {
-                            showSuccessMessage();
-                            workshopForm.reset();
-                            toggleForms();
-                            fetchRegistrationCounts(); // 報名成功後，重新整理名額
-                        } else {
-                            throw new Error(data.message || '報名資料送出失敗');
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error!', error.message);
-                        showErrorMessage(error.message);
-                    })
-                    .finally(() => {
-                        submitButton.disabled = false;
-                        submitButton.textContent = originalButtonText;
-                    });
-            });
-
-            function showSuccessMessage() {
-                successMessage.classList.remove('opacity-0', '-translate-y-4', 'pointer-events-none');
-            }
-            function hideSuccessMessage() {
-                successMessage.classList.add('opacity-0', '-translate-y-4', 'pointer-events-none');
-            }
-            function showErrorMessage(message = '抱歉，發生未知問題，請再試一次。') {
-                errorText.textContent = message;
-                errorMessage.classList.remove('opacity-0', '-translate-y-4', 'pointer-events-none');
-            }
-            function hideErrorMessage() {
-                errorMessage.classList.add('opacity-0', '-translate-y-4', 'pointer-events-none');
-            }
-
-            closeSuccessBtn.addEventListener('click', hideSuccessMessage);
-            closeErrorBtn.addEventListener('click', hideErrorMessage);
-            
-            // Initial setup
-            toggleForms();
-            fetchRegistrationCounts();
-        });
-    </script>
 </body>
 </html>
-
 
