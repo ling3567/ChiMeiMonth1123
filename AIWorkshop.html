@@ -103,7 +103,7 @@
             <h1 class="text-4xl sm:text-5xl md:text-6xl font-black main-title tracking-wider">奇美月 ─ AI 數位賦能工作坊</h1>
             <h2 class="text-2xl md:text-3xl font-bold text-gray-200 mt-2">白手起家搭網站</h2>
             <p class="mt-4 text-gray-300 max-w-3xl mx-auto text-base md:text-lg">
-                探索如何運用 AI 技術，從零開始打造屬於您的網站。本工作坊將結合理論與實戰，帶您一窺 AI 在醫學教育的創新應用，並親手完成您的第一個網頁作品！
+                探索如何運用 AI 技術，從零開始打造屬於您的網站。<br>本工作坊將結合理論與實作，帶領學員親手建置網站，體驗 AI 在醫學教育中的應用與創新。
             </p>
         </header>
 
@@ -307,7 +307,7 @@
             // 已為您填入最新的 Google Apps Script 網址
             const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyQM5FHAPh8VdcO5if26_tU2DpxDka_ddPjN9U3-JY320-l2myI9J5ZbfXiN2R0JZbp/exec';
             
-            const INTERNAL_QUOTA = 40; // <-- Updated from 50
+            const INTERNAL_QUOTA = 40; 
             const EXTERNAL_QUOTA = 20;
 
             const identityRadios = document.querySelectorAll('input[name="identity"]');
@@ -370,8 +370,8 @@
                     .then(response => response.json())
                     .then(data => {
                         if (data.result === 'success') {
-                            const internalRegistered = data.internal || 0;
-                            const externalRegistered = data.external || 0;
+                            let internalRegistered = data.internal || 0;
+                            let externalRegistered = data.external || 0;
 
                             const internalRemaining = INTERNAL_QUOTA - internalRegistered;
                             const externalRemaining = EXTERNAL_QUOTA - externalRegistered;
@@ -477,3 +477,4 @@
     </script>
 </body>
 </html>
+
