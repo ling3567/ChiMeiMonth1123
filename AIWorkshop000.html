@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI 數位賦能工作坊｜報名狀況分析</title>
+    <title>醫學教育AI數位賦能工作坊｜報名狀況分析</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -42,21 +42,12 @@
             to { transform: rotate(360deg); }
         }
         .filter-btn {
-            background-color: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            padding: 8px 16px;
-            border-radius: 9999px;
-            transition: all 0.2s ease;
-            cursor: pointer;
-        }
-        .filter-btn:hover {
-            background-color: rgba(255, 255, 255, 0.2);
+            transition: all 0.2s ease-in-out;
         }
         .filter-btn.active {
-            background: linear-gradient(90deg, #89f7fe, #66a6ff);
+            background-color: #89f7fe;
             color: #0f0c29;
-            font-weight: bold;
-            border-color: transparent;
+            box-shadow: 0 0 15px rgba(137, 247, 254, 0.4);
         }
     </style>
 </head>
@@ -64,9 +55,9 @@
     <div class="w-full max-w-7xl mx-auto">
         <!-- Header Section -->
         <header class="text-center mb-10">
-            <h1 class="text-4xl md:text-5xl font-black main-title tracking-wider">AI 數位賦能工作坊</h1>
+            <h1 class="text-4xl md:text-5xl font-black main-title tracking-wider">醫學教育AI數位賦能工作坊</h1>
             <h2 class="text-2xl md:text-3xl font-bold text-gray-200 mt-2">報名狀況儀表板</h2>
-            <p id="last-updated" class="text-center text-gray-400 mt-2"></p>
+            <p id="last-updated" class="text-gray-400 mt-2 text-sm"></p>
         </header>
 
         <!-- Loading State -->
@@ -117,10 +108,10 @@
             <section class="card rounded-xl p-6">
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4">
                     <h3 class="text-2xl font-bold text-white mb-4 sm:mb-0">完整報名列表</h3>
-                    <div id="filter-container" class="flex space-x-2">
-                        <button class="filter-btn active" data-filter="all">全部</button>
-                        <button class="filter-btn" data-filter="奇美醫院同仁">院內同仁</button>
-                        <button class="filter-btn" data-filter="院外人員">院外人員</button>
+                    <div id="filter-container" class="flex items-center space-x-2 bg-gray-900/50 p-1 rounded-lg">
+                        <button class="filter-btn active px-4 py-2 text-sm rounded-md" data-filter="all">全部</button>
+                        <button class="filter-btn px-4 py-2 text-sm rounded-md" data-filter="奇美醫院同仁">院內同仁</button>
+                        <button class="filter-btn px-4 py-2 text-sm rounded-md" data-filter="院外人員">院外人員</button>
                     </div>
                 </div>
                 <div class="overflow-x-auto">
@@ -130,7 +121,7 @@
                                 <th class="p-3">報名時間</th>
                                 <th class="p-3">身分別</th>
                                 <th class="p-3">姓名</th>
-                                <th class="p-3">服務單位 / 部門</th>
+                                <th class="p-3">服務單位/部門</th>
                                 <th class="p-3">職稱</th>
                                 <th class="p-3">Email</th>
                             </tr>
@@ -154,8 +145,10 @@
             const mainContent = document.getElementById('main-content');
             const errorState = document.getElementById('error-state');
             const errorMessage = document.getElementById('error-message');
+            const lastUpdatedEl = document.getElementById('last-updated');
+            const filterContainer = document.getElementById('filter-container');
             
-            let allRegistrations = []; // 用來儲存所有報名資料
+            let allData = [];
 
             async function fetchData() {
                 try {
@@ -166,7 +159,9 @@
                     const result = await response.json();
                     
                     if (result.result === 'success') {
-                        processData(result.data);
+                        allData = result.data.sort((a, b) => new Date(b.報名時間) - new Date(a.報名時間));
+                        processData(allData);
+                        lastUpdatedEl.textContent = `最後更新時間：${new Date().toLocaleString()}`;
                         loadingState.classList.add('hidden');
                         mainContent.classList.remove('hidden');
                     } else {
@@ -181,12 +176,6 @@
             }
             
             function processData(data) {
-                allRegistrations = data; // 儲存全域資料
-
-                // 更新最後更新時間
-                document.getElementById('last-updated').textContent = `最後更新時間：${new Date().toLocaleString('zh-TW')}`;
-
-                // 1. Update Stat Cards
                 const internalCount = data.filter(r => r.身分別 === '奇美醫院同仁').length;
                 const externalCount = data.filter(r => r.身分別 === '院外人員').length;
                 
@@ -194,7 +183,6 @@
                 document.getElementById('internal-count').textContent = internalCount;
                 document.getElementById('external-count').textContent = externalCount;
                 
-                // 2. Process Data for Charts
                 function getTop5(items, key) {
                     const counts = items.reduce((acc, item) => {
                         const value = item[key];
@@ -214,42 +202,39 @@
                 const topInternalDepts = getTop5(internalData, '部門');
                 const topExternalUnits = getTop5(externalData, '服務單位');
                 
-                // 3. Create Charts
-                createChart('internal-dept-chart', 'bar', topInternalDepts, '人數', ['#89f7fe']);
-                createChart('external-unit-chart', 'bar', topExternalUnits, '人數', ['#66a6ff']);
+                // Clear previous charts if they exist
+                if (window.internalChart) window.internalChart.destroy();
+                if (window.externalChart) window.externalChart.destroy();
+                
+                window.internalChart = createChart('internal-dept-chart', 'bar', topInternalDepts, '人數', ['#89f7fe']);
+                window.externalChart = createChart('external-unit-chart', 'bar', topExternalUnits, '人數', ['#66a6ff']);
 
-                // 4. Populate Table with all data initially
-                populateTable(allRegistrations);
+                populateTable(data);
             }
 
             function populateTable(data) {
                 const tableBody = document.getElementById('registration-table');
-                tableBody.innerHTML = ''; // Clear previous data
+                tableBody.innerHTML = ''; 
                 if (data.length === 0) {
-                    tableBody.innerHTML = `<tr><td colspan="6" class="text-center p-8 text-gray-400">目前沒有符合條件的報名資料</td></tr>`;
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `<td colspan="6" class="p-4 text-center text-gray-400">目前尚無報名資料</td>`;
+                    tableBody.appendChild(tr);
                     return;
                 }
                 data.forEach(row => {
                     const tr = document.createElement('tr');
                     tr.className = 'table-row border-b border-gray-800';
-                    
-                    // 組合單位與部門資訊
-                    let unitDept = '';
-                    if (row.身分別 === '院外人員') {
-                        const unit = row.服務單位 || '';
-                        const dept = row.服務部門 || '';
-                        unitDept = `${unit}${dept ? ` - ${dept}` : ''}`;
-                    } else {
-                        unitDept = row.部門 || '';
-                    }
+                    const unitDept = row.身分別 === '院外人員' 
+                        ? `${row.服務單位 || ''} - ${row.服務部門 || ''}`
+                        : row.部門 || '';
 
                     tr.innerHTML = `
-                        <td class="p-3">${new Date(row.報名時間).toLocaleString('zh-TW')}</td>
+                        <td class="p-3 text-sm">${new Date(row.報名時間).toLocaleString()}</td>
                         <td class="p-3">${row.身分別 || ''}</td>
                         <td class="p-3">${row.姓名 || ''}</td>
                         <td class="p-3">${unitDept}</td>
                         <td class="p-3">${row.職稱 || ''}</td>
-                        <td class="p-3">${row.Email || ''}</td>
+                        <td class="p-3 text-sm">${row.Email || ''}</td>
                     `;
                     tableBody.appendChild(tr);
                 });
@@ -257,14 +242,10 @@
 
             function createChart(canvasId, type, chartData, label, colors) {
                  const ctx = document.getElementById(canvasId).getContext('2d');
-                 // 先銷毀舊的圖表實例，避免重複渲染
-                 if (window[canvasId+'_chart']) {
-                    window[canvasId+'_chart'].destroy();
-                 }
                  Chart.defaults.color = 'rgba(255, 255, 255, 0.7)';
                  Chart.defaults.borderColor = 'rgba(255, 255, 255, 0.2)';
 
-                 window[canvasId+'_chart'] = new Chart(ctx, {
+                 return new Chart(ctx, {
                     type: type,
                     data: {
                         labels: chartData.map(item => item[0]),
@@ -296,22 +277,21 @@
                 });
             }
 
-            // Filter functionality
-            const filterButtons = document.querySelectorAll('.filter-btn');
-            filterButtons.forEach(button => {
-                button.addEventListener('click', () => {
-                    filterButtons.forEach(btn => btn.classList.remove('active'));
-                    button.classList.add('active');
-                    const filterValue = button.dataset.filter;
+            filterContainer.addEventListener('click', function(e) {
+                if (e.target.tagName === 'BUTTON') {
+                    const filterValue = e.target.dataset.filter;
                     
-                    let filteredData = [];
-                    if (filterValue === 'all') {
-                        filteredData = allRegistrations;
-                    } else {
-                        filteredData = allRegistrations.filter(row => row.身分別 === filterValue);
-                    }
+                    // Update button styles
+                    filterContainer.querySelector('.active').classList.remove('active');
+                    e.target.classList.add('active');
+                    
+                    // Filter data
+                    const filteredData = (filterValue === 'all')
+                        ? allData
+                        : allData.filter(row => row.身分別 === filterValue);
+                    
                     populateTable(filteredData);
-                });
+                }
             });
 
             fetchData();
@@ -319,4 +299,3 @@
     </script>
 </body>
 </html>
-
