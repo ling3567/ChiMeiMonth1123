@@ -212,6 +212,42 @@
   #participation-info .cards {
     align-items: stretch;
   }
+
+  /* === 活動時程主要標題強調樣式（含報到、致詞、Break）=== */
+  #agenda-full h3.font-semibold.text-lg {
+    position: relative;
+    padding-left: 12px;
+    border-left: 4px solid var(--blue);
+    color: var(--accent);
+    font-weight: 700;
+    line-height: 1.5;
+    transition: all 0.25s ease-in-out;
+  }
+
+  /* 滑鼠懸停時亮起黃金色 */
+  #agenda-full h3.font-semibold.text-lg:hover {
+    color: var(--yellow);
+    border-left-color: var(--yellow);
+  }
+
+  /* 分階段色彩變化：依序循環展現不同色調，增加層次感 */
+  #agenda-full li:nth-of-type(4n+1) > h3 { border-left-color: #0E7AA8; } /* 主藍 */
+  #agenda-full li:nth-of-type(4n+2) > h3 { border-left-color: #4D8B7D; } /* 醫院綠 */
+  #agenda-full li:nth-of-type(4n+3) > h3 { border-left-color: #E0C23A; } /* 黃金色 */
+  #agenda-full li:nth-of-type(4n+4) > h3 { border-left-color: #5E63B6; } /* 紫藍 */
+
+  /* === Break 時段樣式（柔和中性色）=== */
+  #agenda-full h3:contains("Break"),
+  #agenda-full h3:contains("報到"),
+  #agenda-full h3:contains("致詞") {
+    border-left-color: #9BA7B0;
+    color: #475569;
+  }
+
+  /* 手機版微調：讓左側色條靠近文字 */
+  @media (max-width:768px){
+    #agenda-full h3.font-semibold.text-lg{padding-left:8px;border-left-width:3px;}
+  }
 </style>
 <meta property="og:title" content="創造360°醫學人生 醫學教育共識營">
 <meta property="og:description" content="電影式宣傳官網：日期地點、活動亮點、議程速覽、立即回覆與加入行事曆。">
