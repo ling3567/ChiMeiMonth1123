@@ -229,6 +229,47 @@
   }
 
 
+  /* === 統一議程標題配色（柔和藍系）=== */
+  #agenda-full h3.font-semibold.text-lg {
+    position: relative;
+    padding-left: 12px;
+    border-left: 4px solid #0E7AA8; /* 主題藍色 */
+    color: #0E7AA8;
+    font-weight: 700;
+    line-height: 1.5;
+    transition: all 0.2s ease-in-out;
+  }
+
+  /* 滑鼠懸停效果：微亮但不跳色 */
+  #agenda-full h3.font-semibold.text-lg:hover {
+    color: #145c74;
+    border-left-color: #145c74;
+  }
+
+  /* 文字下方的小項（如主講者）維持中灰文字，增強層次 */
+  #agenda-full p.text-slate-600 {
+    color: #5b6775;
+  }
+
+  /* Break 時段維持灰色系，與主題色柔和區分 */
+  #agenda-full h3:contains("Break") {
+    border-left-color: #9BA7B0;
+    color: #5b6775;
+  }
+
+  /* 手機版微調，讓色條靠近文字 */
+  @media (max-width:768px){
+    #agenda-full h3.font-semibold.text-lg{
+      padding-left:8px;
+      border-left-width:3px;
+    }
+  }
+
+  /* Fallback for Break sessions using explicit class */
+  #agenda-full h3.agenda-break {
+    border-left-color: #9BA7B0;
+    color: #5b6775;
+  }
 </style>
 <meta property="og:title" content="創造360°醫學人生 醫學教育共識營">
 <meta property="og:description" content="電影式宣傳官網：日期地點、活動亮點、議程速覽、立即回覆與加入行事曆。">
@@ -341,7 +382,7 @@
 
         <!-- 14:20–14:30 -->
         <li class="relative">
-          <h3 class="font-semibold text-lg">14:20–14:30｜Break</h3>
+          <h3 class="font-semibold text-lg agenda-break">14:20–14:30｜Break</h3>
      </li>
 
         <!-- 14:30–15:10 -->
@@ -375,7 +416,7 @@
 
         <!-- 15:10–15:20 -->
         <li class="relative">
-          <h3 class="font-semibold text-lg">15:10–15:20｜Break</h3>
+          <h3 class="font-semibold text-lg agenda-break">15:10–15:20｜Break</h3>
         </li>
 
         <!-- 15:20–16:00 -->
@@ -407,7 +448,7 @@
 
         <!-- 16:00–16:10 -->
         <li class="relative">
-          <h3 class="font-semibold text-lg">16:00–16:10｜Break</h3>
+          <h3 class="font-semibold text-lg agenda-break">16:00–16:10｜Break</h3>
      
         </li>
 
