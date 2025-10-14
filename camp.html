@@ -184,6 +184,34 @@
     .infogrid{grid-template-columns:1fr}
     .cards{grid-template-columns:1fr}
   }
+  /* 統一出席資訊區塊卡片的排版與對齊 */
+  #participation-info .card {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    line-height: 1.6;
+    height: 100%;
+  }
+
+  #participation-info .card h3 {
+    margin-bottom: 10px;
+  }
+
+  #participation-info .card p {
+    margin: 4px 0;
+    line-height: 1.6;
+    text-align: left;
+  }
+
+  #participation-info .card a {
+    display: inline-block;
+    margin-top: 2px;
+  }
+
+  /* 讓三張卡片高度一致 */
+  #participation-info .cards {
+    align-items: stretch;
+  }
 </style>
 <meta property="og:title" content="創造360°醫學人生 醫學教育共識營">
 <meta property="og:description" content="電影式宣傳官網：日期地點、活動亮點、議程速覽、立即回覆與加入行事曆。">
