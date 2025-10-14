@@ -55,6 +55,14 @@
   .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:18px}
   .card{background:#fff;border:1px solid #eef1f4;border-radius:14px;padding:18px}
   .card h3{margin:0 0 10px}
+  .card.reminder{background:linear-gradient(135deg,rgba(20,92,116,.92),rgba(14,122,168,.92));color:#f2fbff;border:1px solid rgba(14,122,168,.4);box-shadow:0 20px 45px rgba(14,26,34,.16);display:flex;flex-direction:column;gap:12px;min-height:100%}
+  .card.reminder p{color:inherit}
+  .card.reminder strong{color:#fff}
+  .card.reminder .actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:auto}
+  .card.reminder .btn{background:var(--yellow);color:#1a1a1a;box-shadow:0 8px 18px rgba(0,0,0,.25)}
+  .card.reminder .btn:hover{filter:brightness(.95)}
+  .card.reminder .btn.secondary{background:rgba(255,255,255,.9);color:var(--ink);box-shadow:none}
+  .card.reminder .btn.secondary:hover{background:#fff}
 
   /* AGENDA UTILITIES */
   #agenda-full{background:#fff;padding:60px 20px}
@@ -387,16 +395,12 @@
         <p>臺南｜奇美博物館 豐收廳</p>
         <p><a href="https://www.google.com/maps/search/?api=1&query=%E5%A5%87%E7%BE%8E%E5%8D%9A%E7%89%A9%E9%A4%A8+%E8%B1%90%E6%94%B6%E5%BB%B3" target="_blank" rel="noopener">Google Map 導航</a></p>
       </div>
-    </div>
-    <div class="mt-6 rounded-xl bg-[#0D5C7D] text-white shadow-lg ring-1 ring-black/5">
-      <div class="flex flex-col md:flex-row items-center justify-between gap-3 px-4 py-4">
-        <p class="flex items-center text-base leading-relaxed">
-          <span class="mr-2 text-lg" aria-hidden="true">📌</span>
-          <span>重要提醒：請與會成員於<strong class="mx-1">10月24日（五）</strong>前完成出席回覆，以利後續分組與行政安排。</span>
-        </p>
-        <div class="flex gap-2">
-          <a href="https://forms.office.com/r/GYZYtJPd2A" class="px-4 py-1.5 rounded-md font-medium bg-[#F4C542] text-black hover:bg-[#d9ad32]" target="_blank" rel="noopener">立即回覆</a>
-          <a href="https://calendar.google.com/calendar/u/0/r/eventedit?dates=20251123T124500/20251123T171000&text=%E3%80%8C%E5%89%B5%E9%80%A0360%C2%B0%E9%86%AB%E5%AD%B8%E4%BA%BA%E7%94%9F%E3%80%8D-%20%E9%86%AB%E5%AD%B8%E6%95%99%E8%82%B2%E5%85%B1%E8%AD%98%E7%87%9F&details=%E8%AB%8B%E5%8F%83%E8%80%83%E8%AD%B0%E7%A8%8B%E8%A1%A8%E8%A9%B3%E6%83%85%E3%80%82&location=%E5%A5%87%E7%BE%8E%E5%8D%9A%E7%89%A9%E9%A4%A8%20%E8%B1%90%E6%94%B6%E5%BB%B3" class="px-4 py-1.5 rounded-md font-medium bg-white text-black hover:bg-gray-100" target="_blank" rel="noopener">加入行事曆</a>
+      <div class="card reminder">
+        <h3>重要提醒</h3>
+        <p>請與會成員於<strong class="mx-1">10月24日（五）</strong>前完成出席回覆，以利後續分組與行政安排。</p>
+        <div class="actions">
+          <a href="https://forms.office.com/r/GYZYtJPd2A" class="btn" target="_blank" rel="noopener">立即回覆</a>
+          <a href="https://calendar.google.com/calendar/u/0/r/eventedit?dates=20251123T124500/20251123T171000&text=%E3%80%8C%E5%89%B5%E9%80%A0360%C2%B0%E9%86%AB%E5%AD%B8%E4%BA%BA%E7%94%9F%E3%80%8D-%20%E9%86%AB%E5%AD%B8%E6%95%99%E8%82%B2%E5%85%B1%E8%AD%98%E7%87%9F&details=%E8%AB%8B%E5%8F%83%E8%80%83%E8%AD%B0%E7%A8%8B%E8%A1%A8%E8%A9%B3%E6%83%85%E3%80%82&location=%E5%A5%87%E7%BE%8E%E5%8D%9A%E7%89%A9%E9%A4%A8%20%E8%B1%90%E6%94%B6%E5%BB%B3" class="btn secondary" target="_blank" rel="noopener">加入行事曆</a>
         </div>
       </div>
     </div>
