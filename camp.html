@@ -236,8 +236,8 @@
 
 <section id="agenda-full" class="py-8">
   <!-- 與上方卡片相同的容器寬度：可依你上方區塊改成相同 max-w 與 padding -->
-  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-    <h2 class="text-2xl font-bold text-center mb-8">完整議程</h2>
+  <div class="container">
+    <h2 class="text-2xl font-bold text-center mb-8">活動時程</h2>
 
     <!-- 時間軸外層，使用 before 畫出垂直線，位置更靠左避免壓到時間 -->
     <div class="relative">
@@ -245,7 +245,7 @@
       <div class="pointer-events-none absolute left-6 top-0 bottom-0 w-px bg-slate-200/80"></div>
 
       <!-- 清單本體：左側留白加大，避免圓點壓到時間文字 -->
-      <ol class="pl-14 space-y-8">
+      <ul class="list-none pl-14 space-y-8">
         <!-- 節點元件：把圓點固定在 left: 6，並用 translate-x-1/2 微調靠左 -->
         <!-- 12:45–13:00 -->
         <li class="relative">
@@ -365,7 +365,7 @@
           <h3 class="font-semibold text-lg">17:00–17:10｜長官勉勵</h3>
           <p class="text-sm text-slate-600">—</p>
         </li>
-      </ol>
+      </ul>
     </div>
   </div>
 </section>
