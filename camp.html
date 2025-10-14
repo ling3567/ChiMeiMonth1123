@@ -169,27 +169,6 @@
     .xl\:grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}
   }
 
-  .tracking-tight{letter-spacing:-0.02em}
-  .hover\:bg\[\#d9ad32\]:hover{background:#d9ad32}
-  .hover\:bg-gray-100:hover{background:#f3f4f6}
-
-  .reminder-bar{background:#0D5C7D;color:#fff}
-  .reminder-icon{color:#d73a49;font-size:20px}
-  .reminder-button{display:inline-flex;align-items:center;justify-content:center;font-weight:600;border-radius:10px;padding:10px 16px;border:none;cursor:pointer;transition:background-color .2s,color .2s;border:1px solid transparent;text-decoration:none}
-  .reminder-button.primary{background:#F4C542;color:#1a1a1a}
-  .reminder-button.primary:hover{background:#d8aa26}
-  .reminder-button.secondary{background:#fff;color:#000;border-color:rgba(0,0,0,.12)}
-  .reminder-button.secondary:hover{background:#f2f2f2}
-  .reminder-button.ghost{background:#000;color:#fff}
-  .reminder-button.ghost:hover{background:#1a1a1a}
-
-  /* CTA 固定條（可關閉） */
-  .cta-bar{position:sticky;bottom:16px;z-index:20}
-  .cta-inner{max-width:1200px;margin:0 auto;padding:0 20px}
-  .cta-box{display:flex;gap:10px;align-items:center;justify-content:space-between;background:#0a5b87;color:#fff;border-radius:14px;padding:12px 14px;box-shadow:0 10px 22px rgba(0,0,0,.18)}
-  .cta-actions{display:flex;gap:10px;flex-wrap:wrap}
-  .ghost{background:transparent;border:1px solid #d6dde6;border-radius:10px;padding:8px 12px;cursor:pointer}
-  .close{background:var(--ink);color:#fff;border:none;border-radius:10px;padding:8px 12px;cursor:pointer}
 
   /* Responsive */
   @media (max-width:1080px){
@@ -437,20 +416,6 @@
     </div>
   </div>
 </footer>
-
-<!-- CTA 固定條 -->
-<div class="cta-bar" id="ctaBar">
-  <div class="cta-inner">
-    <div class="cta-box">
-      <div>📌 參與提醒：<span style="opacity:.9">請於 <strong style="color:#f9d25a">10/24（五）</strong> 前完成出席回覆。</span></div>
-      <div class="cta-actions">
-        <a class="btn" href="https://forms.office.com/r/GYZYtJPd2A" target="_blank" rel="noopener">回覆出席</a>
-        <a class="btn secondary" href="https://calendar.google.com/calendar/u/0/r/eventedit?dates=20251123T124500/20251123T171000&text=%E3%80%8C%E5%89%B5%E9%80%A0360%C2%B0%E9%86%AB%E5%AD%B8%E4%BA%BA%E7%94%9F%E3%80%8D-%20%E9%86%AB%E5%AD%B8%E6%95%99%E8%82%B2%E5%85%B1%E8%AD%98%E7%87%9F&details=%E8%AB%8B%E5%8F%83%E8%80%83%E8%AD%B0%E7%A8%8B%E8%A1%A8%E8%A9%B3%E6%83%85%E3%80%82&location=%E5%A5%87%E7%BE%8E%E5%8D%9A%E7%89%A9%E9%A4%A8%20%E8%B1%90%E6%94%B6%E5%BB%B3" target="_blank" rel="noopener">加入行事曆</a>
-        <button class="close" type="button" onclick="document.getElementById('ctaBar').style.display='none'">關閉</button>
-      </div>
-    </div>
-  </div>
-</div>
 
 <script>
 // 倒數（台北時間 2025-11-23 12:45）
