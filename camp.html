@@ -372,7 +372,7 @@
 
 <section id="contact">
   <div class="container">
-    <h2>活動資訊</h2>
+    <h2 class="text-2xl font-bold mb-6 text-center">出席與會資訊</h2>
     <div class="cards">
       <div class="card">
         <h3>聯絡資訊</h3>
@@ -385,15 +385,20 @@
         <p><a href="https://www.google.com/maps/search/?api=1&query=%E5%A5%87%E7%BE%8E%E5%8D%9A%E7%89%A9%E9%A4%A8+%E8%B1%90%E6%94%B6%E5%BB%B3" target="_blank" rel="noopener">Google Map 導航</a></p>
       </div>
     </div>
-    <div class="rounded-lg p-4 mt-6 flex flex-col md:flex-row items-center justify-between shadow reminder-bar">
-      <div class="flex flex-col md:flex-row items-center gap-2 text-white text-center md:text-left">
-        <span class="reminder-icon" aria-hidden="true">📌</span>
-        <p class="font-medium" style="margin:0">參與提醒：請於 <strong>10/24（五）</strong> 前完成出席回覆。</p>
-      </div>
-      <div class="flex justify-between md:justify-end gap-2 flex-wrap w-full md:w-auto mt-4 md:mt-0" style="max-width:360px">
-        <a class="reminder-button primary" href="https://forms.office.com/r/GYZYtJPd2A" target="_blank" rel="noopener">回覆出席</a>
-        <a class="reminder-button secondary" href="https://calendar.google.com/calendar/u/0/r/eventedit?dates=20251123T124500/20251123T171000&text=%E3%80%8C%E5%89%B5%E9%80%A0360%C2%B0%E9%86%AB%E5%AD%B8%E4%BA%BA%E7%94%9F%E3%80%8D-%20%E9%86%AB%E5%AD%B8%E6%95%99%E8%82%B2%E5%85%B1%E8%AD%98%E7%87%9F&details=%E8%AB%8B%E5%8F%83%E8%80%83%E8%AD%B0%E7%A8%8B%E8%A1%A8%E8%A9%B3%E6%83%85%E3%80%82&location=%E5%A5%87%E7%BE%8E%E5%8D%9A%E7%89%A9%E9%A4%A8%20%E8%B1%90%E6%94%B6%E5%BB%B3" target="_blank" rel="noopener">加入行事曆</a>
-        <button class="reminder-button ghost" type="button">關閉</button>
+    <div class="mt-8 flex flex-col md:flex-row items-center justify-between bg-[#0D5C7D] text-white p-4 rounded-lg shadow">
+      <p class="flex items-center text-base leading-relaxed">
+        <span class="mr-2 text-lg" aria-hidden="true">📌</span>
+        <span>
+          重要提醒：請與會成員於<strong class="mx-1">10月24日（五）</strong>前完成出席回覆，以利後續分組與行政安排。
+        </span>
+      </p>
+      <div class="mt-3 md:mt-0 flex gap-2">
+        <a href="https://forms.office.com/r/GYZYtJPd2A" class="bg-[#F4C542] hover:bg-[#d9ad32] text-black px-4 py-1.5 rounded-md font-medium shadow-sm" target="_blank" rel="noopener">
+          立即回覆
+        </a>
+        <a href="https://calendar.google.com/calendar/u/0/r/eventedit?dates=20251123T124500/20251123T171000&text=%E3%80%8C%E5%89%B5%E9%80%A0360%C2%B0%E9%86%AB%E5%AD%B8%E4%BA%BA%E7%94%9F%E3%80%8D-%20%E9%86%AB%E5%AD%B8%E6%95%99%E8%82%B2%E5%85%B1%E8%AD%98%E7%87%9F&details=%E8%AB%8B%E5%8F%83%E8%80%83%E8%AD%B0%E7%A8%8B%E8%A1%A8%E8%A9%B3%E6%83%85%E3%80%82&location=%E5%A5%87%E7%BE%8E%E5%8D%9A%E7%89%A9%E9%A4%A8%20%E8%B1%90%E6%94%B6%E5%BB%B3" class="bg-white text-black px-4 py-1.5 rounded-md font-medium shadow-sm hover:bg-gray-100" target="_blank" rel="noopener">
+          加入行事曆
+        </a>
       </div>
     </div>
   </div>
