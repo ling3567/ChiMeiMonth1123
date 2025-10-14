@@ -1,0 +1,287 @@
+
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>創造360°醫學人生｜醫學教育共識營 — 電影式宣傳官網</title>
+<meta name="description" content="醫學教育共識營：以電影宣傳頁風格呈現，快速掌握日期地點、活動亮點、議程速覽與行動按鈕（出席回覆、加入行事曆）。">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<style>
+  /* —— 風格主題 —— */
+  :root{
+    --blue:#0e7aa8; --yellow:#e0c23a; --ink:#0e1a22; --bg:#f6f7fb; --card:#ffffff; --muted:#667280; --accent:#145c74;
+    --paper:#f2ebe3; --rose:#c53f4f; --violet:#5e63b6; --teal:#1f9d8f; --cream:#fff9e5;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Noto Sans TC,Roboto,Helvetica,Arial,"PingFang TC","Microsoft JhengHei",sans-serif;color:var(--ink);background:var(--bg);-webkit-font-smoothing:antialiased}
+  a{color:var(--blue);text-decoration:none} a:hover{text-decoration:underline}
+
+  /* HERO */
+  header.hero{
+    position:relative;min-height:86vh;display:grid;place-items:center;color:#fff;text-align:left;
+    background:linear-gradient(180deg,rgba(6,16,24,.72),rgba(6,16,24,.88)),url("hero_chimei.jpg") center/cover no-repeat;
+  }
+  .hero .wrap{width:100%;max-width:1200px;margin:0 auto;padding:0 20px;display:grid;grid-template-columns:1.15fr .95fr;gap:28px;align-items:center}
+  .brand{display:flex;gap:12px;align-items:center;margin-bottom:10px}
+  .brand .logo{width:46px;height:46px;border-radius:10px;background:#fff;display:grid;place-items:center;color:var(--ink);font-weight:800}
+  .kicker{letter-spacing:.12em;text-transform:uppercase;font-weight:700;opacity:.9;font-size:14px}
+  h1{font-size:clamp(30px,4.4vw,60px);line-height:1.04;margin:6px 0 14px}
+  .nowrap{white-space:nowrap}
+  .badges{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0}
+  .badge{background:rgba(255,255,255,.12);padding:8px 12px;border-radius:999px;border:1px solid rgba(255,255,255,.26);font-size:13px}
+  .cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:16px}
+  .btn{display:inline-flex;align-items:center;gap:8px;background:var(--yellow);color:#1a1a1a;font-weight:800;border-radius:12px;padding:12px 16px;border:none;cursor:pointer;font-size:16px;box-shadow:0 6px 16px rgba(0,0,0,.18)}
+  .btn.secondary{background:#fff;color:var(--ink)}
+  .meta{margin-top:12px;color:#e7f0f6;font-size:14px}
+
+  /* INFO STRIP */
+  .container{max-width:1200px;margin:0 auto;padding:0 20px}
+  .infostrip{position:relative;z-index:10;background:#fff;box-shadow:0 6px 22px rgba(0,0,0,.06);margin-top:-46px;border-radius:16px;padding:22px}
+  .infogrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+  .icard{background:var(--card);border:1px solid #eef1f4;border-radius:14px;padding:18px;display:flex;gap:12px;align-items:flex-start}
+  .icard svg{width:28px;height:28px;flex:0 0 auto}
+  .icard h4{margin:0 0 6px;font-size:16px}
+  .icard p{margin:0;color:var(--muted);font-size:14px}
+  .icard a{font-weight:700}
+
+  /* BASE */
+  section{padding:60px 0}
+  section h2{font-size:32px;margin:0 0 12px}
+  .lead{color:var(--muted);max-width:860px}
+  .poster{width:100%;border-radius:16px;box-shadow:0 10px 26px rgba(0,0,0,.34);border:4px solid rgba(255,255,255,.25)}
+
+  /* HIGHLIGHTS */
+  .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:18px}
+  .card{background:#fff;border:1px solid #eef1f4;border-radius:14px;padding:18px}
+  .card h3{margin:0 0 10px}
+
+  /* TIMELINE (議程速覽) */
+  .timeline{position:relative;padding-left:20px}
+  .timeline::before{content:"";position:absolute;left:12px;top:0;bottom:0;width:2px;background:linear-gradient(#d7e6ee,#a0c6d7)}
+  .titem{position:relative;margin:14px 0;padding:16px 16px 14px 20px;background:#fff;border:1px solid #e7eef4;border-radius:12px}
+  .titem .dot{position:absolute;left:-4px;top:18px;width:12px;height:12px;border-radius:50%;background:var(--yellow);border:2px solid #fff;box-shadow:0 0 0 2px rgba(14,122,168,.2)}
+  .titem .time{font-weight:800;color:var(--accent)}
+  .titem .who{color:#516071}
+  .break{background:var(--cream)}
+
+  /* AGENDA TABLE (詳盡版，置於手風琴內) */
+  .accordion{border:1px solid #e8edf1;border-radius:12px;overflow:hidden;margin-top:16px}
+  .acc{border-top:1px solid #e8edf1;background:#fff}
+  .acc summary{list-style:none;cursor:pointer;padding:16px 18px;font-weight:700}
+  .acc summary::-webkit-details-marker{display:none}
+  .acc .content{padding:0 18px 18px;color:var(--muted)}
+  table.agenda{width:100%;border-collapse:collapse;border:1px solid #eef1f4}
+  .agenda th{background:#0e7aa8;color:#fff;padding:12px 14px;text-align:left}
+  .agenda td{background:#fff;padding:12px 14px;border-top:1px solid #eef1f4}
+  .agenda .group{background:#d6ecf3;color:#0e1a22;font-weight:800}
+  .agenda .cream td{background:#fff9e5}
+
+  /* CTA 固定條（可關閉） */
+  .cta-bar{position:sticky;bottom:16px;z-index:20}
+  .cta-inner{max-width:1200px;margin:0 auto;padding:0 20px}
+  .cta-box{display:flex;gap:10px;align-items:center;justify-content:space-between;background:#0a5b87;color:#fff;border-radius:14px;padding:12px 14px;box-shadow:0 10px 22px rgba(0,0,0,.18)}
+  .cta-actions{display:flex;gap:10px;flex-wrap:wrap}
+  .ghost{background:transparent;border:1px solid #d6dde6;border-radius:10px;padding:8px 12px;cursor:pointer}
+  .close{background:var(--ink);color:#fff;border:none;border-radius:10px;padding:8px 12px;cursor:pointer}
+
+  /* Responsive */
+  @media (max-width:1080px){
+    .hero .wrap{grid-template-columns:1fr}
+    .infogrid{grid-template-columns:1fr}
+    .cards{grid-template-columns:1fr}
+  }
+</style>
+<meta property="og:title" content="創造360°醫學人生 醫學教育共識營">
+<meta property="og:description" content="電影式宣傳官網：日期地點、活動亮點、議程速覽、立即回覆與加入行事曆。">
+<meta property="og:image" content="hero_chimei.jpg">
+<meta name="theme-color" content="#0e7aa8">
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <div>
+      <div class="brand">
+        <div class="logo">奇美</div>
+        <div class="kicker">MEDICAL EDUCATION CONSENSUS — OFFICIAL</div>
+      </div>
+      <h1>「創造360°醫學人生」｜<span class="nowrap" style="color:var(--yellow)">醫學教育共識營</span></h1>
+      <div class="badges">
+        <span class="badge">2025/11/23（日）12:45–17:10</span>
+        <span class="badge">臺南｜奇美博物館 豐收廳</span>
+        <span class="badge"> 醫教會 × 教學部</span>
+      </div>
+      <p class="meta">三小時半的濃縮交流：回顧一年變化、對齊願景、分組擬定年度策略與KPI。</p>
+      <div class="cta">
+        <a class="btn" href="https://forms.office.com/r/GYZYtJPd2A" target="_blank" rel="noopener">回覆出席</a>
+        <a class="btn secondary" href="https://calendar.google.com/calendar/u/0/r/eventedit?dates=20251123T124500/20251123T171000&text=%E3%80%8C%E5%89%B5%E9%80%A0360%C2%B0%E9%86%AB%E5%AD%B8%E4%BA%BA%E7%94%9F%E3%80%8D-%20%E9%86%AB%E5%AD%B8%E6%95%99%E8%82%B2%E5%85%B1%E8%AD%98%E7%87%9F&details=%E8%AB%8B%E5%8F%83%E8%80%83%E8%AD%B0%E7%A8%8B%E8%A1%A8%E8%A9%B3%E6%83%85%E3%80%82&location=%E5%A5%87%E7%BE%8E%E5%8D%9A%E7%89%A9%E9%A4%A8%20%E8%B1%90%E6%94%B6%E5%BB%B3" target="_blank" rel="noopener">加入行事曆</a>
+      </div>
+      <p class="meta" id="countdown">距離開場：計算中…</p>
+    </div>
+    <div aria-hidden="true">
+      <img class="poster" src="hero_chimei.jpg" alt="共識營主視覺海報">
+    </div>
+  </div>
+</header>
+
+<!-- INFO STRIP -->
+<div class="container infostrip" role="region" aria-label="關鍵資訊">
+  <div class="infogrid">
+    <div class="icard">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M8 7h8M8 11h8M8 15h6"/><rect x="3" y="4" width="18" height="16" rx="2" ry="2" stroke-width="2"/></svg>
+      <div>
+        <h4>活動宗旨</h4>
+        <p>對齊願景、整合方向；把各項教學行動連成推動的力量。</p>
+      </div>
+    </div>
+    <div class="icard">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 5v14M5 12h14" stroke-width="2"/></svg>
+      <div>
+        <h4>行動按鈕</h4>
+        <p><a href="https://forms.office.com/r/GYZYtJPd2A" target="_blank" rel="noopener">回覆出席</a> ・ <a href="https://calendar.google.com/calendar/u/0/r/eventedit?dates=20251123T124500/20251123T171000&text=%E3%80%8C%E5%89%B5%E9%80%A0360%C2%B0%E9%86%AB%E5%AD%B8%E4%BA%BA%E7%94%9F%E3%80%8D-%20%E9%86%AB%E5%AD%B8%E6%95%99%E8%82%B2%E5%85%B1%E8%AD%98%E7%87%9F&details=%E8%AB%8B%E5%8F%83%E8%80%83%E8%AD%B0%E7%A8%8B%E8%A1%A8%E8%A9%B3%E6%83%85%E3%80%82&location=%E5%A5%87%E7%BE%8E%E5%8D%9A%E7%89%A9%E9%A4%A8%20%E8%B1%90%E6%94%B6%E5%BB%B3" target="_blank" rel="noopener">加入行事曆</a></p>
+      </div>
+    </div>
+    <div class="icard">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="8" r="4"/><path d="M6 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/></svg>
+      <div>
+        <h4>與會對象</h4>
+        <p>院級主管、醫教會委員（含功能小組）、教學部各中心與小組成員。</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section id="about">
+  <div class="container">
+    <h2>活動亮點</h2>
+    <p class="lead">以電影式開場、系統化分組與精準報告，三階段推進：回顧→對齊→落地。</p>
+    <div class="cards">
+      <div class="card"><h3>🧭 策略對齊</h3><p>分組聚焦十個單位／專案小組，形成年度目標與KPI草案。</p></div>
+      <div class="card"><h3>🗂️ 區塊敘事</h3><p>醫學教育發展報告 → 分組討論I/II → 各組五分鐘回報。</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="agenda" style="background:#fff">
+  <div class="container">
+    <h2>議程速覽</h2>
+    <div class="timeline">
+      <div class="titem"><div class="dot"></div><div class="time">12:45–13:00</div><div class="what">報到及入場</div></div>
+      <div class="titem"><div class="dot"></div><div class="time">13:00–13:10</div><div class="what">長官致詞</div><div class="who">林宏榮院長、陳志成副院長</div></div>
+      <div class="titem"><div class="dot"></div><div class="time">13:10–13:25</div><div class="what">醫學教育前瞻與未來</div><div class="who">林宏榮院長（邀請中）</div></div>
+
+      <div class="titem"><div class="dot"></div><div class="time">13:25–14:20</div><div class="what"><strong>醫學教育發展與教學計畫報告</strong></div><div class="who">廖家德部長／教學型主治醫師（郭妍伶、陳伯榕、黃琪雅）</div></div>
+      <div class="titem break"><div class="dot"></div><div class="time">14:20–14:30</div><div class="what">Break</div></div>
+
+      <div class="titem"><div class="dot"></div><div class="time">14:30–15:10</div><div class="what"><strong>分組討論（I）</strong></div><div class="who">教學行政組｜一般科｜教師培育中心｜臨床技能中心｜實證醫學中心＋醫學圖書館＋視聽中心</div></div>
+      <div class="titem break"><div class="dot"></div><div class="time">15:10–15:20</div><div class="what">Break</div></div>
+
+      <div class="titem"><div class="dot"></div><div class="time">15:20–16:00</div><div class="what"><strong>分組討論（II）</strong></div><div class="who">特殊事件組｜數位賦能組｜醫學人文組｜核心能力組｜教學品質稽核組</div></div>
+      <div class="titem break"><div class="dot"></div><div class="time">16:00–16:10</div><div class="what">Break</div></div>
+
+      <div class="titem"><div class="dot"></div><div class="time">16:10–17:00</div><div class="what"><strong>各中心／功能小組年度目標報告（每組5分鐘）</strong></div></div>
+      <div class="titem"><div class="dot"></div><div class="time">17:00–17:10</div><div class="what">長官勉勵</div><div class="who">院級長官</div></div>
+    </div>
+
+    <!-- 詳盡版議程（手風琴） -->
+    <div class="accordion" style="margin-top:22px">
+      <details class="acc">
+        <summary>展開完整議程（含講者／單位）</summary>
+        <div class="content">
+          <div style="overflow:auto">
+            <table class="agenda">
+              <thead><tr><th style="width:18%">時間</th><th style="width:42%">活動內容</th><th style="width:40%">負責人／主講人</th></tr></thead>
+              <tbody>
+                <tr><td>12:45–13:00</td><td>報到及入場</td><td></td></tr>
+                <tr><td>13:00–13:10</td><td>長官致詞</td><td>林宏榮院長、陳志成副院長</td></tr>
+                <tr><td>13:10–13:25</td><td>醫學教育前瞻與未來</td><td>林宏榮院長（邀請中）</td></tr>
+                <tr class="group"><td colspan="3">醫學教育發展與教學計畫報告</td></tr>
+                <tr><td>13:25–13:35</td><td>醫學教育─回首來時路 步步是力量（10分）</td><td>教學部 廖家德部長</td></tr>
+                <tr><td>13:35–13:50</td><td>教學型主治醫師未來教學計畫報告（15分）<br><small style="color:#667280">（題目後續公告）</small></td><td>教學部 一般科 郭妍伶主任</td></tr>
+                <tr><td>13:50–14:05</td><td>教學型主治醫師未來教學計畫報告（15分）<br><small style="color:#667280">（題目後續公告）</small></td><td>教學部 陳伯榕教學型主治醫師</td></tr>
+                <tr><td>14:05–14:20</td><td>教學型主治醫師未來教學計畫報告（15分）<br><small style="color:#667280">（題目後續公告）</small></td><td>一般內科 黃琪雅醫師</td></tr>
+                <tr class="cream"><td>14:20–14:30</td><td colspan="2">Break</td></tr>
+                <tr class="group"><td colspan="3">分組討論／策略擬定（I）</td></tr>
+                <tr><td rowspan="5">14:30–15:10</td><td>教學行政組</td><td>劉雯副部長</td></tr>
+                <tr><td>一般科</td><td>郭妍伶主任／黃琪雅醫師（執行秘書）</td></tr>
+                <tr><td>教師培育中心</td><td>郭進榮主任／陳伯榕醫師（執行秘書）</td></tr>
+                <tr><td>臨床技能中心</td><td>蔡長志主任／林昱惠醫師（執行秘書）</td></tr>
+                <tr><td>實證醫學中心、醫學圖書館及視聽中心</td><td>實證：廖家德／李美娟（秘）｜圖書館：王藍浣／陳憶玲（秘）｜視聽：陳志金／許召玟、林雨蕎（秘）</td></tr>
+                <tr class="cream"><td>15:10–15:20</td><td colspan="2">Break</td></tr>
+                <tr class="group"><td colspan="3">分組討論／策略擬定（II）</td></tr>
+                <tr><td rowspan="5">15:20–16:00</td><td>特殊事件組</td><td>謝孟倉（召集人）／黃琪雅（秘）</td></tr>
+                <tr><td>數位賦能組</td><td>劉忠峰（召集人）／黃博裕（秘）</td></tr>
+                <tr><td>醫學人文組</td><td>蘇慧真（召集人）／陳憶玲（秘）</td></tr>
+                <tr><td>核心能力組</td><td>陳志偉（召集人）／陳伯榕（秘）</td></tr>
+                <tr><td>教學品質稽核組</td><td>陳志金（召集人）／蔡長志（秘）</td></tr>
+                <tr class="cream"><td>16:00–16:10</td><td colspan="2">Break</td></tr>
+                <tr class="group"><td colspan="3">各中心／功能小組年度目標報告（每組5分鐘）</td></tr>
+                <tr><td>16:10–17:00</td><td colspan="2"><ul style="margin:0;padding-left:18px"><li>教學行政組</li><li>一般科</li><li>教師培育中心</li><li>臨床技能中心</li><li>實證醫學中心、醫學圖書館及視聽中心</li><li>特殊事件組</li><li>數位賦能組</li><li>醫學人文組</li><li>核心能力組</li><li>教學品質稽核組</li></ul></td></tr>
+                <tr><td>17:00–17:10</td><td>長官勉勵</td><td>院級長官</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p style="margin:10px 0 0;color:#7a8794">※ 流程將依實際情況彈性調整，以當日公告為準。</p>
+        </div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="container">
+    <h2>聯絡資訊</h2>
+    <div class="cards">
+      <div class="card">
+        <h3>主辦單位</h3>
+        <p>奇美醫院 教學部</p>
+        <p>聯絡人：楊依玲 教學行政管理員（分機 57426）</p>
+      </div>
+      <div class="card">
+        <h3>參與方式</h3>
+        <p>與會者請先完成出席回覆；現場將提供分組指示與資料。</p>
+      </div>
+      <div class="card">
+        <h3>地點資訊</h3>
+        <p>臺南｜奇美博物館 豐收廳</p>
+        <p><a href="https://www.google.com/maps/search/?api=1&query=%E5%A5%87%E7%BE%8E%E5%8D%9A%E7%89%A9%E9%A4%A8+%E8%B1%90%E6%94%B6%E5%BB%B3" target="_blank" rel="noopener">Google Map 導航</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer style="background:#0c1d26;color:#cfe5ef;padding:36px 0">
+  <div class="container" style="display:grid;grid-template-columns:1.1fr 1fr;gap:20px">
+    <div>
+      <h3>創造360°醫學人生｜醫學教育共識營</h3>
+      <p>回顧變化，對齊願景；把每一個行動連成集體的推動力。</p>
+      <p>&copy; 2025 Chi Mei Medical Center. All rights reserved.</p>
+    </div>
+    <div>
+      <h3>快速導覽</h3>
+      <p><a href="#about">活動亮點</a>・<a href="#agenda">議程速覽</a>・<a href="#contact">聯絡資訊</a></p>
+    </div>
+  </div>
+</footer>
+
+<!-- CTA 固定條 -->
+<div class="cta-bar" id="ctaBar">
+  <div class="cta-inner">
+    <div class="cta-box">
+      <div>📌 參與提醒：<span style="opacity:.9">請於 <strong style="color:#f9d25a">10/24（五）</strong> 前完成出席回覆。</span></div>
+      <div class="cta-actions">
+        <a class="btn" href="https://forms.office.com/r/GYZYtJPd2A" target="_blank" rel="noopener">回覆出席</a>
+        <a class="btn secondary" href="https://calendar.google.com/calendar/u/0/r/eventedit?dates=20251123T124500/20251123T171000&text=%E3%80%8C%E5%89%B5%E9%80%A0360%C2%B0%E9%86%AB%E5%AD%B8%E4%BA%BA%E7%94%9F%E3%80%8D-%20%E9%86%AB%E5%AD%B8%E6%95%99%E8%82%B2%E5%85%B1%E8%AD%98%E7%87%9F&details=%E8%AB%8B%E5%8F%83%E8%80%83%E8%AD%B0%E7%A8%8B%E8%A1%A8%E8%A9%B3%E6%83%85%E3%80%82&location=%E5%A5%87%E7%BE%8E%E5%8D%9A%E7%89%A9%E9%A4%A8%20%E8%B1%90%E6%94%B6%E5%BB%B3" target="_blank" rel="noopener">加入行事曆</a>
+        <button class="close" type="button" onclick="document.getElementById('ctaBar').style.display='none'">關閉</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// 倒數（台北時間 2025-11-23 12:45）
+(function(){const t=new Date('2025-11-23T12:45:00+08:00').getTime(),el=document.getElementById('countdown');function pad(n){return String(n).padStart(2,'0')}function tick(){let d=Math.max(0,t-Date.now());let days=Math.floor(d/86400000);d-=days*86400000;let hrs=Math.floor(d/3600000);d-=hrs*3600000;let mins=Math.floor(d/60000);el.textContent=`距離開場：${days} 天 ${pad(hrs)} 小時 ${pad(mins)} 分鐘`}tick();setInterval(tick,30000)})();
+</script>
+</body>
+</html>
