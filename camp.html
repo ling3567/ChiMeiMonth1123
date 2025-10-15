@@ -339,17 +339,17 @@
     margin-left: 0;
   }
 
-  /* === 活動時程｜灰線與黃點同座標、桌機與手機對齊 === */
+  /* === 完美對齊版：灰線、黃點、時間三者視覺平衡 === */
 
-  /* 1️⃣ 讓 ul 成為座標原點 */
+  /* 讓 ul 成為座標原點 */
   #agenda-full ul.list-none {
     position: relative;
     list-style: none;
     margin: 0;
-    padding-left: 52px; /* 灰線→文字距離，覺得太遠可改 48px */
+    padding-left: 52px; /* 決定灰線與時間距離，可改 48–56 視覺調整 */
   }
 
-  /* 2️⃣ 在 ul::before 畫出灰線（固定在 padding 左緣） */
+  /* 灰線：固定在左內距 */
   #agenda-full ul.list-none::before {
     content: "";
     position: absolute;
@@ -361,14 +361,14 @@
     z-index: 0;
   }
 
-  /* 3️⃣ 每個 li：黃點用同座標系、與灰線完全重疊 */
+  /* 黃點：靠灰線 + 微向右1px，使圓心完美壓線 */
   #agenda-full ul.list-none > li {
     position: relative;
   }
   #agenda-full ul.list-none > li::before {
     content: "";
     position: absolute;
-    left: 0; /* 與灰線同一條線 */
+    left: 1px; /* ← 微向右1px，修正 translate 的位移 */
     top: 0.92em; /* 垂直置中，字體不同可微調 0.9–1.0 */
     transform: translate(-50%, -50%);
     width: 12px;
@@ -379,18 +379,18 @@
     z-index: 1;
   }
 
-  /* 4️⃣ 內層子清單不要再畫黃點 */
+  /* 內層項目不要黃點 */
   #agenda-full ul.list-none li ul > li::before {
     content: none !important;
   }
 
-  /* 5️⃣ 移除 h3 左側藍線（避免雙線干擾） */
+  /* 移除標題左側藍線 */
   #agenda-full h3.font-semibold.text-lg {
     border-left: none !important;
     padding-left: 0 !important;
   }
 
-  /* 6️⃣ 手機調整：灰線略收、圓點略小、距離微縮 */
+  /* 手機微調 */
   @media (max-width: 768px) {
     #agenda-full ul.list-none {
       padding-left: 48px; /* 手機上更緊湊 */
@@ -399,6 +399,7 @@
       width: 10px;
       height: 10px;
       top: 0.9em;
+      left: 1px; /* 保持對齊灰線 */
     }
   }
 </style>
