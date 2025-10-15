@@ -343,67 +343,100 @@
     margin-left: 0;
   }
 
-  /* === 活動時程線條與圓點對齊設定 === */
-
-  /* 1️⃣ 統一定義變數（灰線與列表距離） */
-  #agenda-full {
-    --rail-x: 1.5rem;  /* Tailwind .left-6 = 1.5rem (24px) */
-    --list-pad: 3.5rem; /* Tailwind .pl-14 = 3.5rem (56px) */
-  }
-
-  /* 2️⃣ 畫出灰線 */
+  /* === 整體時間軸容器 === */
   #agenda-full .timeline {
     position: relative;
-    padding-left: var(--list-pad);
+    padding-left: 2.5rem; /* 預留空間給左側垂直線與圓點 */
   }
+
+  /* === 灰色垂直線 === */
   #agenda-full .timeline::before {
     content: "";
     position: absolute;
-    left: var(--rail-x);
+    left: 0.75rem; /* 控制垂直線距離左邊的距離 */
     top: 0;
     bottom: 0;
-    width: 1px;
-    background-color: rgba(203,213,225,0.7); /* 比原本更淡的灰 */
+    width: 2px;
+    background-color: rgba(203, 213, 225, 0.8); /* slate-200/80 */
     z-index: 0;
   }
 
-  /* 3️⃣ 調整圓點位置：相對灰線 + 微往右移 2px 對齊線中心 */
-  #agenda-full ul.list-none {
-    padding-left: var(--list-pad);
-  }
-  #agenda-full ul.list-none > li {
+  /* === 每個時間節點 === */
+  #agenda-full .timeline li {
     position: relative;
+    padding-left: 1.75rem;
+    margin-bottom: 1.5rem;
   }
-  #agenda-full ul.list-none > li::before {
+
+  /* === 黃色節點設定（對齊垂直線） === */
+  #agenda-full .timeline li::before {
     content: "";
     position: absolute;
-    left: calc(var(--rail-x) - 2px); /* 與灰線幾乎重疊 */
-    top: 0.8em;
-    transform: translate(-50%, -50%);
+    left: 0.73rem; /* 與垂直線幾乎重合 */
+    top: 0.8em; /* 垂直置中微調 */
     width: 14px;
     height: 14px;
+    background-color: #facc15; /* 黃色節點 */
     border-radius: 50%;
-    background: var(--yellow);
-    box-shadow: 0 0 0 3px #fff;
+    box-shadow: 0 0 0 3px #fff; /* 白色外框，保持乾淨 */
+    transform: translate(-50%, -50%);
     z-index: 1;
   }
 
-  /* 4️⃣ 手機板（內距通常較小 pl-10~pl-12）自動修正 */
-  @media (max-width: 768px) {
-    #agenda-full {
-      --rail-x: 1.25rem;   /* 灰線略向右收 */
-      --list-pad: 3rem;    /* 若 pl-12 就是 3rem */
+  /* === 內層子清單保持原狀，不加圓點 === */
+  #agenda-full .timeline li ul li::before {
+    content: none !important;
+  }
+
+  /* === RWD 微調（手機上稍微靠左） === */
+  @media (max-width: 640px) {
+    #agenda-full .timeline {
+      padding-left: 2rem;
     }
-    #agenda-full ul.list-none > li::before {
-      left: calc(var(--rail-x) - 1px);
+    #agenda-full .timeline::before {
+      left: 0.6rem;
+    }
+    #agenda-full .timeline li::before {
+      left: 0.6rem;
       width: 12px;
       height: 12px;
     }
   }
 
-  /* 5️⃣ 內層列表不要圓點 */
-  #agenda-full ul.list-none li ul > li::before {
-    content: none !important;
+  /* === 精準控制時間軸圓點位置，確保壓在線上且 RWD 同步 === */
+  /* 灰線所在容器：定義線的位置（與 .left-6 相同 = 24px） */
+  #agenda-full .relative{
+    --rail-x: 24px;   /* 灰線距離容器左邊的座標 */
+  }
+
+  /* 外層清單：定義左內距（pl-14 = 56px） */
+  #agenda-full ul.list-none{
+    --list-pad: 56px; /* 依實際 class 調整：pl-14=56px、pl-12=48px... */
+  }
+
+  /* 每個節點的黃點：用(灰線座標 - 清單左內距) 對齊同一條線 */
+  #agenda-full ul.list-none > li{
+    position: relative;
+  }
+  #agenda-full ul.list-none > li::before{
+    content:"";
+    position:absolute;
+    left: calc(var(--rail-x) - var(--list-pad)); /* 精準壓在線上 */
+    top: 0.8em;
+    transform: translate(-50%,-50%);            /* 讓圓心對齊 */
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    background: var(--yellow);
+    box-shadow: 0 0 0 3px #fff;
+    z-index: 0;
+  }
+
+  /* 內層子清單不要出現黃點 */
+  #agenda-full ul.list-none li ul > li::before{ content: none !important; }
+
+  /* 手機若改用不同的內距（例如 pl-12=48px），這邊同步覆寫變數即可 */
+  @media (max-width: 768px){
+    #agenda-full ul.list-none{ --list-pad: 56px; } /* 若手機仍是 pl-14 就維持 56；若你改成 pl-12 就填 48 */
   }
 </style>
 <meta property="og:title" content="創造360°醫學人生 醫學教育共識營">
