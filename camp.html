@@ -403,40 +403,56 @@
     }
   }
 
-  /* === 精準控制時間軸圓點位置，確保壓在線上且 RWD 同步 === */
-  /* 灰線所在容器：定義線的位置（與 .left-6 相同 = 24px） */
+  /* === 活動時程：重設為同一座標系，桌機/手機都對齊 === */
+
+  /* 1) 在時間軸外層(relative)統一定義灰線座標 */
   #agenda-full .relative{
-    --rail-x: 24px;   /* 灰線距離容器左邊的座標 */
+    --rail-x: 24px;    /* 左邊灰線的位置；原 Tailwind .left-6 = 24px */
+    --pad-gap: 32px;   /* 灰線到文字的緩衝距離，避免黃點貼到時間 */
   }
 
-  /* 外層清單：定義左內距（pl-14 = 56px） */
+  /* 2) 灰線用同一個座標（避免 RWD 偏移） */
+  #agenda-full .relative > .pointer-events-none{
+    left: var(--rail-x) !important;
+    width: 1px;
+    background-color: rgba(203,213,225,.7); /* 柔和一點 */
+  }
+
+  /* 3) 外層 UL 以「灰線座標 + 緩衝」決定左內距；並移除預設黑點 */
   #agenda-full ul.list-none{
-    --list-pad: 56px; /* 依實際 class 調整：pl-14=56px、pl-12=48px... */
+    list-style: none !important;
+    padding-left: calc(var(--rail-x) + var(--pad-gap)) !important;
+    margin-left: 0 !important;
   }
 
-  /* 每個節點的黃點：用(灰線座標 - 清單左內距) 對齊同一條線 */
-  #agenda-full ul.list-none > li{
-    position: relative;
-  }
+  /* 4) 每個 li 成為定位容器；黃點用同一座標壓在線上 */
+  #agenda-full ul.list-none > li{ position: relative; }
   #agenda-full ul.list-none > li::before{
     content:"";
     position:absolute;
-    left: calc(var(--rail-x) - var(--list-pad)); /* 精準壓在線上 */
-    top: 0.8em;
-    transform: translate(-50%,-50%);            /* 讓圓心對齊 */
-    width: 14px; height: 14px;
+    left: var(--rail-x);               /* 與灰線同一條直線 */
+    top: 0.95em;                       /* 視字高微調垂直位置 */
+    transform: translate(-50%,-50%);   /* 以圓心對齊灰線 */
+    width: 12px; height: 12px;
     border-radius: 50%;
     background: var(--yellow);
-    box-shadow: 0 0 0 3px #fff;
-    z-index: 0;
+    box-shadow: 0 0 0 3px #fff;        /* 白色外圈，保持乾淨不壓字 */
+    z-index: 0;                        /* 在文字之下，避免遮字 */
   }
 
-  /* 內層子清單不要出現黃點 */
-  #agenda-full ul.list-none li ul > li::before{ content: none !important; }
+  /* 5) 內層子清單不要再畫黃點 */
+  #agenda-full ul.list-none li ul > li::before{ content:none !important; }
 
-  /* 手機若改用不同的內距（例如 pl-12=48px），這邊同步覆寫變數即可 */
+  /* 6) 手機版：根據視覺把灰線稍收、緩衝略縮（避免看起來偏左） */
   @media (max-width: 768px){
-    #agenda-full ul.list-none{ --list-pad: 56px; } /* 若手機仍是 pl-14 就維持 56；若你改成 pl-12 就填 48 */
+    #agenda-full .relative{
+      --rail-x: 22px;   /* 手機上線條略向右 2px */
+      --pad-gap: 28px;  /* 讓時間靠近一些，不會離線太遠 */
+    }
+    #agenda-full ul.list-none > li::before{
+      width: 11px; height: 11px;       /* 手機黃點縮小些更精緻 */
+      top: 0.9em;
+    }
   }
 </style>
 <meta property="og:title" content="創造360°醫學人生 醫學教育共識營">
