@@ -159,7 +159,7 @@
         <!-- Header Section -->
         <header class="text-center mb-10">
             <h1 class="text-4xl sm:text-5xl md:text-6xl font-black main-title tracking-wider text-white">醫學教育AI數位賦能工作坊</h1>
-            <h2 class="text-2xl md:text-3xl font-bold mt-2 highlight-yellow">報名頁面</h2>
+            <h2 class="text-2xl md:text-3xl font-bold mt-2 highlight-yellow">活動報名專區</h2>
             <p class="mt-4 text-gray-300 max-w-3xl mx-auto text-base md:text-lg">
                 探索如何運用 AI 技術，從零開始打造屬於您的網站。<br>本工作坊將結合理論與實作，帶領學員親手建置網站，體驗 AI 在醫學教育中的應用與創新。
             </p>
@@ -215,17 +215,17 @@
                 <!-- 聯絡資訊 -->
                 <div class="card p-6">
                     <div class="flex items-center mb-3">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="text-yellow-300 mr-3" width="24" height="24" viewBox="0 0 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-3.92 7.94"></path></svg>
+                       <svg xmlns="http://www.w3.org/2000/svg" class="text-yellow-300 mr-3" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
                         <h3 class="text-xl font-bold text-white">聯絡資訊</h3>
                     </div>
                     <p class="text-gray-300 text-base md:text-lg">奇美醫院教學部</p>
                     <p class="text-gray-300 text-base md:text-lg">楊依玲教學行政管理員</p>
                     <p class="text-gray-300 text-sm mt-2 flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-yellow-300 mr-2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81 .7A2 2 0 0 1 22 16.92z"></path></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-yellow-300 mr-2"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
                         06-2812811 分機 57426
                     </p>
                     <a href="mailto:a41202@mail.chimei.org.tw" class="text-yellow-400 text-sm break-all hover:underline flex items-center mt-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-yellow-300 mr-2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-yellow-300 mr-2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
                         a41202@mail.chimei.org.tw
                     </a>
                 </div>
@@ -502,10 +502,13 @@
                             if (document.activeElement) {
                                 document.activeElement.blur();
                             }
-                            showSuccessMessage();
-                            workshopForm.reset();
-                            toggleForms();
-                            fetchRegistrationCounts(); // 報名成功後，重新整理名額
+                            // 短暫延遲，等待鍵盤完全收合
+                            setTimeout(() => {
+                                showSuccessMessage();
+                                workshopForm.reset();
+                                toggleForms();
+                                fetchRegistrationCounts(); // 報名成功後，重新整理名額
+                            }, 150);
                         } else {
                             throw new Error(data.message || '報名資料送出失敗');
                         }
@@ -540,10 +543,11 @@
             closeSuccessBtn.addEventListener('click', hideSuccessMessage);
             closeErrorBtn.addEventListener('click', hideErrorMessage);
 
-            // Initial setup
+-            // Initial setup
             toggleForms();
             fetchRegistrationCounts();
         });
     </script>
 </body>
 </html>
+
