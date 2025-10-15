@@ -121,7 +121,6 @@
   .card.reminder .btn.secondary:hover{background:#fff}
 
   /* AGENDA UTILITIES */
-  #agenda-full{background:#fff;padding:60px 20px}
   #agenda-full h2{font-size:32px;margin-left:auto;margin-right:auto;max-width:1200px}
   #agenda-full>.grid{max-width:1200px;margin:0 auto}
   .py-8{padding-top:32px;padding-bottom:32px}
@@ -310,6 +309,32 @@
     border-left-color: #9BA7B0;
     color: #5b6775;
   }
+
+  /* 活動時程外層大卡樣式（與上方資訊一致的語彙） */
+  .agenda-card{
+    background:#fff;
+    border:1px solid #eef1f4;
+    border-radius:20px;
+    padding:28px 22px;
+    box-shadow:0 12px 28px rgba(14,26,34,.08);
+  }
+
+  /* 調整時程區塊：取消自帶白底，改由外層卡片提供 */
+  #agenda-full{
+    background:transparent;
+    padding:60px 0;   /* 原本有 padding 保留 */
+  }
+
+  /* 卡片內標題微調間距 */
+  #agenda-full .agenda-card h2{
+    margin-top:0;
+    margin-bottom:18px;
+  }
+
+  /* 手機內距較緊湊 */
+  @media (max-width:768px){
+    .agenda-card{ padding:22px 16px; border-radius:16px; }
+  }
 </style>
 <meta property="og:title" content="創造360°醫學人生 醫學教育共識營">
 <meta property="og:description" content="醫學教育共識營宣傳官網：日期地點、活動議程、立即回覆與加入行事曆。">
@@ -378,15 +403,16 @@
 <section id="agenda-full" class="py-8">
   <!-- 與上方卡片相同的容器寬度：可依你上方區塊改成相同 max-w 與 padding -->
   <div class="container">
-    <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight text-slate-900 mb-8">活動時程</h2>
+    <div class="agenda-card">
+      <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight text-slate-900 mb-8">活動時程</h2>
 
-    <!-- 時間軸外層，使用 before 畫出垂直線，位置更靠左避免壓到時間 -->
-    <div class="relative">
-      <!-- 垂直線（淡灰） -->
-      <div class="pointer-events-none absolute left-6 top-0 bottom-0 w-px bg-slate-200/80"></div>
+      <!-- 時間軸外層，使用 before 畫出垂直線，位置更靠左避免壓到時間 -->
+      <div class="relative">
+        <!-- 垂直線（淡灰） -->
+        <div class="pointer-events-none absolute left-6 top-0 bottom-0 w-px bg-slate-200/80"></div>
 
-      <!-- 清單本體：左側留白加大，避免圓點壓到時間文字 -->
-      <ul class="list-none pl-14 space-y-8">
+        <!-- 清單本體：左側留白加大，避免圓點壓到時間文字 -->
+        <ul class="list-none pl-14 space-y-8">
         <!-- 節點元件：把圓點固定在 left: 6，並用 translate-x-1/2 微調靠左 -->
         <!-- 12:45–13:00 -->
         <li class="relative">
@@ -521,7 +547,8 @@
           <h3 class="font-semibold text-lg">17:00–17:10｜長官勉勵</h3>
     
         </li>
-      </ul>
+        </ul>
+      </div>
     </div>
   </div>
 </section>
