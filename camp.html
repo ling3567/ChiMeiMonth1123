@@ -341,65 +341,50 @@
 
   /* === 完美對齊版：灰線、黃點、時間三者視覺平衡 === */
 
-  /* 讓 ul 成為座標原點 */
-  #agenda-full ul.list-none {
+  /* === 時間軸：用 ul 的內距變數來對齊線與圓點 === */
+
+  /* 桌機：決定時間與灰線距離（52px 可微調） */
+  #agenda-full ul.list-none{
+    --gutter: 52px;      /* 文字與灰線的距離 */
     position: relative;
     list-style: none;
     margin: 0;
-    padding-left: 52px; /* 決定灰線與時間距離，可改 40 視覺調整 */
+    padding-left: var(--gutter);
   }
 
-  /* 灰線：固定在左內距 */
-  #agenda-full ul.list-none::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0; /* 固定在 ul 左內距起點 */
-    width: 1px;
-    background-color: rgba(203, 213, 225, 0.7);
-    z-index: 0;
+  /* 灰線畫在 ul 的 padding 左緣（= 0） */
+  #agenda-full ul.list-none::before{
+    content:"";
+    position:absolute;
+    top:0; bottom:0;
+    left:0;              /* 就是 ul 的 padding 起點 */
+    width:1px;
+    background: rgba(203,213,225,.7);
+    z-index:0;
   }
 
-  /* 黃點：靠灰線 + 微向右1px，使圓心完美壓線 */
-  #agenda-full ul.list-none > li {
-    position: relative;
-  }
-  #agenda-full ul.list-none > li::before {
-    content: "";
-    position: absolute;
-    left: 1px; /* ← 微向右1px，修正 translate 的位移 */
-    top: 0.92em; /* 垂直置中，字體不同可微調 0.9–1.0 */
-    transform: translate(-50%, -50%);
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
+  /* 黃點：以 li 為基準，向左位移「gutter」回到灰線上 */
+  #agenda-full ul.list-none > li{ position: relative; }
+  #agenda-full ul.list-none > li::before{
+    content:"";
+    position:absolute;
+    left: calc(-1 * var(--gutter) + 1px); /* +1px 微調，讓圓心壓線 */
+    top: 0.92em;
+    transform: translate(-50%,-50%);
+    width:12px; height:12px; border-radius:50%;
     background: var(--yellow);
-    box-shadow: 0 0 0 3px #fff; /* 白色外框，避免壓到文字 */
-    z-index: 1;
+    box-shadow:0 0 0 3px #fff;
+    z-index:1;          /* 在文字之上，但有白圈不會壓字 */
   }
 
-  /* 內層項目不要黃點 */
-  #agenda-full ul.list-none li ul > li::before {
-    content: none !important;
-  }
+  /* 內層子清單不畫黃點 */
+  #agenda-full ul.list-none li ul > li::before{ content:none !important; }
 
-  /* 移除標題左側藍線 */
-  #agenda-full h3.font-semibold.text-lg {
-    border-left: none !important;
-    padding-left: 0 !important;
-  }
-
-  /* 手機微調 */
-  @media (max-width: 768px) {
-    #agenda-full ul.list-none {
-      padding-left: 40px; /* 手機上更緊湊 */
-    }
-    #agenda-full ul.list-none > li::before {
-      width: 10px;
-      height: 10px;
-      top: 0.9em;
-      left: 1px; /* 保持對齊灰線 */
+  /* 手機：更緊湊一點（可改 44~48） */
+  @media (max-width: 768px){
+    #agenda-full ul.list-none{ --gutter: 48px; }
+    #agenda-full ul.list-none > li::before{
+      width:10px; height:10px; top:.9em;
     }
   }
 </style>
