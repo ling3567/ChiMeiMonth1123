@@ -355,6 +355,42 @@
   @media (max-width:768px){
     .agenda-card{ padding:22px 16px; border-radius:16px; }
   }
+
+  /* 1) 讓每個 li 成為定位容器 */
+  #agenda-full ul.list-none > li{
+    position: relative;
+  }
+
+  /* 2) 圓點置中在縱線上（縱線 left:24px），並略小一點避免干擾文字 */
+  #agenda-full ul.list-none > li::before{
+    content:"";
+    position:absolute;
+    left:24px;                 /* 與縱線相同位置 */
+    top:0.6em;
+    transform:translate(-50%,-50%); /* 圓心對齊縱線 */
+    width:12px;
+    height:12px;
+    border-radius:50%;
+    background:var(--yellow);
+    box-shadow:0 0 0 3px #fff; /* 白色外圈，與背景分離 */
+    z-index:0;                 /* 不蓋住文字 */
+  }
+
+  /* 3) 再把整串清單向右內縮，留出圓點與縱線的緩衝 */
+  #agenda-full ul.list-none{
+    padding-left:72px;         /* 原本 pl-14 (56px)，再加大到 72px */
+  }
+
+  /* 內層清單仍不加圓點 */
+  #agenda-full ul.list-none li ul > li::before{
+    content:none;
+  }
+
+  /* 小螢幕再微調（避免太擠） */
+  @media (max-width:768px){
+    #agenda-full ul.list-none{ padding-left:68px; }
+    #agenda-full ul.list-none > li::before{ width:10px; height:10px; }
+  }
 </style>
 <meta property="og:title" content="創造360°醫學人生 醫學教育共識營">
 <meta property="og:description" content="醫學教育共識營宣傳官網：日期地點、活動議程、立即回覆與加入行事曆。">
