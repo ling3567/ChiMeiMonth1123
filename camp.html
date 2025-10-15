@@ -319,26 +319,6 @@
     box-shadow:0 12px 28px rgba(14,26,34,.08);
   }
 
-  /* 活動時程：節點圓點位置與樣式 */
-#agenda-full ul.list-none>li::before{
-  content:"";
-  position:absolute;
-  left:24px;
-  top:0.6em;
-  transform:translate(-50%,-50%);
-  width:14px;
-  height:14px;
-  border-radius:50%;
-  background:var(--yellow);
-  box-shadow:0 0 0 3px #fff;
-  z-index:1;
-}
-
-  /* 內層列表維持原樣，不覆蓋樣式 */
-  #agenda-full ul.list-none li ul>li::before{
-    content:none;
-  }
-
   /* 調整時程區塊：取消自帶白底，改由外層卡片提供 */
   #agenda-full{
     background:transparent;
@@ -356,40 +336,71 @@
     .agenda-card{ padding:22px 16px; border-radius:16px; }
   }
 
-  /* 1) 讓每個 li 成為定位容器 */
-  #agenda-full ul.list-none > li{
+  /* === 移除預設黑點樣式 === */
+  #agenda-full ul {
+    list-style: none !important;
+    padding-left: 0;
+    margin-left: 0;
+  }
+
+  /* === 整體時間軸容器 === */
+  #agenda-full .timeline {
     position: relative;
+    padding-left: 2.5rem; /* 預留空間給左側垂直線與圓點 */
   }
 
-  /* 2) 圓點置中在縱線上（縱線 left:24px），並略小一點避免干擾文字 */
-  #agenda-full ul.list-none > li::before{
-    content:"";
-    position:absolute;
-    left:24px;                 /* 與縱線相同位置 */
-    top:0.6em;
-    transform:translate(-50%,-50%); /* 圓心對齊縱線 */
-    width:12px;
-    height:12px;
-    border-radius:50%;
-    background:var(--yellow);
-    box-shadow:0 0 0 3px #fff; /* 白色外圈，與背景分離 */
-    z-index:0;                 /* 不蓋住文字 */
+  /* === 灰色垂直線 === */
+  #agenda-full .timeline::before {
+    content: "";
+    position: absolute;
+    left: 0.75rem; /* 控制垂直線距離左邊的距離 */
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background-color: rgba(203, 213, 225, 0.8); /* slate-200/80 */
+    z-index: 0;
   }
 
-  /* 3) 再把整串清單向右內縮，留出圓點與縱線的緩衝 */
-  #agenda-full ul.list-none{
-    padding-left:72px;         /* 原本 pl-14 (56px)，再加大到 72px */
+  /* === 每個時間節點 === */
+  #agenda-full .timeline li {
+    position: relative;
+    padding-left: 1.75rem;
+    margin-bottom: 1.5rem;
   }
 
-  /* 內層清單仍不加圓點 */
-  #agenda-full ul.list-none li ul > li::before{
-    content:none;
+  /* === 黃色節點設定（對齊垂直線） === */
+  #agenda-full .timeline li::before {
+    content: "";
+    position: absolute;
+    left: 0.73rem; /* 與垂直線幾乎重合 */
+    top: 0.8em; /* 垂直置中微調 */
+    width: 14px;
+    height: 14px;
+    background-color: #facc15; /* 黃色節點 */
+    border-radius: 50%;
+    box-shadow: 0 0 0 3px #fff; /* 白色外框，保持乾淨 */
+    transform: translate(-50%, -50%);
+    z-index: 1;
   }
 
-  /* 小螢幕再微調（避免太擠） */
-  @media (max-width:768px){
-    #agenda-full ul.list-none{ padding-left:68px; }
-    #agenda-full ul.list-none > li::before{ width:10px; height:10px; }
+  /* === 內層子清單保持原狀，不加圓點 === */
+  #agenda-full .timeline li ul li::before {
+    content: none !important;
+  }
+
+  /* === RWD 微調（手機上稍微靠左） === */
+  @media (max-width: 640px) {
+    #agenda-full .timeline {
+      padding-left: 2rem;
+    }
+    #agenda-full .timeline::before {
+      left: 0.6rem;
+    }
+    #agenda-full .timeline li::before {
+      left: 0.6rem;
+      width: 12px;
+      height: 12px;
+    }
   }
 </style>
 <meta property="og:title" content="創造360°醫學人生 醫學教育共識營">
@@ -462,12 +473,10 @@
       <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight text-slate-900 mb-8">活動時程</h2>
 
       <!-- 時間軸外層，使用 before 畫出垂直線，位置更靠左避免壓到時間 -->
-      <div class="relative">
-        <!-- 垂直線（淡灰） -->
-        <div class="pointer-events-none absolute left-6 top-0 bottom-0 w-px bg-slate-200/80"></div>
+      <div class="timeline">
 
         <!-- 清單本體：左側留白加大，避免圓點壓到時間文字 -->
-        <ul class="list-none pl-14 space-y-8">
+        <ul class="list-none space-y-8">
         <!-- 節點元件：把圓點固定在 left: 6，並用 translate-x-1/2 微調靠左 -->
         <!-- 12:45–13:00 -->
         <li class="relative">
