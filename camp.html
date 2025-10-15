@@ -387,16 +387,18 @@
     position: relative;
     padding-left: 22px;
   }
-  #agenda-full ul.agenda-sublist > li::before{
-    content:"";
-    position:absolute;
-    left:0;
-    top:0.95em;
-    width:8px; height:8px;
-    border-radius:50%;
-    background:var(--accent);
-    box-shadow:0 0 0 2px #fff;
-  }
+#agenda-full ul.agenda-sublist > li::before{
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0 2px #fff;
+}
   #agenda-full ul.agenda-sublist > li > *:first-child{
     position:relative;
     z-index:1;
