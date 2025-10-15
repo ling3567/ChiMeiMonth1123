@@ -402,6 +402,42 @@
       height: 12px;
     }
   }
+
+  /* === 精準控制時間軸圓點位置，確保壓在線上且 RWD 同步 === */
+  /* 灰線所在容器：定義線的位置（與 .left-6 相同 = 24px） */
+  #agenda-full .relative{
+    --rail-x: 24px;   /* 灰線距離容器左邊的座標 */
+  }
+
+  /* 外層清單：定義左內距（pl-14 = 56px） */
+  #agenda-full ul.list-none{
+    --list-pad: 56px; /* 依實際 class 調整：pl-14=56px、pl-12=48px... */
+  }
+
+  /* 每個節點的黃點：用(灰線座標 - 清單左內距) 對齊同一條線 */
+  #agenda-full ul.list-none > li{
+    position: relative;
+  }
+  #agenda-full ul.list-none > li::before{
+    content:"";
+    position:absolute;
+    left: calc(var(--rail-x) - var(--list-pad)); /* 精準壓在線上 */
+    top: 0.8em;
+    transform: translate(-50%,-50%);            /* 讓圓心對齊 */
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    background: var(--yellow);
+    box-shadow: 0 0 0 3px #fff;
+    z-index: 0;
+  }
+
+  /* 內層子清單不要出現黃點 */
+  #agenda-full ul.list-none li ul > li::before{ content: none !important; }
+
+  /* 手機若改用不同的內距（例如 pl-12=48px），這邊同步覆寫變數即可 */
+  @media (max-width: 768px){
+    #agenda-full ul.list-none{ --list-pad: 56px; } /* 若手機仍是 pl-14 就維持 56；若你改成 pl-12 就填 48 */
+  }
 </style>
 <meta property="og:title" content="創造360°醫學人生 醫學教育共識營">
 <meta property="og:description" content="醫學教育共識營宣傳官網：日期地點、活動議程、立即回覆與加入行事曆。">
