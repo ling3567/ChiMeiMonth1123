@@ -378,7 +378,9 @@
   }
 
   /* 內層子清單不畫黃點 */
-  #agenda-full ul.list-none li ul > li::before{ content:none !important; }
+  #agenda-full ul.list-none li ul:not(.agenda-sublist) > li::before {
+  content: none !important;
+}
 
   /* 子清單小圓點：凸顯各小組 */
   #agenda-full ul.agenda-sublist > li{
