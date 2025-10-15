@@ -320,19 +320,19 @@
   }
 
   /* 活動時程：節點圓點位置與樣式 */
-  #agenda-full ul.list-none>li::before{
-    content:"";
-    position:absolute;
-    left:24px;
-    top:0.6em;
-    transform:translateY(-50%);
-    width:18px;
-    height:18px;
-    border-radius:50%;
-    background:var(--yellow);
-    box-shadow:0 0 0 3px #fff;
-    z-index:1;
-  }
+#agenda-full ul.list-none>li::before{
+  content:"";
+  position:absolute;
+  left:24px;
+  top:0.6em;
+  transform:translate(-50%,-50%);
+  width:14px;
+  height:14px;
+  border-radius:50%;
+  background:var(--yellow);
+  box-shadow:0 0 0 3px #fff;
+  z-index:1;
+}
 
   /* 內層列表維持原樣，不覆蓋樣式 */
   #agenda-full ul.list-none li ul>li::before{
