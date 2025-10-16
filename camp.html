@@ -51,6 +51,9 @@
       width:100%;
       max-width:none;
     }
+    .hero .visual.poster-inline{
+      display:flex;
+    }
     .hero .visual figure{
       border-radius:18px;
     }
@@ -98,6 +101,9 @@
     align-items:center;
     justify-content:center;
   }
+  .hero .visual.poster-inline{
+    display:none;
+  }
   .hero .visual figure{
     margin:0;
     width:100%;
@@ -143,6 +149,39 @@
   section h2{font-size:32px;margin:0 0 12px}
   .lead{color:var(--muted);max-width:860px}
   .poster{width:100%;border-radius:16px;box-shadow:0 10px 26px rgba(0,0,0,.34);border:4px solid rgba(255,255,255,.25)}
+
+  /* 海報呈現：行動優先 inline、桌機浮動 */
+  .floating-poster{
+    position:fixed;
+    top:48px;
+    right:48px;
+    width:280px;
+    z-index:40;
+    display:block;
+  }
+  .floating-poster figure{
+    margin:0;
+    border-radius:18px;
+    overflow:hidden;
+    box-shadow:0 24px 60px rgba(6,16,24,0.4);
+    border:4px solid rgba(255,255,255,0.25);
+  }
+  .floating-poster img{
+    display:block;
+    width:100%;
+    height:auto;
+  }
+
+  @media (max-width: 1024px){
+    .floating-poster{
+      right:24px;
+      width:240px;
+    }
+  }
+
+  @media (max-width:768px){
+    .floating-poster{display:none;}
+  }
 
   /* HIGHLIGHTS */
   .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:18px}
@@ -488,13 +527,19 @@
       </div>
       <p class="meta" id="countdown">距離開場：計算中…</p>
     </div>
-    <div class="visual">
+    <div class="visual poster-inline">
       <figure>
-        <img src="hero_chimei.jpg" alt="創造360°醫學人生醫學教育共識營主視覺">
+        <img src="poster.jpg" alt="醫學教育共識營活動海報">
       </figure>
     </div>
   </div>
 </header>
+
+<div class="floating-poster" aria-hidden="true">
+  <figure>
+    <img src="poster.jpg" alt="">
+  </figure>
+</div>
 
 <!-- INFO STRIP -->
 <div class="container infostrip" role="region" aria-label="關鍵資訊">
