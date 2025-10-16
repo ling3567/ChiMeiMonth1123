@@ -43,6 +43,16 @@
     .hero .wrap{
       padding-top:80px;
       padding-bottom:60px;
+      flex-direction:column;
+      align-items:flex-start;
+      gap:32px;
+    }
+    .hero .visual{
+      width:100%;
+      max-width:none;
+    }
+    .hero .visual figure{
+      border-radius:18px;
     }
     .hero h1{
       font-size: clamp(26px, 7vw, 38px);
@@ -72,8 +82,35 @@
     margin:0 auto;
     padding:0 20px;
     display:flex;
-    flex-direction:column;
-    align-items:flex-start;
+    flex-direction:row;
+    align-items:center;
+    justify-content:space-between;
+    gap:48px;
+  }
+  .hero .copy{
+    flex:1 1 0;
+    max-width:620px;
+  }
+  .hero .visual{
+    flex:1 1 0;
+    max-width:460px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .hero .visual figure{
+    margin:0;
+    width:100%;
+    border-radius:24px;
+    overflow:hidden;
+    box-shadow:0 24px 60px rgba(6,16,24,0.45);
+    border:4px solid rgba(255,255,255,0.2);
+  }
+  .hero .visual img{
+    display:block;
+    width:100%;
+    height:100%;
+    object-fit:cover;
   }
   .brand{display:flex;gap:12px;align-items:center;margin-bottom:10px}
   .brand .logo{width:46px;height:46px;border-radius:10px;background:#fff;display:grid;place-items:center;color:var(--ink);font-weight:800}
@@ -430,7 +467,7 @@
 
 <header class="hero">
   <div class="wrap">
-    <div>
+    <div class="copy">
       <div class="brand">
         <div class="logo">奇美</div>
         <div class="kicker">MEDICAL EDUCATION CONSENSUS — OFFICIAL</div>
@@ -450,6 +487,11 @@
         <a class="btn secondary" href="https://calendar.google.com/calendar/u/0/r/eventedit?dates=20251123T124500/20251123T171000&text=%E3%80%8C%E5%89%B5%E9%80%A0360%C2%B0%E9%86%AB%E5%AD%B8%E4%BA%BA%E7%94%9F%E3%80%8D-%20%E9%86%AB%E5%AD%B8%E6%95%99%E8%82%B2%E5%85%B1%E8%AD%98%E7%87%9F&details=%E8%AB%8B%E5%8F%83%E8%80%83%E8%AD%B0%E7%A8%8B%E8%A1%A8%E8%A9%B3%E6%83%85%E3%80%82&location=%E5%A5%87%E7%BE%8E%E5%8D%9A%E7%89%A9%E9%A4%A8%20%E8%B1%90%E6%94%B6%E5%BB%B3" target="_blank" rel="noopener">加入行事曆</a>
       </div>
       <p class="meta" id="countdown">距離開場：計算中…</p>
+    </div>
+    <div class="visual">
+      <figure>
+        <img src="hero_chimei.jpg" alt="創造360°醫學人生醫學教育共識營主視覺">
+      </figure>
     </div>
   </div>
 </header>
