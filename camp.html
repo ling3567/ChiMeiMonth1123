@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
@@ -372,8 +371,12 @@
 
   /* 調整時程區塊：取消自帶白底，改由外層卡片提供 */
   #agenda-full{
-    background:transparent;
-    padding:60px 0;   /* 原本有 padding 保留 */
+    /* 新增背景圖，並疊加半透明白色漸層以刷淡效果 */
+    background: 
+      linear-gradient(rgba(255,255,255,0.7), rgba(255,255,255,0.7)), /* 白色半透明層 */
+      url("許文龍.jpg") center/cover no-repeat; /* 許文龍.jpg 背景圖 */
+    background-attachment: fixed; /* 參照 hero 格式，設定為固定背景 */
+    padding:60px 0;    /* 原本有 padding 保留 */
   }
 
   /* 卡片內標題微調間距 */
@@ -502,21 +505,20 @@
       <p class="meta">四小時的行動共識：回顧變化、對齊願景、擬定年度策略與KPI</p>
       <div class="cta">
         <a class="btn" href="https://forms.office.com/r/GYZYtJPd2A" target="_blank" rel="noopener">回覆出席</a>
-        <a class="btn secondary" href="https://calendar.google.com/calendar/u/0/r/eventedit?dates=20251123T124500/20251123T171000&text=%E3%80%8C%E5%89%B5%E9%80%A0360%C2%B0%E9%86%AB%E5%AD%B8%E4%BA%BA%E7%94%9F%E3%80%8D-%20%E9%86%AB%E5%AD%B8%E6%95%99%E8%82%B2%E5%85%B1%E8%AD%98%E7%87%9F&details=%E8%AB%8B%E5%8F%83%E8%80%83%E8%AD%B0%E7%A8%8B%E8%A1%A8%E8%A9%B3%E6%83%85%E3%80%82&location=%E5%A5%87%E7%BE%8E%E5%8D%9A%E7%89%A9%E9%A4%A8%20%E8%B1%90%E6%94%B6%E5%BB%B3" target="_blank" rel="noopener">加入行事曆</a>
+        <a class="btn secondary" href="https://calendar.google.com/calendar/u/0/r/eventedit?dates=20251123T124500/20251123T171000&text=%E3%80%8C%E5%89%B5%E9%80%A0360%C2%B0%E9%86%AB%E5%AD%B8%E4%BA%BA%E7%94%9F%E3%80%8D-%20%E9%86%AB%E5%AD%B8%E6%95%99%E8%82%B2%E5%85%B1%E8%AD%98%E7%91%9F&details=%E8%AB%8B%E5%8F%83%E8%80%83%E8%AD%B0%E7%A8%8B%E8%A1%A8%E8%A9%B3%E6%83%85%E3%80%82&location=%E5%A5%87%E7%BE%8E%E5%8D%9A%E7%89%A9%E9%A4%A8%20%E8%B1%90%E6%94%B6%E5%BB%B3" target="_blank" rel="noopener">加入行事曆</a>
       </div>
       <p class="meta" id="countdown">距離開場：計算中…</p>
       <div id="poster-anchor" aria-live="polite"></div>
     </div>
     <div class="visual">
       <figure>
-        <img src="hero_chimei.jpg" alt="創造360°醫學人生醫學教育共識營主視覺">
+        <img src="hero_chimei.jpg" alt="創造360°醫學人生醫學教育共識營主視覺" onerror="this.onerror=null; this.src='https://placehold.co/460x575/0e1a22/f6f7fb?text=Loading...';">
       </figure>
     </div>
   </div>
 </header>
 
-<!-- INFO STRIP -->
-<div class="container infostrip" role="region" aria-label="關鍵資訊">
+<!-- INFO STRIP --><div class="container infostrip" role="region" aria-label="關鍵資訊">
   <div class="infogrid">
     <div class="icard">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M8 7h8M8 11h8M8 15h6"/><rect x="3" y="4" width="18" height="16" rx="2" ry="2" stroke-width="2"/></svg>
@@ -540,37 +542,29 @@
       </div>
     </div>
   </div>
-</div>
+</diV>
 
 <section id="agenda-full" class="py-8">
-  <!-- 與上方卡片相同的容器寬度：可依你上方區塊改成相同 max-w 與 padding -->
-  <div class="container agenda-card">
+  <!-- 與上方卡片相同的容器寬度：可依你上方區塊改成相同 max-w 與 padding --><div class="container agenda-card">
       <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight text-slate-900 mb-8">活動時程</h2>
 
-      <!-- 時間軸外層，使用 before 畫出垂直線，位置更靠左避免壓到時間 -->
-      <div class="timeline">
+      <!-- 時間軸外層，使用 before 畫出垂直線，位置更靠左避免壓到時間 --><div class="timeline">
 
-        <!-- 清單本體：左側留白加大，避免圓點壓到時間文字 -->
-        <ul class="list-none space-y-8">
-        <!-- 節點元件：把圓點固定在 left: 6，並用 translate-x-1/2 微調靠左 -->
-        <!-- 12:45–13:00 -->
-        <li class="relative">
+        <!-- 清單本體：左側留白加大，避免圓點壓到時間文字 --><ul class="list-none space-y-8">
+        <!-- 節點元件：把圓點固定在 left: 6，並用 translate-x-1/2 微調靠左 --><!-- 12:45–13:00 --><li class="relative">
           <h3 class="font-semibold text-lg">12:45–13:00｜報到及入場</h3>
         </li>
 
-        <!-- 13:00–13:10 接續在下 -->
-        <li class="relative">
+        <!-- 13:00–13:10 接續在下 --><li class="relative">
           <h3 class="font-semibold text-lg">13:00–13:10｜長官致詞</h3>
         </li>
 
-        <!-- 13:10–13:25 -->
-        <li class="relative">
+        <!-- 13:10–13:25 --><li class="relative">
           <h3 class="font-semibold text-lg">13:10–13:25｜醫學教育前瞻與未來</h3>
           <p class="text-sm text-slate-600">主講｜林宏榮 院長（邀請中）</p>
         </li>
 
-        <!-- 13:25–14:20（含小講題明細） -->
-        <li class="relative">
+        <!-- 13:25–14:20（含小講題明細） --><li class="relative">
           <h3 class="font-semibold text-lg">13:25–14:20｜醫學教育發展與教學型主治醫師未來教學計畫報告</h3>
           <ul class="agenda-sublist mt-3 divide-y divide-slate-200">
             <li class="py-3">
@@ -592,13 +586,11 @@
           </ul>
         </li>
 
-        <!-- 14:20–14:30 -->
-        <li class="relative">
+        <!-- 14:20–14:30 --><li class="relative">
           <h3 class="font-semibold text-lg agenda-break">14:20–14:30｜Break</h3>
-     </li>
+       </li>
 
-        <!-- 14:30–15:10 -->
-        <li class="relative">
+        <!-- 14:30–15:10 --><li class="relative">
           <h3 class="font-semibold text-lg">14:30–15:10｜分組討論（策略擬定）I</h3>
           <ul class="agenda-sublist mt-3 divide-y divide-slate-200">
             <li class="py-3">
@@ -626,13 +618,11 @@
           </ul>
         </li>
 
-        <!-- 15:10–15:20 -->
-        <li class="relative">
+        <!-- 15:10–15:20 --><li class="relative">
           <h3 class="font-semibold text-lg agenda-break">15:10–15:20｜Break</h3>
         </li>
 
-        <!-- 15:20–16:00 -->
-        <li class="relative">
+        <!-- 15:20–16:00 --><li class="relative">
           <h3 class="font-semibold text-lg">15:20–16:00｜分組討論（策略擬定）II</h3>
           <ul class="agenda-sublist mt-3 divide-y divide-slate-200">
             <li class="py-3">
@@ -658,14 +648,12 @@
           </ul>
         </li>
 
-        <!-- 16:00–16:10 -->
-        <li class="relative">
+        <!-- 16:00–16:10 --><li class="relative">
           <h3 class="font-semibold text-lg agenda-break">16:00–16:10｜Break</h3>
      
         </li>
 
-        <!-- 16:10–17:00 -->
-        <li class="relative">
+        <!-- 16:10–17:00 --><li class="relative">
           <h3 class="font-semibold text-lg">16:10–17:00｜各中心／功能小組未來規劃報告（每組5分）</h3>
           <ul class="agenda-sublist agenda-sublist-grid mt-3 grid gap-2 md:grid-cols-2">
             <li>教學行政組</li>
@@ -681,8 +669,7 @@
           </ul>
         </li>
 
-        <!-- 17:00–17:10 -->
-        <li class="relative">
+        <!-- 17:00–17:10 --><li class="relative">
           <h3 class="font-semibold text-lg">17:00–17:10｜長官勉勵</h3>
     
         </li>
@@ -775,3 +762,4 @@
 </script>
 </body>
 </html>
+
