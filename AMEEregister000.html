@@ -1,0 +1,501 @@
+<html lang="zh-Hant" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AMEE 分享沙龍 - 報名儀表板</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js 圖表庫 -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Lucide 圖標庫 -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+
+    <style>
+        /* 載入 Inter 字體 (備用) */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display.swap');
+        
+        body {
+            /* 使用與報名頁面相同的配色 */
+            background-color: #F3EDDC; /* poster-cream */
+            font-family: '"Microsoft JhengHei"', '"微軟正黑體"', 'Inter', sans-serif;
+        }
+        
+        .card {
+            background-color: #ffffff;
+            border-radius: 0.5rem; /* rounded-lg */
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* shadow-lg */
+            padding: 1.5rem; /* p-6 */
+        }
+
+        .stat-card {
+             background-color: #1B474B; /* poster-teal */
+             color: #F3EDDC; /* poster-cream */
+             border-radius: 0.5rem;
+             padding: 1.5rem;
+             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        .stat-card h3 {
+            color: #BFA66E; /* poster-gold */
+        }
+    </style>
+
+    <script>
+        // 設定 Tailwind CSS
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Microsoft JhengHei"', '"微軟正黑體"', 'Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        'poster-teal': '#1B474B',   // 深綠色 (主色)
+                        'poster-olive': '#838863',  // 橄欖綠 (點綴)
+                        'poster-gold': '#BFA66E',   // 金色 (點綴)
+                        'poster-cream': '#F3EDDC',  // 米色 (背景)
+                    },
+                },
+            },
+        };
+    </script>
+</head>
+<body class="text-gray-800">
+
+    <!-- 頁首 -->
+    <header class="bg-poster-teal shadow-md">
+        <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 flex justify-between items-center">
+            <h1 class="text-3xl font-bold text-poster-cream">
+                <i data-lucide="bar-chart-3" class="inline-block align-text-bottom mr-2"></i>
+                AMEE 分享沙龍 - 報名儀表板
+            </h1>
+            <button id="refresh-button" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-poster-teal bg-poster-cream hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-poster-gold transition-colors disabled:opacity-50">
+                <i data-lucide="refresh-cw" class="w-4 h-4 mr-2"></i>
+                重新整理
+            </button>
+        </div>
+    </header>
+
+    <!-- 主內容區 -->
+    <main class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+        
+        <!-- 載入中 / 錯誤 訊息 -->
+        <div id="loading-message" class="card text-center py-12">
+            <h2 class="text-2xl font-semibold text-poster-olive">
+                <i data-lucide="loader" class="inline-block animate-spin mr-2"></i>
+                正在從 Google Sheet 載入報名資料...
+            </h2>
+            <p class="mt-2 text-gray-500">請稍候...</p>
+        </div>
+
+        <div id="error-message" class="card bg-red-100 border border-red-400 text-red-700 text-center py-12 hidden">
+            <h2 class="text-2xl font-bold">
+                <i data-lucide="alert-triangle" class="inline-block mr-2"></i>
+                載入失敗！
+            </h2>
+            <p class="mt-2" id="error-text">錯誤訊息</p>
+            <p class="mt-4 text-sm text-gray-600">
+                請檢查您的 SCRIPT_URL 是否正確，以及 Apps Script 專案是否已「重新部署」。
+            </p>
+        </div>
+
+        <!-- 儀表板內容 (預設隱藏) -->
+        <div id="dashboard-content" class="space-y-12 hidden">
+
+            <!-- 總覽統計 -->
+            <section>
+                <h2 class="text-2xl font-semibold text-poster-teal mb-4">
+                    <i data-lucide="pie-chart" class="inline-block align-text-bottom mr-2"></i>
+                    總覽統計
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- 總報名人數 -->
+                    <div class="stat-card">
+                        <h3 class="text-sm font-medium uppercase tracking-wider">總報名人數</h3>
+                        <p class="mt-2 text-4xl font-black" id="total-registrants">0</p>
+                        <p class="mt-1 text-sm text-poster-cream opacity-70">位不重複的參與者</p>
+                    </div>
+                    <!-- 總報名場次 -->
+                    <div class="stat-card">
+                        <h3 class="text-sm font-medium uppercase tracking-wider">總報名場次 (人次)</h3>
+                        <p class="mt-2 text-4xl font-black" id="total-sessions-filled">0</p>
+                        <p class="mt-1 text-sm text-poster-cream opacity-70">
+                            總計 <span id="total-sessions-available">0</span> 個名額
+                        </p>
+                    </div>
+                    <!-- 最熱門場次 -->
+                    <div class="stat-card">
+                        <h3 class="text-sm font-medium uppercase tracking-wider">最熱門場次</h3>
+                        <p class="mt-2 text-2xl font-bold" id="top-session">---</p>
+                        <p class="mt-1 text-sm text-poster-cream opacity-70" id="top-session-count">0 人報名</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 場次報名統計 (圖表) -->
+            <section>
+                <h2 class="text-2xl font-semibold text-poster-teal mb-4">
+                    <i data-lucide="bar-chart-horizontal" class="inline-block align-text-bottom mr-2"></i>
+                    各場次報名人數 (總名額: <span id="spots-per-session-label">15</span>)
+                </h2>
+                <div class="card h-96 relative">
+                    <canvas id="sessionChart"></canvas>
+                </div>
+            </section>
+            
+            <!-- 報名人員列表 -->
+            <section>
+                <div class="flex flex-col md:flex-row md:justify-between md:items-center mb-4">
+                    <h2 class="text-2xl font-semibold text-poster-teal">
+                        <i data-lucide="users" class="inline-block align-text-bottom mr-2"></i>
+                        報名人員列表
+                    </h2>
+                    <div class="mt-4 md:mt-0 relative">
+                        <input type="text" id="searchInput" placeholder="搜尋姓名、單位、Email..." class="pl-10 pr-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-poster-gold focus:border-poster-gold w-full md:w-80">
+                        <i data-lucide="search" class="w-5 h-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2"></i>
+                    </div>
+                </div>
+                <div class="card overflow-x-auto">
+                    <div class="min-w-full overflow-hidden overflow-x-auto align-middle">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">姓名</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">服務單位</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">部門 & 職稱</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">報名場次</th>
+                                </tr>
+                            </thead>
+                            <tbody id="participantsTableBody" class="bg-white divide-y divide-gray-200">
+                                <!-- JavaScript 將會在這裡填入資料 -->
+                                <tr>
+                                    <td colspan="5" class="px-6 py-12 text-center text-gray-500">
+                                        正在載入資料...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- 頁腳 -->
+    <footer class="py-6 bg-poster-teal text-poster-cream mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-sm opacity-70">
+            &copy; 2025 Chi Mei Medical Center. All rights reserved. (儀表板)
+        </div>
+    </footer>
+
+    <script>
+    (function() {
+        var SCRIPT_URL = ""; // 將在 DOMContentLoaded 中提示使用者輸入
+        var allParticipants = []; // 儲存所有參與者資料，用於搜尋
+        var sessionChartInstance = null; // 儲存 Chart.js 實體
+
+        var loadingMessage = document.getElementById('loading-message');
+        var errorMessage = document.getElementById('error-message');
+        var errorText = document.getElementById('error-text');
+        var dashboardContent = document.getElementById('dashboard-content');
+        var searchInput = document.getElementById('searchInput');
+        var participantsTableBody = document.getElementById('participantsTableBody');
+        var refreshButton = document.getElementById('refresh-button');
+
+        /**
+         * 顯示錯誤訊息
+         */
+        function showError(message) {
+            loadingMessage.classList.add('hidden');
+            errorMessage.classList.remove('hidden');
+            errorText.textContent = message || "未知的錯誤。";
+            dashboardContent.classList.add('hidden');
+        }
+
+        /**
+         * (核心) 載入儀表板資料
+         */
+        function loadDashboardData() {
+            if (!SCRIPT_URL) {
+                showError("SCRIPT_URL 尚未設定。");
+                return;
+            }
+
+            // 顯示載入中...
+            loadingMessage.classList.remove('hidden');
+            errorMessage.classList.add('hidden');
+            dashboardContent.classList.add('hidden');
+            refreshButton.disabled = true;
+
+            // 1. 建立一個唯一的 callback 函式名稱
+            var callbackName = 'dashboard_callback_' + Math.round(100000 * Math.random());
+            
+            // 2. 在 window 上定義這個函式
+            window[callbackName] = function(payload) {
+                try {
+                    if (payload.error) {
+                        throw new Error(payload.error);
+                    }
+                    
+                    // 成功時，處理資料
+                    handleData(payload);
+                    loadingMessage.classList.add('hidden');
+                    dashboardContent.classList.remove('hidden');
+
+                } catch (e) {
+                    showError(e.message);
+                } finally {
+                    // 4. 清理
+                    refreshButton.disabled = false;
+                    if (script && script.parentNode) {
+                        document.body.removeChild(script);
+                    }
+                    delete window[callbackName];
+                }
+            };
+
+            // 處理載入失敗
+            function handleScriptError(errorMsg) {
+                console.error("Failed to load dashboard data:", errorMsg);
+                showError("無法載入資料。請檢查您的網路連線或 SCRIPT_URL 是否正確。");
+                refreshButton.disabled = false;
+                if (script && script.parentNode) {
+                    document.body.removeChild(script);
+                }
+                if (window[callbackName]) {
+                    delete window[callbackName];
+                }
+            }
+
+            // 3. 建立 script 標籤
+            var script = document.createElement('script');
+            script.src = SCRIPT_URL + (SCRIPT_URL.indexOf('?') === -1 ? '?' : '&') + 'dashboard_callback=' + callbackName;
+            script.onerror = handleScriptError;
+
+            // 將 script 標籤加到頁面，觸發請求
+            document.body.appendChild(script);
+        }
+
+        /**
+         * (核心) 處理從 GAS 獲取的資料
+         */
+        function handleData(payload) {
+            // payload = { sessionCounts, participants, totalSpotsPerSession, sessionDetails }
+
+            // 1. 儲存全域資料
+            allParticipants = payload.participants || [];
+            
+            // 2. 渲染總覽統計
+            renderStats(payload.sessionCounts, payload.participants, payload.totalSpotsPerSession);
+
+            // 3. 渲染圖表
+            renderChart(payload.sessionCounts, payload.totalSpotsPerSession, payload.sessionDetails);
+
+            // 4. 渲染表格
+            renderTable(allParticipants);
+        }
+
+        /**
+         * 輔助：渲染總覽統計
+         */
+        function renderStats(sessionCounts, participants, totalSpots) {
+            var totalRegistrants = participants.length;
+            var totalFilled = 0;
+            var topSessionName = "---";
+            var topSessionCount = 0;
+
+            for (var time in sessionCounts) {
+                var count = sessionCounts[time];
+                totalFilled += count;
+                if (count > topSessionCount) {
+                    topSessionCount = count;
+                    topSessionName = time;
+                }
+            }
+
+            var totalAvailable = (Object.keys(sessionCounts).length || 0) * totalSpots;
+
+            document.getElementById('total-registrants').textContent = totalRegistrants;
+            document.getElementById('total-sessions-filled').textContent = totalFilled;
+            document.getElementById('total-sessions-available').textContent = totalAvailable;
+            document.getElementById('top-session').textContent = topSessionName + " 場次";
+            document.getElementById('top-session-count').textContent = topSessionCount + " 人報名";
+            document.getElementById('spots-per-session-label').textContent = totalSpots;
+        }
+
+        /**
+         * 輔助：渲染長條圖
+         */
+        function renderChart(sessionCounts, totalSpots, sessionDetails) {
+            var ctx = document.getElementById('sessionChart').getContext('2d');
+            
+            // 取得場次標籤 (使用 sessionDetails 的標題)
+            var labels = Object.keys(sessionCounts).map(function(time) {
+                return sessionDetails[time] ? sessionDetails[time].title : (time + " 場次");
+            });
+            var data = Object.keys(sessionCounts).map(function(time) {
+                return sessionCounts[time];
+            });
+
+            // 銷毀舊的圖表 (如果存在)
+            if (sessionChartInstance) {
+                sessionChartInstance.destroy();
+            }
+
+            sessionChartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: '報名人數',
+                        data: data,
+                        backgroundColor: '#1B474B', // poster-teal
+                        borderColor: '#1B474B',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    indexAxis: 'y', // 水平長條圖
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            max: totalSpots, // 以總名額為最大值
+                            ticks: {
+                                stepSize: 1 // 確保刻度是整數
+                            },
+                            title: {
+                                display: true,
+                                text: '人數'
+                            }
+                        },
+                        y: {
+                            ticks: {
+                                autoSkip: false // 確保所有標籤都顯示
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false // 隱藏圖例
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return ' 報名人數: ' + context.raw + ' 人';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        /**
+         * 輔助：渲染參與者表格
+         */
+        function renderTable(participants) {
+            if (participants.length === 0) {
+                participantsTableBody.innerHTML = '<tr><td colspan="5" class="px-6 py-12 text-center text-gray-500">目前尚無報名資料。</td></tr>';
+                return;
+            }
+
+            var htmlRows = [];
+            for (var i = 0; i < participants.length; i++) {
+                var p = participants[i];
+                var sessionsStr = p.signedUpSessions.join(', ') || '<span class="text-gray-400">無</span>';
+                
+                htmlRows.push(
+                    '<tr class="hover:bg-gray-50">' +
+                        '<td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">' + escapeHTML(p.name) + '</td>' +
+                        '<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">' + escapeHTML(p.organization) + '</td>' +
+                        '<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">' +
+                            '<div class="font-medium text-gray-700">' + escapeHTML(p.department) + '</div>' +
+                            '<div class="text-gray-500">' + escapeHTML(p.title) + '</div>' +
+                        '</td>' +
+                        '<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">' + escapeHTML(p.email) + '</td>' +
+                        '<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">' + sessionsStr + '</td>' +
+                    '</tr>'
+                );
+            }
+            participantsTableBody.innerHTML = htmlRows.join('');
+        }
+
+        /**
+         * 輔助：過濾表格
+         */
+        function filterTable() {
+            var query = searchInput.value.toLowerCase().trim();
+            if (!query) {
+                renderTable(allParticipants); // 如果清空搜尋，顯示全部
+                return;
+            }
+
+            var filteredParticipants = allParticipants.filter(function(p) {
+                return (
+                    (p.name && p.name.toLowerCase().indexOf(query) > -1) ||
+                    (p.organization && p.organization.toLowerCase().indexOf(query) > -1) ||
+                    (p.department && p.department.toLowerCase().indexOf(query) > -1) ||
+                    (p.title && p.title.toLowerCase().indexOf(query) > -1) ||
+                    (p.email && p.email.toLowerCase().indexOf(query) > -1)
+                );
+            });
+
+            renderTable(filteredParticipants);
+        }
+
+        /**
+         * 輔助：HTML 轉義 (防止 XSS)
+         */
+        function escapeHTML(str) {
+            if (!str) return '';
+            return str.replace(/[&<>"']/g, function(match) {
+                return {
+                    '&': '&amp;',
+                    '<': '&lt;',
+                    '>': '&gt;',
+                    '"': '&quot;',
+                    "'": '&#39;'
+                }[match];
+            });
+        }
+        
+        /**
+         * 頁面載入完成時執行
+         */
+        document.addEventListener("DOMContentLoaded", function() {
+            // 渲染 Lucide 圖標
+            try {
+                if (typeof lucide !== 'undefined' && lucide.createIcons) {
+                    lucide.createIcons();
+                }
+            } catch (e) { console.error(e); }
+
+            // 綁定事件
+            searchInput.addEventListener('input', filterTable);
+            refreshButton.addEventListener('click', loadDashboardData);
+
+            // 取得 SCRIPT_URL
+            var storedUrl = localStorage.getItem('AMEE_SCRIPT_URL');
+            if (storedUrl) {
+                SCRIPT_URL = storedUrl;
+            } else {
+                SCRIPT_URL = prompt("請貼上您的 Google Apps Script 網址 (SCRIPT_URL):", "");
+                if (SCRIPT_URL) {
+                    localStorage.setItem('AMEE_SCRIPT_URL', SCRIPT_URL);
+                }
+            }
+
+            // 載入資料
+            if (SCRIPT_URL) {
+                loadDashboardData();
+            } else {
+                showError("未提供 SCRIPT_URL。請重新整理頁面並輸入網址。");
+            }
+        });
+
+    })();
+    </script>
+</body>
+</html>
