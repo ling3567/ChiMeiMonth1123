@@ -142,7 +142,7 @@
                         <div>
                             <!-- [!! 修改 !!] 設為必填 -->
                             <label for="email" class="block text-sm font-medium text-gray-700">Email <span class="text-red-500">*</span></label>
-                            <input type="email" id="email" name="email" required class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-poster-gold focus:border-poster-gold" oninvalid="this.setCustomValidity(this.validity.valueMissing ? '請填寫這個欄位。' : (this.value.includes('@') ? (this.value.trim().endsWith('@') ? '請在「@」後方輸入內容。「abc@」的內容不完整。' : '請輸入電子郵件地址。') : '請輸入電子郵件地址。'))" oninput="this.setCustomValidity('')">
+                            <input type="email" id="email" name="email" required pattern="^[^@\s]+@[^@\s]+\.[^@\s]+$" class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-poster-gold focus:border-poster-gold" oninvalid="this.setCustomValidity(this.validity.valueMissing ? '請填寫這個欄位。' : (this.value.includes('@') && this.value.trim().endsWith('@') ? '請在「@」後方輸入內容。「abc@」的內容不完整。' : '請輸入電子郵件地址。'))" oninput="this.setCustomValidity('')">
                         </div>
                     </fieldset>
 
