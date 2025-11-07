@@ -142,7 +142,16 @@
                         <div>
                             <!-- [!! 修改 !!] 設為必填 -->
                             <label for="email" class="block text-sm font-medium text-gray-700">Email <span class="text-red-500">*</span></label>
-                            <input type="email" id="email" name="email" required pattern="^[^@\s]+@[^@\s]+\.[^@\s]+$" class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-poster-gold focus:border-poster-gold" oninvalid="this.setCustomValidity(this.validity.valueMissing ? '請填寫這個欄位。' : (this.value.includes('@') && this.value.trim().endsWith('@') ? '請在「@」後方輸入內容。「abc@」的內容不完整。' : '請輸入電子郵件地址。'))" oninput="this.setCustomValidity('')">
+                            <input
+                                type="email"
+                                id="email"
+                                name="email"
+                                required
+                                placeholder="例如：abc@example.com"
+                                class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-poster-gold focus:border-poster-gold"
+                                aria-describedby="email-error"
+                            >
+                            <span id="email-error" class="mt-1 block text-sm text-red-500 hidden"></span>
                         </div>
                     </fieldset>
 
@@ -431,6 +440,66 @@
         var submitButton = document.getElementById('submit-button');
         var errorMessage = document.getElementById('error-message');
         var errorMessageText = document.getElementById('error-message-text');
+        var emailInput = document.getElementById('email');
+        var emailError = document.getElementById('email-error');
+
+        function getEmailErrorMessage() {
+            if (!emailInput) {
+                return '';
+            }
+
+            if (emailInput.validity.valueMissing) {
+                return '請填寫這個欄位';
+            }
+
+            if (emailInput.validity.typeMismatch) {
+                return '請輸入正確的電子郵件地址（需包含@）';
+            }
+
+            return '';
+        }
+
+        function updateEmailValidationState() {
+            if (!emailInput) {
+                return '';
+            }
+
+            var message = getEmailErrorMessage();
+
+            if (message) {
+                emailInput.setCustomValidity(message);
+                emailInput.classList.remove('focus:ring-poster-gold', 'focus:border-poster-gold', 'border-gray-300');
+                emailInput.classList.add('border-red-500', 'focus:ring-red-500', 'focus:border-red-500');
+                emailInput.setAttribute('aria-invalid', 'true');
+
+                if (emailError) {
+                    emailError.textContent = message;
+                    emailError.classList.remove('hidden');
+                }
+            } else {
+                emailInput.setCustomValidity('');
+                emailInput.classList.remove('border-red-500', 'focus:ring-red-500', 'focus:border-red-500');
+                emailInput.classList.add('border-gray-300', 'focus:ring-poster-gold', 'focus:border-poster-gold');
+                emailInput.removeAttribute('aria-invalid');
+
+                if (emailError) {
+                    emailError.textContent = '';
+                    emailError.classList.add('hidden');
+                }
+            }
+
+            return message;
+        }
+
+        if (emailInput) {
+            emailInput.addEventListener('input', function () {
+                updateEmailValidationState();
+            });
+
+            emailInput.addEventListener('blur', function () {
+                updateEmailValidationState();
+            });
+        }
 
         // [!! 新增 !!] Modal 相關元素
         var successModal = document.getElementById('success-modal');
@@ -591,7 +660,17 @@
             form.addEventListener('submit', function (e) {
                 e.preventDefault(); // 防止表單傳統提交
 
-                // 顯示載入中... 
+                if (emailInput) {
+                    var emailValidationMessage = updateEmailValidationState();
+                    if (emailValidationMessage) {
+                        if (typeof emailInput.reportValidity === 'function') {
+                            emailInput.reportValidity();
+                        }
+                        return;
+                    }
+                }
+
+                // 顯示載入中...
                 submitButton.disabled = true;
                 submitButton.innerHTML = '資料送出中...';
 
