@@ -1,0 +1,683 @@
+<html lang="zh-Hant" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>醫學人文 & AMEE 分享沙龍 報名專區</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide 圖標庫 -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+
+    <style>
+        /* 載入 Inter 字體 (備用) */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+        
+        /* 讓已停用的 checkbox 相關文字變灰 */
+        input[type="checkbox"]:disabled + div label {
+            color: #9ca3af; /* text-gray-400 */
+        }
+        input[type="checkbox"]:disabled + div p {
+            color: #d1d5db; /* text-gray-300 */
+        }
+
+        /* [!! 新增 !!] Modal 彈窗動畫 */
+        .modal {
+            transition: opacity 0.25s ease;
+        }
+        .modal-content {
+            transition: all 0.25s ease;
+        }
+        .modal-enter {
+            opacity: 0;
+        }
+        .modal-enter .modal-content {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+        /* [!! 修正 !!] 確保彈窗內容在最上層 */
+        .modal-content {
+            position: relative; 
+            z-index: 10; /* 確保內容在遮罩之上 */
+        }
+    </style>
+
+    <script>
+        // 設定 Tailwind CSS
+        tailwind.config = {
+            theme: {
+                extend: {
+                    // 自訂字體家族，優先使用微軟正黑體
+                    fontFamily: {
+                        sans: ['"Microsoft JhengHei"', '"微軟正黑體"', 'Inter', 'sans-serif'],
+                        serif: ['"Microsoft JhengHei"', '"微軟正黑體"', 'Inter', 'sans-serif'] // 標題也改用正黑體
+                    },
+                    // 自訂顏色 (來自海報)
+                    colors: {
+                        'poster-teal': '#1B474B',   // 深綠色 (主色)
+                        'poster-olive': '#838863',  // 橄欖綠 (點綴)
+                        'poster-gold': '#BFA66E',   // 金色 (點綴)
+                        'poster-cream': '#F3EDDC',  // 米色 (背景)
+
+                        // [!! 新增 !!] 場次色彩
+                        'session-blue-light': '#EFF6FF',  // bg-blue-50
+                        'session-blue-dark': '#3B82F6',   // border-blue-500
+                        'session-green-light': '#F0FDF4', // bg-green-50
+                        'session-green-dark': '#22C55E',  // border-green-500
+                        'session-amber-light': '#FFFBEB', // bg-amber-50
+                        'session-amber-dark': '#F59E0B',  // border-amber-500
+                        'session-purple-light': '#FAF5FF', // bg-purple-50
+                        'session-purple-dark': '#A855F7', // border-purple-500
+                        'session-rose-light': '#FFF1F2',  // bg-rose-50
+                        'session-rose-dark': '#F43F5E',   // border-rose-500
+                    },
+                },
+            },
+        };
+    </script>
+</head>
+<body class="bg-poster-cream font-sans">
+
+    <!-- 報名表單區塊 -->
+    <div class="min-h-screen bg-poster-teal flex flex-col items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-3xl w-full space-y-8">
+            <!-- 標題 -->
+            <div class="text-center">
+                <!-- 標題文字為 'poster-cream' (米色) -->
+                <!-- [!! 修改 !!] 放大字體 -->
+                <h1 class="text-4xl md:text-5xl text-poster-cream tracking-wider font-sans font-black">
+                    醫學人文 & AMEE 分享沙龍
+                </h1>
+                <p class="mt-3 text-2xl font-semibold text-poster-gold">
+                    報名專區
+                </p>
+            </div>
+
+            <!-- 表單容器 -->
+            <div class="mt-8">
+
+                <!-- 錯誤訊息 (預設隱藏) -->
+                <div id="error-message" class="hidden mb-6 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg relative" role="alert">
+                    <strong class="font-bold">發生錯誤！</strong>
+                    <span class="block sm:inline" id="error-message-text">報名資料無法送出，請稍後再試。</span>
+                    <span class="absolute top-0 bottom-0 right-0 px-4 py-3" onclick="this.parentElement.style.display='none';">
+                        <svg class="fill-current h-6 w-6 text-red-500" role="button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><title>Close</title><path d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 2.651a1.2 1.2 0 1 1-1.697-1.697L8.303 10 5.651 7.349a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-2.651a1.2 1.2 0 1 1 1.697 1.697L11.697 10l2.651 2.651a1.2 1.2 0 0 1 0 1.698z"/></svg>
+                    </span>
+                </div>
+
+                <!-- 報名表單 -->
+                <form id="registration-form" class="bg-white p-8 md:p-10 rounded-lg shadow-2xl space-y-6">
+                    <!-- 基本資料 -->
+                    <fieldset class="space-y-4">
+                        <legend class="text-xl font-semibold text-poster-teal pb-2 border-b border-gray-200">基本資料</legend>
+                        
+                        <!-- 依照指定順序排列的欄位 -->
+                        <div>
+                            <!-- [!! 修改 !!] 設為必填 -->
+                            <label for="name" class="block text-sm font-medium text-gray-700">姓名 <span class="text-red-500">*</span></label>
+                            <input type="text" id="name" name="name" required class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-poster-gold focus:border-poster-gold">
+                        </div>
+                        <div>
+                            <!-- [!! 修改 !!] 設為必填 -->
+                            <label for="organization" class="block text-sm font-medium text-gray-700">服務單位 <span class="text-red-500">*</span></label>
+                            <input type="text" id="organization" name="organization" required placeholder="例如：奇美醫院" class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-poster-gold focus:border-poster-gold">
+                        </div>
+                        <div>
+                            <!-- [!! 修改 !!] 設為必填 -->
+                            <label for="department" class="block text-sm font-medium text-gray-700">服務部門 <span class="text-red-500">*</span></label>
+                            <input type="text" id="department" name="department" required placeholder="例如：教學部" class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-poster-gold focus:border-poster-gold">
+                        </div>
+                        <div>
+                            <!-- [!! 修改 !!] 設為必填 -->
+                            <label for="title" class="block text-sm font-medium text-gray-700">職稱 <span class="text-red-500">*</span></label>
+                            <input type="text" id="title" name="title" required placeholder="例如：教學行政管理員" class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-poster-gold focus:border-poster-gold">
+                        </div>
+                        <div>
+                            <!-- [!! 修改 !!] 設為必填 -->
+                            <label for="email" class="block text-sm font-medium text-gray-700">Email <span class="text-red-500">*</span></label>
+                            <input type="email" id="email" name="email" required class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-poster-gold focus:border-poster-gold">
+                        </div>
+                    </fieldset>
+
+                    <!-- 場次選擇 -->
+                    <fieldset class="space-y-5">
+                        <legend class="text-xl font-semibold text-poster-teal pb-2 border-b border-gray-200">報名場次 (可複選)</legend>
+                        
+                        <!-- 上午場 -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <h4 class="text-lg font-medium text-gray-800 md:col-span-2">上午場</h4>
+                            
+                            <!-- 場次 10:00 - 卡片樣式 (藍色) -->
+                            <div class="p-4 bg-session-blue-light rounded-lg shadow-md flex flex-col space-y-3 h-full border-l-4 border-session-blue-dark" id="session-block-1000" data-color="session-blue-dark">
+                                <div class="relative flex items-start">
+                                    <div class="flex items-center h-5">
+                                        <input id="session-1000" name="sessions" type="checkbox" value="10:00" class="focus:ring-poster-olive h-4 w-4 text-poster-olive border-gray-300 rounded">
+                                    </div>
+                                    <div class="ml-3 text-sm">
+                                        <label for="session-1000" class="font-medium text-gray-700">10:00 - Moral, Ethical and Legal Issues of AI in HPE</label>
+                                        <p class="text-gray-500">奇康診所 張榮哲主任</p>
+                                    </div>
+                                </div>
+                                <div class="flex-shrink-0 text-sm pt-3 mt-auto border-t border-gray-200">
+                                    <span class="font-medium text-gray-500" id="spots-1000">名額載入中...</span>
+                                </div>
+                            </div>
+
+                            <!-- 場次 10:30 - 卡片樣式 (綠色) -->
+                            <div class="p-4 bg-session-green-light rounded-lg shadow-md flex flex-col space-y-3 h-full border-l-4 border-session-green-dark" id="session-block-1030" data-color="session-green-dark">
+                                <div class="relative flex items-start">
+                                    <div class="flex items-center h-5">
+                                        <input id="session-1030" name="sessions" type="checkbox" value="10:30" class="focus:ring-poster-olive h-4 w-4 text-poster-olive border-gray-300 rounded">
+                                    </div>
+                                    <div class="ml-3 text-sm">
+                                        <label for="session-1030" class="font-medium text-gray-700">10:30 - Profession Identity Formation and AI</label>
+                                        <p class="text-gray-500">護理部 江惠英副部長</p>
+                                    </div>
+                                </div>
+                                <div class="flex-shrink-0 text-sm pt-3 mt-auto border-t border-gray-200">
+                                    <span class="font-medium text-gray-500" id="spots-1030">名額載入中...</span>
+                                </div>
+                            </div>
+                            
+                            <!-- 場次 11:00 - 卡片樣式 (橘色) -->
+                            <div class="p-4 bg-session-amber-light rounded-lg shadow-md flex flex-col space-y-3 h-full border-l-4 border-session-amber-dark" id="session-block-1100" data-color="session-amber-dark">
+                                <div class="relative flex items-start">
+                                    <div class="flex items-center h-5">
+                                        <input id="session-1100" name="sessions" type="checkbox" value="11:00" class="focus:ring-poster-olive h-4 w-4 text-poster-olive border-gray-300 rounded">
+                                    </div>
+                                    <div class="ml-3 text-sm">
+                                        <label for="session-1100" class="font-medium text-gray-700">11:00 - Learning from Errors, Teaching with Empathy</label>
+                                        <p class="text-gray-500">藥劑部 蘇慧真部長</p>
+                                    </div>
+                                </div>
+                                <div class="flex-shrink-0 text-sm pt-3 mt-auto border-t border-gray-200">
+                                    <span class="font-medium text-gray-500" id="spots-1100">名額載入中...</span>
+                                </div>
+                            </div>
+                            
+                            <!-- 場次 11:30 - 卡片樣式 (紫色) -->
+                            <div class="p-4 bg-session-purple-light rounded-lg shadow-md flex flex-col space-y-3 h-full border-l-4 border-session-purple-dark" id="session-block-1130" data-color="session-purple-dark">
+                                <div class="relative flex items-start">
+                                    <div class="flex items-center h-5">
+                                        <input id="session-1130" name="sessions" type="checkbox" value="11:30" class="focus:ring-poster-olive h-4 w-4 text-poster-olive border-gray-300 rounded">
+                                    </div>
+                                    <div class="ml-3 text-sm">
+                                        <label for="session-1130" class="font-medium text-gray-700">11:30 - 歡迎來到我的AMEE秀</label>
+                                        <p class="text-gray-500">教學部 林汶秀教學行政管理員</p>
+                                    </div>
+                                </div>
+                                <div class="flex-shrink-0 text-sm pt-3 mt-auto border-t border-gray-200">
+                                    <span class="font-medium text-gray-500" id="spots-1130">名額載入中...</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 下午場 -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t border-gray-200">
+                            <h4 class="text-lg font-medium text-gray-800 md:col-span-2">下午場</h4>
+                            
+                            <!-- 場次 13:30 - 卡片樣式 (玫瑰紅) -->
+                            <div class="p-4 bg-session-rose-light rounded-lg shadow-md flex flex-col space-y-3 h-full border-l-4 border-session-rose-dark" id="session-block-1330" data-color="session-rose-dark">
+                                <div class="relative flex items-start">
+                                    <div class="flex items-center h-5">
+                                        <input id="session-1330" name="sessions" type="checkbox" value="13:30" class="focus:ring-poster-olive h-4 w-4 text-poster-olive border-gray-300 rounded">
+                                    </div>
+                                    <div class="ml-3 text-sm">
+                                        <label for="session-1330" class="font-medium text-gray-700">13:30 - 怡起出發的AMEE之旅</label>
+                                        <p class="text-gray-500">教學部 許淑怡教學行政管理員</p>
+                                    </div>
+                                </div>
+                                <div class="flex-shrink-0 text-sm pt-3 mt-auto border-t border-gray-200">
+                                    <span class="font-medium text-gray-500" id="spots-1330">名額載入中...</span>
+                                </div>
+                            </div>
+                            
+                            <!-- 場次 14:00 - 卡片樣式 (藍色) -->
+                            <div class="p-4 bg-session-blue-light rounded-lg shadow-md flex flex-col space-y-3 h-full border-l-4 border-session-blue-dark" id="session-block-1400" data-color="session-blue-dark">
+                                <div class="relative flex items-start">
+                                    <div class="flex items-center h-5">
+                                        <input id="session-1400" name="sessions" type="checkbox" value="14:00" class="focus:ring-poster-olive h-4 w-4 text-poster-olive border-gray-300 rounded">
+                                    </div>
+                                    <div class="ml-3 text-sm">
+                                        <label for="session-1400" class="font-medium text-gray-700">14:00 - A咪婷、看、聽</label>
+                                        <p class="text-gray-500">教學部 楊宜婷教學行政管理員</p>
+                                    </div>
+                                </div>
+                                <div class="flex-shrink-0 text-sm pt-3 mt-auto border-t border-gray-200">
+                                    <span class="font-medium text-gray-500" id="spots-1400">名額載入中...</span>
+                                </div>
+                            </div>
+                            
+                            <!-- 場次 14:30 - 卡片樣式 (綠色) -->
+                            <div class="p-4 bg-session-green-light rounded-lg shadow-md flex flex-col space-y-3 h-full border-l-4 border-session-green-dark" id="session-block-1430" data-color="session-green-dark">
+                                <div class="relative flex items-start">
+                                    <div class="flex items-center h-5">
+                                        <input id="session-1430" name="sessions" type="checkbox" value="14:30" class="focus:ring-poster-olive h-4 w-4 text-poster-olive border-gray-300 rounded">
+                                    </div>
+                                    <div class="ml-3 text-sm">
+                                        <label for="session-1430" class="font-medium text-gray-700">14:30 - AMEE氣象台：為您播報下一波教學『云』圖變化</label>
+                                        <p class="text-gray-500">教學部 盧英云教學行政管理員</p>
+                                    </div>
+                                </div>
+                                <div class="flex-shrink-0 text-sm pt-3 mt-auto border-t border-gray-200">
+                                    <span class="font-medium text-gray-500" id="spots-1430">名額載入中...</span>
+                                </div>
+                            </div>
+                            
+                            <!-- 場次 15:00 - 卡片樣式 (橘色) -->
+                            <div class="p-4 bg-session-amber-light rounded-lg shadow-md flex flex-col space-y-3 h-full border-l-4 border-session-amber-dark" id="session-block-1500" data-color="session-amber-dark">
+                                <div class="relative flex items-start">
+                                    <div class="flex items-center h-5">
+                                        <input id="session-1500" name="sessions" type="checkbox" value="15:00" class="focus:ring-poster-olive h-4 w-4 text-poster-olive border-gray-300 rounded">
+                                    </div>
+                                    <div class="ml-3 text-sm">
+                                        <label for="session-1500" class="font-medium text-gray-700">15:00 - 詩藝相融，芸思綻放—來自AMEE的新啟發</label>
+                                        <p class="text-gray-500">教學部 陳詩芸教學行政管理員</p>
+                                    </div>
+                                </div>
+                                <div class="flex-shrink-0 text-sm pt-3 mt-auto border-t border-gray-200">
+                                    <span class="font-medium text-gray-500" id="spots-1500">名額載入中...</span>
+                                </div>
+                            </div>
+                            
+                            <!-- 場次 15:30 - 卡片樣式 (紫色) -->
+                            <div class="p-4 bg-session-purple-light rounded-lg shadow-md flex flex-col space-y-3 h-full border-l-4 border-session-purple-dark" id="session-block-1530" data-color="session-purple-dark">
+                                <div class="relative flex items-start">
+                                    <div class="flex items-center h-5">
+                                        <input id="session-1530" name="sessions" type="checkbox" value="15:30" class="focus:ring-poster-olive h-4 w-4 text-poster-olive border-gray-300 rounded">
+                                    </div>
+                                    <div class="ml-3 text-sm">
+                                        <label for="session-1530" class="font-medium text-gray-700">15:30 - 學習的雅趣：在AMEE找回探索的初心</label>
+                                        <p class="text-gray-500">教學部 林淑雅教學行政管理員</p>
+                                    </div>
+                                </div>
+                                <div class="flex-shrink-0 text-sm pt-3 mt-auto border-t border-gray-200">
+                                    <span class="font-medium text-gray-500" id="spots-1530">名額載入中...</span>
+                                </div>
+                            </div>
+
+                        </div>
+                    </fieldset>
+                    
+                    <!-- 送出按鈕 -->
+                    <div class="pt-2">
+                        <button type="submit" id="submit-button" class="w-full flex justify-center items-center px-6 py-4 border border-transparent rounded-lg shadow-sm text-base font-medium text-white bg-poster-olive hover:bg-poster-teal focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-poster-olive transition-colors duration-300 disabled:opacity-50">
+                            <i data-lucide="check-circle" class="mr-2 h-5 w-5"></i>
+                            送出報名
+                        </button>
+                    </div>
+                </form>
+
+                <!-- [!! 新增 !!] 聯絡資訊 -->
+                <div class="mt-8 text-center">
+                    <div class="bg-white p-6 md:p-8 rounded-lg shadow-2xl text-left">
+                        <h3 class="text-xl font-semibold text-poster-teal mb-4 border-b border-gray-200 pb-3">
+                            <!-- 使用 Lucide 圖標 -->
+                            <i data-lucide="help-circle" class="w-6 h-6 inline-block mr-2 text-poster-olive align-text-bottom"></i>
+                            報名資訊洽詢
+                        </h3>
+                        <!-- [!! 修改 !!] 縮減聯絡資訊排版 -->
+                        <div class="space-y-3 text-gray-700">
+                            <p class="flex items-center">
+                                <i data-lucide="user" class="w-5 h-5 mr-3 text-poster-olive flex-shrink-0"></i>
+                                <!-- [!! 修改 !!] 將單位和姓名合併 -->
+                                <span>奇美醫院教學部 楊依玲 教學行政管理員</span>
+                            </p>
+                            <p class="flex items-center">
+                                <i data-lucide="phone" class="w-5 h-5 mr-3 text-poster-olive flex-shrink-0"></i>
+                                <a href="tel:06-2812811,57426" class="hover:text-poster-gold transition-colors">06-2812811 分機 57426</a>
+                            </p>
+                            <p class="flex items-start">
+                                <i data-lucide="mail" class="w-5 h-5 mr-3 text-poster-olive flex-shrink-0 mt-1"></i>
+                                <a href="mailto:a41202@mail.chimei.org.tw" class="hover:text-poster-gold transition-colors break-all">a41202@mail.chimei.org.tw</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- [!! 新增 !!] 成功訊息 Modal 彈窗 -->
+    <!-- [!! 終極修正 !!] 移除 modal-enter -->
+    <div id="success-modal" class="modal fixed z-50 inset-0 overflow-y-auto hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <!-- 背景遮罩 -->
+            <div id="modal-backdrop" class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
+            <!-- 垂直置中輔助 -->
+            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+            
+            <!-- Modal 內容 -->
+            <!-- [!! 終極修正 !!] 移除 modal-content 上的動畫 class -->
+            <div id="modal-content-box" class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                    <div class="sm:flex sm:items-start">
+                        <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-green-100 sm:mx-0 sm:h-10 sm:w-10">
+                            <!-- Lucide 圖標 -->
+                            <i data-lucide="check" class="h-6 w-6 text-green-600"></i>
+                        </div>
+                        <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                            <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">
+                                報名成功！
+                            </h3>
+                            <div class="mt-2">
+                                <p class="text-sm text-gray-500">
+                                    感謝您的報名，我們已收到您的資料。
+                                </p>
+                                <p class="text-sm text-gray-500 mt-2">
+                                    一封確認信件已寄送到您的 Email 信箱，敬請查收。
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                    <button type="button" id="modal-close-button" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-poster-olive text-base font-medium text-white hover:bg-poster-teal focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-poster-olive sm:ml-3 sm:w-auto sm:text-sm transition-colors">
+                        關閉
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- 頁腳 -->
+    <footer class="py-8 bg-poster-teal text-poster-cream">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <!-- 依照要求更新 -->
+            <p>&copy; 2025 Chi Mei Medical Center. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- 執行 Lucide 圖標 -->
+    <script>
+    (function() { 
+        window.addEventListener("load", function(event) {
+            try {
+                if (typeof lucide !== 'undefined' && lucide.createIcons) {
+                    lucide.createIcons();
+                }
+            } catch (e) {
+                console.error("Lucide icons failed to load.", e);
+            }
+        });
+    })();
+    </script>
+
+    <!-- 表單提交邏輯 -->
+    <script>
+    (function() {
+        // ***************************************************************
+        // * [!! 警告 !!] SCRIPT_URL 必須更新！
+        // ***************************************************************
+        // * 請將您「最新部署」的 Google Apps Script 網址貼在下方
+        // * (如果您剛剛重新部署了 code.gs，這裡的網址必須更新)
+        // * 否則報名將會失敗！
+        // ***************************************************************
+        var SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwxYU8vHmg1prwsKznaveIzrtLXzUJ3RdordWlAz2o6bFaEgdZKn-Qdi5mhnaEu00Gp/exec";
+        // ***************************************************************
+
+
+        // [修正] 全部改用 var 以相容 ES5
+        var form = document.getElementById('registration-form');
+        var submitButton = document.getElementById('submit-button');
+        var errorMessage = document.getElementById('error-message');
+        var errorMessageText = document.getElementById('error-message-text');
+
+        // [!! 新增 !!] Modal 相關元素
+        var successModal = document.getElementById('success-modal');
+        var modalCloseButton = document.getElementById('modal-close-button');
+        // [!! 終極修正 !!] 取得 Modal 內容
+        var modalContentBox = document.getElementById('modal-content-box');
+        var modalBackdrop = document.getElementById('modal-backdrop');
+        
+        // (舊的 SCRIPT_URL 宣告位置已被移到最上方)
+
+        /**
+         * 顯示錯誤訊息
+         */
+        function showError(message) {
+            errorMessageText.textContent = message || "報名資料無法送出，請稍後再試。";
+            errorMessage.classList.remove('hidden');
+            window.scrollTo(0, 0); // 滾動到頁面頂部
+        }
+
+        /**
+         * [!! 終極修正 !!] 顯示 Modal (移除動畫，直接顯示)
+         */
+        function showSuccessModal() {
+            if (!successModal) return;
+            // 直接顯示彈窗
+            successModal.classList.remove('hidden');
+        }
+
+        /**
+         * [!! 終極修正 !!] 隱藏 Modal (移除動畫，直接隱藏)
+         */
+        function hideSuccessModal() {
+            if (!successModal) return;
+            // 直接隱藏彈窗
+            successModal.classList.add('hidden');
+        }
+
+
+        // [!! 新增 !!] 綁定 Modal 關閉按鈕事件
+        if (modalCloseButton) {
+            modalCloseButton.addEventListener('click', hideSuccessModal);
+        }
+
+        /**
+         * (新功能 - JSONP 版本) 載入剩餘名額
+         */
+        function loadRemainingSpots() {
+            // 顯示載入中...
+            var spans = document.querySelectorAll('span[id^="spots-"]');
+            for (var i = 0; i < spans.length; i++) {
+                spans[i].textContent = '名額載入中...';
+                spans[i].className = 'font-medium text-gray-500';
+            }
+
+            // 1. 建立一個唯一的 callback 函式名稱
+            var callbackName = 'jsonp_callback_' + Math.round(100000 * Math.random());
+            
+            // 2. 在 window 上定義這個函式，Apps Script 將會呼叫它
+            window[callbackName] = function(remaining) {
+                try {
+                    if (remaining.error) {
+                        throw new Error(remaining.error);
+                    }
+                    // 成功時，更新 UI
+                    updateSpotCounts(remaining);
+                } catch (e) {
+                    handleScriptError(e.message);
+                } finally {
+                    // 4. 清理
+                    if (script && script.parentNode) {
+                        document.body.removeChild(script);
+                    }
+                    delete window[callbackName];
+                }
+            };
+
+            // 處理載入失敗的輔助函式
+            function handleScriptError(errorMsg) {
+                console.error("Failed to load spots:", errorMsg);
+                showError("無法載入名額資訊，請檢查網路連線或稍後重試。");
+                var spans = document.querySelectorAll('span[id^="spots-"]');
+                for (var i = 0; i < spans.length; i++) {
+                    spans[i].textContent = '名額載入失敗';
+                    spans[i].className = 'font-medium text-red-500';
+                }
+                // 清理
+                if (script && script.parentNode) {
+                    document.body.removeChild(script);
+                }
+                if (window[callbackName]) {
+                    delete window[callbackName];
+                }
+            }
+
+            // 3. 建立 script 標籤
+            var script = document.createElement('script');
+            // 將 callback 函式名稱作為 URL 參數
+            script.src = SCRIPT_URL + (SCRIPT_URL.indexOf('?') === -1 ? '?' : '&') + 'callback=' + callbackName;
+            script.onerror = handleScriptError;
+
+            // 將 script 標籤加到頁面，觸發請求
+            document.body.appendChild(script);
+        }
+
+        /**
+         * (新功能) 根據抓取到的名額資料更新 UI
+         */
+        function updateSpotCounts(remaining) {
+            // e.g., remaining = {"10:00": 15, "10:30": 14, ...}
+            
+            // 這是一個對照表，將 "10:00" 轉為 "1000" (ID 後綴)
+            var timeMap = {
+                "10:00": "1000",
+                "10:30": "1030",
+                "11:00": "1100",
+                "11:30": "1130",
+                "13:30": "1330",
+                "14:00": "1400",
+                "14:30": "1430",
+                "15:00": "1500",
+                "15:30": "1530"
+            };
+
+            for (var time in remaining) {
+                if (remaining.hasOwnProperty(time)) {
+                    var idSuffix = timeMap[time];
+                    var spots = remaining[time];
+                    var span = document.getElementById('spots-' + idSuffix);
+                    var checkbox = document.getElementById('session-' + idSuffix);
+                    var block = document.getElementById('session-block-' + idSuffix);
+
+                    if (span && checkbox && block) {
+                        // [!! 修改 !!] 取得卡片的 data-color
+                        var colorClass = block.getAttribute('data-color') || 'poster-olive';
+                        
+                        if (spots > 0) {
+                            span.textContent = '剩餘 ' + spots + ' 名';
+                            // [!! 修改 !!] 動態設定顏色
+                            span.className = 'font-medium text-' + colorClass; 
+                            checkbox.disabled = false;
+                        } else {
+                            span.textContent = '已額滿';
+                            span.className = 'font-medium text-red-500'; // 紅色
+                            checkbox.disabled = true;
+                            checkbox.checked = false; // 自動取消勾選
+                        }
+                    }
+                }
+            }
+        }
+
+
+        /**
+         * 表單提交事件
+         */
+        // [!! 修復 !!] 檢查 form 是否存在
+        if (form) {
+            form.addEventListener('submit', function (e) {
+                e.preventDefault(); // 防止表單傳統提交
+
+                // 顯示載入中... 
+                submitButton.disabled = true;
+                submitButton.innerHTML = '資料送出中...';
+
+                // 隱藏先前的提示訊息
+                errorMessage.classList.add('hidden');
+
+                var formData = new FormData(form);
+                var data = {};
+                
+                // 處理基本資料
+                data.name = formData.get('name');
+                data.organization = formData.get('organization');
+                data.department = formData.get('department');
+                data.title = formData.get('title');
+                data.email = formData.get('email');
+
+                // 處理複選的場次
+                data.sessions = formData.getAll('sessions'); // 取得勾選的陣列 ["10:00", "14:30"]
+
+                // *** 升級 Fetch 邏輯 (改用 FormData 避免 CORS preflight) ***
+                var postData = new FormData();
+                postData.append('data', JSON.stringify(data)); // 將 JSON 包在 FormData 中
+
+                fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    cache: 'no-cache',
+                    body: postData 
+                })
+                .then(function(response) {
+                    if (!response.ok) {
+                        return response.text().then(function(text) {
+                            throw new Error('Server error: ' + text);
+                        });
+                    }
+                    return response.json(); // 解析 Apps Script 回傳的 JSON
+                }) 
+                .then(function(result) {
+                    // [!! 新增 !!] 除錯用：在主控台顯示 GAS 回傳的內容
+                    console.log("Google Apps Script response:", result);
+
+                    if (result.status === "success") {
+                        // 報名成功
+                        // [!! 修改 !!] 呼叫 Modal 彈窗
+                        showSuccessModal();
+                        form.reset(); // 清空表單
+                        window.scrollTo(0, 0); // 滾動到頁面頂部
+                        // 重新載入名額
+                        loadRemainingSpots(); 
+                    } else {
+                        // 報名失敗 (例如 "場次已額滿")
+                        showError(result.message || "報名失敗，請稍後再試。");
+                        loadRemainingSpots();
+                    }
+                })
+                .catch(function(error) {
+                    // 處理網路連線錯誤
+                    console.error('Fetch Error:', error);
+                    showError("網路連線錯誤，請稍後再試。");
+                })
+                .then(function() { 
+                    // 無論成功或失敗，都還原按鈕
+                    submitButton.disabled = false;
+                    submitButton.innerHTML = '<i data-lucide="check-circle" class="mr-2 h-5 w-5"></i> 送出報名';
+                    // 重新渲染圖標
+                    try {
+                        if (typeof lucide !== 'undefined' && lucide.createIcons) {
+                            lucide.createIcons(); 
+                        }
+                    } catch (e) {
+                       console.error("Lucide icons failed to re-create.", e);
+                    }
+                });
+            });
+        } else {
+            console.error("Registration form not found.");
+        }
+
+        // [!! 修改 !!] 確保 DOM 載入後再執行
+        document.addEventListener("DOMContentLoaded", function() {
+            // 頁面載入時，抓取剩餘名額
+            loadRemainingSpots();
+
+            // 重新觸發 Lucide 圖標渲染 (因為有些圖標是動態載入的)
+            try {
+                if (typeof lucide !== 'undefined' && lucide.createIcons) {
+                    lucide.createIcons();
+                }
+            } catch (e) {
+                console.error("Lucide icons failed to load on DOMContentLoaded.", e);
+            }
+        });
+
+    })();
+    </script>
+
+
+</body>
+</html>
