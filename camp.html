@@ -491,6 +491,26 @@
       width:10px; height:10px; top:.9em;
     }
   }
+
+  /* === 內頁背景：主視覺以下全段 === */
+  .page-background{
+    position:relative;
+    background: url("images/許文龍.jpg") center center / cover no-repeat fixed;
+    isolation:isolate;
+  }
+  .page-background::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:rgba(255,255,255,0.78);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+    z-index:-1;
+  }
+  .page-background > *{
+    position:relative;
+    z-index:0;
+  }
 </style>
 <meta property="og:title" content="創造360°人生 醫學教育共識營">
 <meta property="og:description" content="醫學教育共識營宣傳官網：日期地點、活動議程、立即回覆與加入行事曆。">
@@ -535,6 +555,7 @@
   </div>
 </header>
 
+<div class="page-background">
 <!-- INFO STRIP --><div class="container infostrip" role="region" aria-label="關鍵資訊">
   <div class="infogrid">
     <div class="icard">
@@ -727,6 +748,8 @@
     <p style="margin:0">&copy; 2025 Chi Mei Medical Center. All rights reserved.</p>
   </div>
 </footer>
+
+</div>
 
 <script>
 // 主視覺在桌機／手機間切換位置
