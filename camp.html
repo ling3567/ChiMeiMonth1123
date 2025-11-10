@@ -147,9 +147,29 @@
 
   /* INFO STRIP */
   .container{max-width:1200px;margin:0 auto;padding:0 20px}
-  .infostrip{position:relative;z-index:10;background:#fff;box-shadow:0 6px 22px rgba(0,0,0,.06);margin-top:-46px;border-radius:16px;padding:22px}
+  .infostrip{
+    position:relative;
+    z-index:10;
+    background:rgba(255,255,255,0.7);
+    backdrop-filter:blur(6px);
+    -webkit-backdrop-filter:blur(6px);
+    box-shadow:0 4px 20px rgba(0,0,0,0.1);
+    margin-top:-46px;
+    border-radius:16px;
+    padding:22px;
+  }
   .infogrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-  .icard{background:var(--card);border:1px solid #eef1f4;border-radius:14px;padding:18px;display:flex;gap:12px;align-items:flex-start}
+  .icard{
+    background:rgba(255,255,255,0.6);
+    backdrop-filter:blur(6px);
+    -webkit-backdrop-filter:blur(6px);
+    border:1px solid rgba(255,255,255,0.65);
+    border-radius:14px;
+    padding:18px;
+    display:flex;
+    gap:12px;
+    align-items:flex-start;
+  }
   .icard svg{width:28px;height:28px;flex:0 0 auto}
   .icard h4{margin:0 0 6px;font-size:16px}
   .icard p{margin:0;color:var(--muted);font-size:14px}
