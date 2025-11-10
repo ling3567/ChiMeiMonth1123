@@ -163,7 +163,28 @@
 
   /* HIGHLIGHTS */
   .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:18px}
-  .card{background:#fff;border:1px solid #eef1f4;border-radius:14px;padding:18px}
+  .card {
+    background: rgba(255, 255, 255, 0.6); /* 半透明白底 */
+    backdrop-filter: blur(10px);          /* 毛玻璃效果 */
+    -webkit-backdrop-filter: blur(10px);  /* Safari 支援 */
+    border-radius: 16px;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1); /* 柔和陰影 */
+    padding: 2rem;
+    margin: 2rem auto;
+    max-width: 960px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+  }
+  .cards .card {
+    background: #fff;
+    border: 1px solid #eef1f4;
+    border-radius: 14px;
+    padding: 18px;
+    box-shadow: 0 6px 22px rgba(0,0,0,.06);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    margin: 0;
+    max-width: none;
+  }
   .card h3{margin:0 0 10px}
   .card.reminder{background:linear-gradient(135deg,rgba(20,92,116,.92),rgba(14,122,168,.92));color:#f2fbff;border:1px solid rgba(14,122,168,.4);box-shadow:0 20px 45px rgba(14,26,34,.16);display:flex;flex-direction:column;gap:12px;min-height:100%}
   .card.reminder p{color:inherit}
@@ -362,11 +383,7 @@
 
   /* 活動時程外層大卡樣式（與上方資訊一致的語彙） */
   .agenda-card{
-    background:#fff;
-    border:1px solid #eef1f4;
-    border-radius:20px;
-    padding:28px 22px;
-    box-shadow:0 12px 28px rgba(14,26,34,.08);
+    border-radius:16px;
   }
 
   /* 調整時程區塊：取消自帶白底，改由外層卡片提供 */
@@ -387,7 +404,7 @@
 
   /* 手機內距較緊湊 */
   @media (max-width:768px){
-    .agenda-card{ padding:22px 16px; border-radius:16px; }
+    .agenda-card{ padding:1.5rem; border-radius:16px; }
   }
 
   /* === 移除預設黑點樣式 === */
@@ -545,7 +562,7 @@
 </diV>
 
 <section id="agenda-full" class="py-8">
-  <!-- 與上方卡片相同的容器寬度：可依你上方區塊改成相同 max-w 與 padding --><div class="container agenda-card">
+  <!-- 與上方卡片相同的容器寬度：可依你上方區塊改成相同 max-w 與 padding --><div class="container agenda-card card">
       <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight text-slate-900 mb-8">活動時程</h2>
 
       <!-- 時間軸外層，使用 before 畫出垂直線，位置更靠左避免壓到時間 --><div class="timeline">
