@@ -149,7 +149,19 @@
   .container{max-width:1200px;margin:0 auto;padding:0 20px}
   .infostrip{position:relative;z-index:10;background:#fff;box-shadow:0 6px 22px rgba(0,0,0,.06);margin-top:-46px;border-radius:16px;padding:22px}
   .infogrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-  .icard{background:var(--card);border:1px solid #eef1f4;border-radius:14px;padding:18px;display:flex;gap:12px;align-items:flex-start}
+  .icard{
+    position:relative;
+    border:1px solid #eef1f4;
+    border-radius:14px;
+    padding:18px;
+    display:flex;
+    gap:12px;
+    align-items:flex-start;
+    background:
+      linear-gradient(rgba(255,255,255,0.8), rgba(255,255,255,0.8)),
+      url("images/許文龍.jpg") center/cover no-repeat;
+    overflow:hidden;
+  }
   .icard svg{width:28px;height:28px;flex:0 0 auto}
   .icard h4{margin:0 0 6px;font-size:16px}
   .icard p{margin:0;color:var(--muted);font-size:14px}
