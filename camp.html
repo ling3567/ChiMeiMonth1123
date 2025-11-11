@@ -150,26 +150,27 @@
 .infostrip {
   position: relative;
   z-index: 10;
-  background: transparent;
-  backdrop-filter: none;
-  -webkit-backdrop-filter: none;
-  box-shadow: none;
-  margin-top: -46px;
+  background: rgba(255, 255, 255, 0.4); /* 半透明白色 */
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
   border-radius: 16px;
   padding: 22px;
+  margin-top: -46px;
 }
-  .infogrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-  .icard{
-    background:transparent;
-    backdrop-filter:none;
-    -webkit-backdrop-filter:none;
-    border:none;
-    border-radius:14px;
-    padding:18px;
-    display:flex;
-    gap:12px;
-    align-items:flex-start;
-  }
+
+.icard {
+  background: rgba(255, 255, 255, 0.4); /* 半透明白色 */
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 14px;
+  padding: 18px;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
   .icard svg{width:28px;height:28px;flex:0 0 auto}
   .icard h4{margin:0 0 6px;font-size:16px}
   .icard p{margin:0;color:var(--muted);font-size:14px}
