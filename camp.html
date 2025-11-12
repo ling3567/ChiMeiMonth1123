@@ -13,7 +13,17 @@
     --paper:#f2ebe3; --rose:#c53f4f; --violet:#5e63b6; --teal:#1f9d8f; --cream:#fff9e5;
   }
   *{box-sizing:border-box}
-  html,body{margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Noto Sans TC,Roboto,Helvetica,Arial,"PingFang TC","Microsoft JhengHei",sans-serif;color:var(--ink);background:var(--bg);-webkit-font-smoothing:antialiased}
+  html,body{
+    margin:0;
+    padding:0;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Noto Sans TC,Roboto,Helvetica,Arial,"PingFang TC","Microsoft JhengHei",sans-serif;
+    color:var(--ink);
+    background:
+      linear-gradient(rgba(255,255,255,0.12), rgba(255,255,255,0.12)),
+      url("images/許文龍.jpg") center/cover fixed no-repeat;
+    background-color:#0e1a22;
+    -webkit-font-smoothing:antialiased;
+  }
   a{color:var(--blue);text-decoration:none} a:hover{text-decoration:underline}
 
   /* === HERO 區塊重設：電影式聚焦感 === */
@@ -249,20 +259,31 @@
     border: 1px solid rgba(255, 255, 255, 0.3);
   }
   .cards .card {
-    background: #fff;
-    border: 1px solid #eef1f4;
-    border-radius: 14px;
+    background: rgba(255,255,255,0.85);
+    border: 1px solid rgba(255,255,255,0.55);
+    border-radius: 16px;
     padding: 18px;
-    box-shadow: 0 6px 22px rgba(0,0,0,.06);
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
+    box-shadow: 0 10px 30px rgba(14,26,34,0.12);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     margin: 0;
     max-width: none;
   }
   .card h3{margin:0 0 10px}
-  .card.reminder{background:linear-gradient(135deg,rgba(20,92,116,.92),rgba(14,122,168,.92));color:#f2fbff;border:1px solid rgba(14,122,168,.4);box-shadow:0 20px 45px rgba(14,26,34,.16);display:flex;flex-direction:column;gap:12px;min-height:100%}
-  .card.reminder p{color:inherit}
-  .card.reminder strong{color:#fff}
+  .card.reminder{
+    background: rgba(255,255,255,0.9);
+    color:var(--ink);
+    border:1px solid rgba(255,255,255,0.6);
+    box-shadow:0 20px 45px rgba(14,26,34,.16);
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+    min-height:100%;
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+  }
+  .card.reminder p{color:rgba(14,26,34,0.85)}
+  .card.reminder strong{color:var(--rose)}
   .card.reminder .actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:auto}
   .card.reminder .btn{background:var(--yellow);color:#1a1a1a;box-shadow:0 8px 18px rgba(0,0,0,.25)}
   .card.reminder .btn:hover{filter:brightness(.95)}
@@ -469,12 +490,16 @@
   }
 
   /* 調整時程區塊：取消自帶白底，改由外層卡片提供 */
-  #agenda-full{
+  #agenda-full,
+  #participation-info{
     /* 新增背景圖，並疊加半透明白色漸層以刷淡效果 */
     background:
       linear-gradient(rgba(255,255,255,0.72), rgba(255,255,255,0.72)), /* 白色半透明層 */
       url("images/許文龍.jpg") center/cover no-repeat; /* 許文龍.jpg 背景圖 */
     background-attachment: fixed; /* 參照 hero 格式，設定為固定背景 */
+  }
+
+  #agenda-full{
     padding:60px 0;    /* 原本有 padding 保留 */
   }
 
@@ -487,7 +512,8 @@
   /* 手機內距較緊湊 */
   @media (max-width:768px){
     .agenda-card{ padding:1.5rem; border-radius:16px; }
-    #agenda-full{ background-attachment:scroll; }
+    #agenda-full,
+    #participation-info{ background-attachment:scroll; }
   }
 
   /* === 移除預設黑點樣式 === */
