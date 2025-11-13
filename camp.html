@@ -12,7 +12,8 @@
     --blue:#0e7aa8; --yellow:#e0c23a; --ink:#0e1a22; --bg:#f6f7fb; --card:#ffffff; --muted:#667280; --accent:#145c74;
     --paper:#f2ebe3; --rose:#c53f4f; --violet:#5e63b6; --teal:#1f9d8f; --cream:#fff9e5;
   }
-  *{box-sizing:border-box}
+  *,*::before,*::after{box-sizing:border-box}
+  img{max-width:100%;height:auto;display:block}
   html,body{
     margin:0;
     padding:0;
@@ -247,6 +248,9 @@
 
   /* HIGHLIGHTS */
   .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:18px}
+  @media (max-width:768px){
+    .cards{grid-template-columns:1fr}
+  }
   .card {
     background: rgba(255, 255, 255, 0.45); /* 半透明白底 */
     backdrop-filter: blur(10px);          /* 毛玻璃效果 */
@@ -289,6 +293,31 @@
   .card.reminder .btn:hover{filter:brightness(.95)}
   .card.reminder .btn.secondary{background:rgba(255,255,255,.9);color:var(--ink);box-shadow:none}
   .card.reminder .btn.secondary:hover{background:#fff}
+
+  /* 出席資訊的橫向卡片列 */
+  .cards.info-footer{
+    display:flex;
+    flex-wrap:wrap;
+    gap:16px;
+  }
+  .cards.info-footer .card{
+    flex:1 1 calc(33.333% - 16px);
+    min-width:250px;
+  }
+  @media (max-width:768px){
+    .cards.info-footer{
+      flex-wrap:nowrap;
+      overflow-x:auto;
+      -webkit-overflow-scrolling:touch;
+      padding-bottom:8px;
+      margin:0 -20px;
+      padding-left:20px;
+      padding-right:20px;
+    }
+    .cards.info-footer .card{
+      flex:0 0 auto;
+    }
+  }
 
   /* AGENDA UTILITIES */
   #agenda-full h2{font-size:32px;margin-left:auto;margin-right:auto;max-width:1200px}
@@ -825,18 +854,18 @@
 <section id="participation-info" class="py-12">
   <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
     <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight text-slate-900 mb-8">出席與會資訊</h2>
-    <div class="cards">
-      <div class="card">
+    <div class="cards info-footer">
+      <div class="card contact-info">
         <h3>聯絡資訊</h3>
         <p>奇美醫院 教學部</p>
         <p>楊依玲 教學行政管理員（分機 57426）<br><a href="mailto:a41202@mail.chimei.org.tw">a41202@mail.chimei.org.tw</a></p>
       </div>
-      <div class="card">
+      <div class="card location-info">
         <h3>地點資訊</h3>
         <p>臺南｜奇美博物館 豐收廳</p>
         <p><a href="https://www.google.com/maps/search/?api=1&query=%E5%A5%87%E7%BE%8E%E5%8D%9A%E7%89%A9%E9%A4%A8+%E8%B1%90%E6%94%B6%E5%BB%B3" target="_blank" rel="noopener">Google Map 導航</a></p>
       </div>
-      <div class="card reminder">
+      <div class="card reminder important-info">
         <h3>重要提醒</h3>
         <p>請與會成員於<strong class="mx-1">10月31日（五）</strong>前完成出席回覆，以利後續分組與行政安排。</p>
         <div class="actions">
