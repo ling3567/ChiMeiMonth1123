@@ -513,6 +513,19 @@
     border-radius:16px;
   }
 
+  /* 讓活動時程卡片沿用主要 container 寬度，左右邊界與下方資訊卡一致 */
+  .container.agenda-card{
+    width:100%;
+    max-width:1200px;
+    margin:0 auto;
+    padding:clamp(1.5rem,4vw,3rem);
+  }
+
+  .container.agenda-card.card{
+    margin-top:0;
+    margin-bottom:0;
+  }
+
   /* 調整時程區塊：取消自帶白底，改由外層卡片提供 */
   #agenda-full{
     padding:60px 0;    /* 原本有 padding 保留 */
