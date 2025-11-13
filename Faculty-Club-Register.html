@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我們都是追夢人天涯海角俱樂部｜分享會報名專區</title>
+    
+    <!-- 載入 Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- 載入字體 -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+    <style>
+        body {
+            font-family: 'Inter', 'Noto Sans TC', sans-serif;
+            /* 【已更新】使用您指定的 facultyclub.jpg 作為背景 */
+            /* 請確保 facultyclub.jpg 和這個 html 檔案在同一個資料夾 */
+            background-image: url('facultyclub.jpg'); 
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed; /* 讓背景圖固定不滾動 */
+            background-repeat: no-repeat;
+        }
+        /* 簡單的 modal 樣式 */
+        .modal {
+            display: none; /* 預設隱藏 */
+            position: fixed;
+            z-index: 50;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 500px;
+        }
+        
+        /* 閃爍動畫 (用於名額稀少) */
+        .animate-pulse-fast {
+            animation: pulse-fast 1s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse-fast {
+            0%, 100% { opacity: 1; }
+            50% { opacity: .5; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 頁首：固定在頂部，帶有毛玻璃效果 -->
+    <header class="bg-white/70 backdrop-blur-md shadow-md sticky top-0 z-10 py-6">
+        <div class="container mx-auto max-w-4xl px-6 text-center">
+            <!-- 恢復的標題 -->
+            <h1 class="text-3xl md:text-4xl font-bold text-pink-500 mb-2">
+                我們都是追夢人
+            </h1>
+            <h2 class="text-2xl font-semibold text-blue-700">
+                天涯海角俱樂部 | 分享會
+            </h2>
+            <p class="text-xl font-medium text-gray-800 mt-2">
+                報名專區
+            </p>
+        </div>
+    </header>
+
+    <!-- 主要內容 -->
+    <main class="container mx-auto max-w-4xl px-6 py-10 mt-8">
+        
+        <!-- 報名表單區塊：半透明毛玻璃效果 -->
+        <div class="bg-white/90 backdrop-blur-sm p-8 md:p-10 rounded-lg shadow-xl">
+            
+            <form id="registrationForm">
+                
+                <!-- 報名資料 -->
+                <div class="border-b border-gray-200 pb-6 mb-6">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-4">
+                        報名資料
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        
+                        <!-- 姓名 -->
+                        <div>
+                            <label for="name" class="block text-sm font-medium text-gray-700 mb-1">姓名 *</label>
+                            <input type="text" id="name" name="name" required
+                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+                        
+                        <!-- 服務單位 -->
+                        <div>
+                            <label for="unit" class="block text-sm font-medium text-gray-700 mb-1">服務單位 *</label>
+                            <input type="text" id="unit" name="unit" required
+                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                   placeholder="例如：奇美醫院">
+                        </div>
+                        
+                        <!-- 服務部門 -->
+                        <div>
+                            <label for="department" class="block text-sm font-medium text-gray-700 mb-1">服務部門 *</label>
+                            <input type="text" id="department" name="department" required
+                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                   placeholder="例如：教學部">
+                        </div>
+
+                        <!-- 職稱 -->
+                        <div>
+                            <label for="title" class="block text-sm font-medium text-gray-700 mb-1">職稱 *</label>
+                            <input type="text" id="title" name="title" required
+                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                   placeholder="例如：教學行政管理員">
+                        </div>
+                        
+                        <!-- Email -->
+                        <div>
+                            <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email *</label>
+                            <input type="email" id="email" name="email" required
+                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                   placeholder="例如：abc@example.com">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 【新增】剩餘名額顯示區塊 (移到按鈕上方) -->
+                <div class="mt-8 mb-4 text-center">
+                    <p id="quota-display" class="text-lg font-bold text-gray-700">
+                        <span class="animate-pulse">剩餘名額載入中...</span>
+                    </p>
+                </div>
+
+
+                <!-- 送出按鈕 -->
+                <div class="text-center">
+                    <button type="submit" id="submit-button"
+                            class="w-full md:w-auto inline-flex justify-center px-10 py-3 border border-transparent text-base font-medium rounded-lg shadow-lg text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
+                        <span id="button-text">送出報名</span>
+                        <span id="button-loading" class="hidden">傳送中...</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <!-- 頁尾 -->
+    <footer class="bg-gray-900/90 backdrop-blur-sm text-gray-300 mt-12 py-8">
+        <div class="container mx-auto max-w-4xl px-6">
+            <h3 class="text-lg font-semibold text-white mb-4">
+                報名資訊洽詢
+            </h3>
+            <div class="space-y-2">
+                <p>奇美醫院教學部 林汶秀 教學行政管理員</p>
+                <p>電話：<a href="tel:06-2812811,52007" class="hover:text-white">06-2812811 分機 52007</a></p>
+                <p>Email：<a href="mailto:cmhcfd@mail.chimei.org.tw" class="hover:text-white">cmhcfd@mail.chimei.org.tw</a></p>
+            </div>
+            <div class="border-t border-gray-700 mt-6 pt-6 text-center text-sm">
+                <p>&copy; 2025 Chi Mei Medical Center. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 成功 Modal -->
+    <div id="successModal" class="modal">
+        <div class="modal-content text-center p-6 bg-white rounded-lg shadow-xl">
+            <span onclick="closeModal('successModal')" class="float-right text-2xl font-bold cursor-pointer text-gray-400 hover:text-gray-600">&times;</span>
+            <div class="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-4">
+                <svg class="w-10 h-10 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-900 mb-2">報名成功！</h3>
+            <p class="text-gray-600 mb-6">
+                感謝您的報名，我們已收到您的資料。<br>
+                相關資訊已寄送到您的 Email 信箱，敬請查收。
+            </p>
+            <button onclick="closeModal('successModal')"
+                    class="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 focus:outline-none">
+                關閉
+            </button>
+        </div>
+    </div>
+
+    <!-- 錯誤 Modal -->
+    <div id="errorModal" class="modal">
+        <div class="modal-content text-center p-6 bg-white rounded-lg shadow-xl">
+            <span onclick="closeModal('errorModal')" class="float-right text-2xl font-bold cursor-pointer text-gray-400 hover:text-gray-600">&times;</span>
+            <div class="w-16 h-16 rounded-full bg-red-100 flex items-center justify-center mx-auto mb-4">
+                <svg class="w-10 h-10 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-900 mb-2">發生錯誤！</h3>
+            <p class="text-gray-600 mb-6" id="error-message">
+                報名資料無法送出，請稍後再試或直接聯繫管理員。
+            </p>
+            <button onclick="closeModal('errorModal')"
+                    class="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 focus:outline-none">
+                關閉
+            </button>
+        </div>
+    </div>
+    
+    <!-- 額滿 Modal -->
+    <div id="fullModal" class="modal">
+        <div class="modal-content text-center p-6 bg-white rounded-lg shadow-xl">
+            <span onclick="closeModal('fullModal')" class="float-right text-2xl font-bold cursor-pointer text-gray-400 hover:text-gray-600">&times;</span>
+            <div class="w-16 h-16 rounded-full bg-yellow-100 flex items-center justify-center mx-auto mb-4">
+                <svg class="w-10 h-10 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-900 mb-2">報名已額滿</h3>
+            <p class="text-gray-600 mb-6">
+                感謝您的關注，本次活動名額已滿。<br>
+                期待您下次的參與！
+            </p>
+            <button onclick="closeModal('fullModal')"
+                    class="px-6 py-2 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 focus:outline-none">
+                關閉
+            </button>
+        </div>
+    </div>
+
+
+    <script>
+        // --- 1. Google Apps Script 網址 ---
+        // (必填) 請填入您部署 (Deploy) 後的 Web App 網址
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbyim_RmKurd_JGKVysTVcvvZyj04_FPA0xCpvDylE2jOvgUa77u7O4VcWo95Tt_w9aRng/exec';
+
+        // --- 2. 獲取剩餘名額 (JSONP) ---
+        const quotaDisplay = document.getElementById('quota-display');
+        const submitButton = document.getElementById('submit-button');
+
+        /**
+         * 處理從 GAS 回傳的名額資料
+         * 這必須是全域函數 (window.) 才能被 JSONP 回呼
+         */
+        window.handleQuotaResponse = function(data) {
+            if (data && typeof data.remainingQuota !== 'undefined') {
+                const remaining = data.remainingQuota;
+                
+                if (remaining > 3) {
+                    quotaDisplay.innerHTML = `剩餘名額：<span class="text-green-600 font-bold">${remaining}</span> 人`;
+                } else if (remaining > 0) {
+                    quotaDisplay.innerHTML = `<span class="text-orange-600 font-bold animate-pulse-fast">僅剩 ${remaining} 人！</span>`;
+                } else {
+                    quotaDisplay.innerHTML = `<span class="text-red-600 font-bold">報名已額滿</span>`;
+                    submitButton.disabled = true;
+                    submitButton.querySelector('#button-text').innerText = '報名已額滿';
+                }
+            } else {
+                quotaDisplay.innerText = '名額查詢失敗';
+            }
+        };
+
+        /**
+         * 使用 JSONP 方式向 GAS 請求名額
+         */
+        function fetchQuota() {
+            const script = document.createElement('script');
+            // 我們使用 'callback=handleQuotaResponse' 來告訴 GAS 回呼哪個函數
+            script.src = scriptURL + '?callback=handleQuotaResponse';
+            document.body.appendChild(script);
+            
+            // 清理
+            script.onload = () => {
+                document.body.removeChild(script);
+            };
+            script.onerror = () => {
+                quotaDisplay.innerText = '名額查詢失敗';
+                document.body.removeChild(script);
+            };
+        }
+
+        // 頁面載入時自動執行
+        window.addEventListener('load', fetchQuota);
+
+
+        // --- 3. 表單提交 ---
+        const form = document.getElementById('registrationForm');
+        const buttonText = document.getElementById('button-text');
+        const buttonLoading = document.getElementById('button-loading');
+        const errorMessage = document.getElementById('error-message');
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault(); // 防止表單預設提交
+            
+            // 檢查必填欄位
+            if (!form.checkValidity()) {
+                // 觸發瀏覽器內建的驗證提示
+                form.reportValidity();
+                return;
+            }
+
+            // 鎖定按鈕
+            submitButton.disabled = true;
+            buttonText.classList.add('hidden');
+            buttonLoading.classList.remove('hidden');
+
+            fetch(scriptURL, { 
+                method: 'POST', 
+                body: new FormData(form)
+            })
+            .then(response => response.json())
+            .then(data => {
+                // 解鎖按鈕
+                submitButton.disabled = false;
+                buttonText.classList.remove('hidden');
+                buttonLoading.classList.add('hidden');
+
+                // 根據 GAS 回傳的結果顯示 Modal
+                if (data.result === 'success') {
+                    showModal('successModal');
+                    form.reset(); // 清空表單
+                    fetchQuota(); // 報名成功後，重新抓取名額
+                } else if (data.result === 'full') {
+                    showModal('fullModal');
+                    // 額滿後，也禁用按鈕
+                    submitButton.disabled = true;
+                    submitButton.querySelector('#button-text').innerText = '報名已額滿';
+                    quotaDisplay.innerHTML = `<span class="text-red-600 font-bold">報名已額滿</span>`;
+                } else {
+                    errorMessage.innerText = data.message || '報名資料無法送出，請稍後再試。';
+                    showModal('errorModal');
+                }
+            })
+            .catch(error => {
+                // 解鎖按鈕
+                submitButton.disabled = false;
+                buttonText.classList.remove('hidden');
+                buttonLoading.classList.add('hidden');
+
+                // 顯示 fetch 失敗的錯誤
+                errorMessage.innerText = '網路連線錯誤，請稍後再試。 ' + error.message;
+                showModal('errorModal');
+                console.error('Error!', error.message);
+            });
+        });
+
+        // --- 4. Modal 控制 ---
+        function showModal(id) {
+            document.getElementById(id).style.display = 'block';
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).style.display = 'none';
+        }
+
+        // 關閉 Modal (點擊背景)
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = 'none';
+            }
+        }
+    </script>
+
+</body>
+</html>
