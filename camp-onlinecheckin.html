@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>「創造360°人生」 醫學教育共識營 報到系統</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* 設定背景圖片 */
+    body {
+      background-image: url('https://i.imgur.com/your_image_hash.jpg'); /* !!! 請替換成您圖片的實際網址 !!! */
+      background-size: cover; /* 覆蓋整個視窗 */
+      background-position: center; /* 圖片置中 */
+      background-attachment: fixed; /* 圖片固定不滾動 */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      font-family: 'Noto Sans TC', sans-serif; /* 使用思源黑體或其他優雅字體 */
+      color: #fff; /* 預設文字顏色為白色 */
+    }
+    /* 為文字內容提供一個半透明疊加層，以提高可讀性 */
+    .overlay-container {
+      background-color: rgba(0, 0, 0, 0.4); /* 半透明深色疊加 */
+      padding: 2rem;
+      border-radius: 0.75rem; /* 與卡片圓角一致 */
+      margin: 1rem;
+    }
+
+    /* 卡片設計 - 優雅的半透明毛玻璃效果 */
+    .glass-card {
+      background-color: rgba(255, 255, 255, 0.15); /* 更透明的白色 */
+      backdrop-filter: blur(8px); /* 稍微加強模糊 */
+      border: 1px solid rgba(255, 255, 255, 0.2); /* 柔和的白色邊框 */
+      border-radius: 1rem; /* 更圓潤的邊角 */
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3); /* 更深邃的陰影 */
+      max-width: 28rem; /* 限制最大寬度 */
+      width: 100%;
+    }
+
+    /* 輸入框和按鈕的樣式 */
+    .input-field {
+      background-color: rgba(255, 255, 255, 0.1); /* 淺色半透明背景 */
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      color: #fff;
+      padding: 0.75rem 1rem;
+      border-radius: 0.5rem;
+      transition: all 0.3s ease;
+    }
+    .input-field::placeholder {
+      color: rgba(255, 255, 255, 0.6);
+    }
+    .input-field:focus {
+      border-color: rgba(255, 255, 255, 0.6);
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.3);
+    }
+
+    .submit-button, .reset-button {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.1) 100%); /* 淺色漸層 */
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      color: #fff;
+      font-weight: bold;
+      padding: 0.75rem 1.5rem;
+      border-radius: 0.5rem;
+      transition: all 0.3s ease;
+    }
+    .submit-button:hover, .reset-button:hover {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.15) 100%);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+    .submit-button:focus, .reset-button:focus {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.4);
+    }
+    
+    /* Spinner 調整為白色 */
+    .spinner {
+      border: 4px solid rgba(255, 255, 255, 0.3);
+      border-left-color: #fff;
+    }
+
+    /* 訊息文字顏色調整 */
+    .text-success { color: #d0f0c0; } /* 柔和的淺綠色 */
+    .text-error { color: #f0c0c0; }   /* 柔和的淺紅色 */
+  </style>
+  <!-- 引入 Google Fonts (思源黑體) --><link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- 這裡放置背景圖 --><!-- 由於圖片網址是變數，我們讓您手動替換 --><div class="overlay-container glass-card p-8 md:p-12 text-center">
+    
+    <!-- 標題區 --><div class="mb-8">
+      <h1 class="text-3xl md:text-4xl font-bold text-white mb-4 leading-tight">
+        「創造360°人生」<br>醫學教育共識營 報到系統
+      </h1>
+      <p class="text-lg md:text-xl text-gray-200 mt-4">
+        2025/11/23（日）12:45–17:10
+      </p>
+      <p class="text-lg md:text-xl text-gray-200 mt-1">
+        奇美博物館 豐收廳
+      </p>
+    </div>
+
+    <!-- 報到表單 --><div id="checkInForm">
+      <label for="employeeId" class="block text-lg font-medium text-gray-100 mb-2">
+        請輸入您的人事號
+      </label>
+      <input type="tel" id="employeeId" name="employeeId" 
+             class="w-full input-field text-xl focus:ring-white/80" 
+             placeholder="範例：1001">
+      
+      <button id="submitButton" 
+              onclick="handleCheckIn()"
+              class="w-full submit-button text-xl mt-6">
+        送出報到
+      </button>
+    </div>
+
+    <!-- 載入中畫面 --><div id="loadingIndicator" class="hidden text-center py-8">
+      <div class="spinner mx-auto"></div>
+      <p class="text-lg text-gray-200 mt-4">報到中，請稍候...</p>
+    </div>
+
+    <!-- 結果訊息 --><div id="resultMessage" class="hidden mt-6 text-center">
+      <p id="messageText" class="text-2xl font-semibold"></p>
+      <p id="groupText" class="text-3xl font-bold text-white mt-4"></p>
+      <button onclick="resetForm()" 
+              class="w-full reset-button text-lg mt-8">
+        返回報到
+      </button>
+    </div>
+
+  </div>
+
+  <script>
+    // -----------------------------------------------------------------
+    // !!! 關鍵設定：您專屬的 Google Apps Script 網址 !!!
+    // (這個不需要變動)
+    // -----------------------------------------------------------------
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbweDq70D9T01XvspyieBBLVFmXOY3WsP0ZaWR0k68XM5IRtgmKmtODfoT43h0JCMrIbwg/exec";
+    // -----------------------------------------------------------------
+
+
+    // 取得頁面上的元件
+    const form = document.getElementById('checkInForm');
+    const loading = document.getElementById('loadingIndicator');
+    const resultDiv = document.getElementById('resultMessage');
+    const messageText = document.getElementById('messageText');
+    const groupText = document.getElementById('groupText');
+    const input = document.getElementById('employeeId');
+
+    /**
+     * 處理報到按鈕點擊
+     */
+    async function handleCheckIn() {
+      const employeeId = input.value;
+      if (!employeeId) {
+        alert("請輸入人事號！"); 
+        return;
+      }
+
+      form.classList.add('hidden');
+      loading.classList.remove('hidden');
+      resultDiv.classList.add('hidden');
+
+      try {
+        const response = await fetch(WEB_APP_URL, {
+          method: 'POST',
+          mode: 'cors',
+          headers: {
+            'Content-Type': 'text/plain;charset=utf-8',
+          },
+          body: JSON.stringify({
+            action: "processCheckIn",
+            employeeId: employeeId
+          })
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP 錯誤! 狀態: ${response.status}`);
+        }
+
+        const result = await response.json();
+        showResult(result);
+
+      } catch (error) {
+        console.error("Fetch 錯誤:", error);
+        showError(error);
+      }
+    }
+
+    /**
+     * 成功回呼函式
+     * @param {object} result - 從後端傳回的結果物件
+     */
+    function showResult(result) {
+      loading.classList.add('hidden');
+      messageText.textContent = result.message;
+
+      if (result.success) {
+        messageText.className = "text-2xl font-semibold text-success";
+        groupText.textContent = result.group;
+      } else {
+        messageText.className = "text-2xl font-semibold text-error";
+        groupText.textContent = result.group || '';
+      }
+      
+      resultDiv.classList.remove('hidden');
+    }
+
+    /**
+     * 失敗回呼函式 (例如網路斷線或後端嚴重錯誤)
+     * @param {Error} error - 錯誤物件
+     */
+    function showError(error) {
+      loading.classList.add('hidden');
+      messageText.textContent = "發生錯誤：" + error.message;
+      messageText.className = "text-2xl font-semibold text-error";
+      groupText.textContent = "請洽詢工作人員。";
+      resultDiv.classList.remove('hidden');
+    }
+
+    /**
+     * 重設表單，回到報到畫面
+     */
+    function resetForm() {
+      input.value = '';
+      resultDiv.classList.add('hidden');
+      form.classList.remove('hidden');
+      loading.classList.add('hidden');
+    }
+
+    // 讓使用者可以在輸入框按 Enter 鍵送出
+    input.addEventListener('keypress', function(event) {
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        document.getElementById('submitButton').click();
+      }
+    });
+
+  </script>
+</body>
+</html>
