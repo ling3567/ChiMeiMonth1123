@@ -623,89 +623,50 @@
   .time-entry{
     display:flex;
     flex-wrap:wrap;
-    align-items:flex-start;
-    gap:12px;
+    align-items:baseline;
+    gap:8px;
     margin:0;
   }
   .time-entry .time{
-    font-weight:700;
-    min-width:130px;
-    color:var(--ink);
-    font-size:clamp(1rem, 2.4vw, 1.15rem);
-    letter-spacing:0.01em;
+    font-weight:500;
+    min-width:120px;
+    color:var(--muted);
   }
   .time-entry .topic{
     display:flex;
-    align-items:flex-start;
+    align-items:baseline;
     gap:8px;
     color:var(--ink);
-    font-size:clamp(1rem, 2.4vw, 1.15rem);
   }
   .time-entry .topic::before{
     content:"｜";
-    color:rgba(14,26,34,0.3);
-    font-weight:400;
+    color:var(--muted);
   }
   .section-subtitle{
     display:inline-flex;
     align-items:center;
     gap:8px;
-    padding:0.65rem 1.4rem;
-    border-radius:12px;
-    background:rgba(38,57,82,0.32);
-    color:#fefefe;
-    font-weight:600;
+    padding:0.5rem 1rem;
+    border-radius:1rem;
+    background:#fef8e7;
+    color:#0e1a22;
+    font-weight:800;
     font-size:clamp(1rem, 2vw, 1.15rem);
-    letter-spacing:0.08em;
-    box-shadow:0 12px 30px rgba(8,16,24,0.18);
-    backdrop-filter:blur(6px);
-    -webkit-backdrop-filter:blur(6px);
-  }
-  .section-divider{
-    padding:1.2rem 0 0.3rem;
+    letter-spacing:0.04em;
   }
   .agenda-sublist{
     margin-top:1rem;
   }
   .agenda-sublist > li{
-    padding-top:1rem;
-    padding-bottom:1rem;
-  }
-  .timeline .space-y-8 > li + li{
-    margin-top:clamp(1.5rem, 4vw, 2.4rem);
-  }
-  #agenda-full ul.list-none > li{
-    padding-bottom:clamp(1.1rem, 3vw, 1.8rem);
-  }
-  #agenda-full ul.list-none > li:last-child{
-    padding-bottom:0;
-  }
-  #agenda-full .speaker-line{
-    margin:0.45rem 0 0;
-    font-size:clamp(0.92rem, 2.3vw, 1rem);
-    line-height:1.7;
-    color:#4b5563;
-    font-weight:500;
-  }
-  #agenda-full .speaker-line .speaker{
-    font-weight:650;
+    padding-top:1.2rem;
+    padding-bottom:1.2rem;
   }
   #agenda-full ul.list-none > li.section-divider::before{
     display:none;
   }
   .speaker{
+    font-weight:600;
     color:var(--accent);
-  }
-  @media (max-width:768px){
-    .time-entry{
-      gap:6px;
-    }
-    .time-entry .time{
-      min-width:100%;
-    }
-    .time-entry .topic::before{
-      display:none;
-    }
   }
 
   /* === 內頁背景：主視覺以下全段 === */
@@ -834,7 +795,7 @@
             <span class="time">13:10–13:25</span>
             <span class="topic"><strong>奇美醫教的北極星、創造360°人生</strong></span>
           </h3>
-          <p class="text-sm text-slate-600 speaker-line">講者｜<span class="speaker">林宏榮 院長</span></p>
+          <p class="text-sm text-slate-600">講者｜<span class="speaker">林宏榮 院長</span></p>
         </li>
 
         <li class="relative">
@@ -842,7 +803,7 @@
             <span class="time">13:25–13:45</span>
             <span class="topic"><strong>現代醫療人員的修練－多元韌性成長</strong></span>
           </h3>
-          <p class="text-sm text-slate-600 speaker-line">講者｜<span class="speaker">廖熏香 顧問</span></p>
+          <p class="text-sm text-slate-600">講者｜<span class="speaker">廖熏香 顧問</span></p>
         </li>
 
         <li class="relative">
@@ -850,7 +811,7 @@
             <span class="time">13:45–13:50</span>
             <span class="topic"><strong>勇氣與實現的旅程：奇美醫學教育組織架構說明</strong></span>
           </h3>
-          <p class="text-sm text-slate-600 speaker-line">講者｜<span class="speaker">廖家德 部長</span></p>
+          <p class="text-sm text-slate-600">講者｜<span class="speaker">廖家德 部長</span></p>
         </li>
 
         <li class="relative section-divider">
@@ -865,15 +826,15 @@
           <ul class="agenda-sublist mt-3 divide-y divide-slate-200">
             <li class="py-3">
               <div class="font-medium"><strong>講題待確認</strong></div>
-              <div class="text-sm text-slate-600 speaker-line">講者｜<span class="speaker">教學部一般科 郭妍伶 主任</span></div>
+              <div class="text-sm text-slate-600">講者｜<span class="speaker">教學部一般科 郭妍伶 主任</span></div>
             </li>
             <li class="py-3">
               <div class="font-medium"><strong>迷宮中仰望星斗：醫學教育路上的自我定位與未來</strong></div>
-              <div class="text-sm text-slate-600 speaker-line">講者｜<span class="speaker">教學部 陳伯榕 教學型主治醫師</span></div>
+              <div class="text-sm text-slate-600">講者｜<span class="speaker">教學部 陳伯榕 教學型主治醫師</span></div>
             </li>
             <li class="py-3">
               <div class="font-medium"><strong>乘著醫學教育之風－Lighter and Lighter</strong></div>
-              <div class="text-sm text-slate-600 speaker-line">講者｜<span class="speaker">一般內科 黃琪雅 醫師</span></div>
+              <div class="text-sm text-slate-600">講者｜<span class="speaker">一般內科 黃琪雅 醫師</span></div>
             </li>
           </ul>
         </li>
@@ -897,19 +858,19 @@
           <ul class="agenda-sublist mt-3 divide-y divide-slate-200">
             <li class="py-3">
               <div class="font-medium"><strong>醫學人文</strong></div>
-              <div class="text-sm text-slate-600 speaker-line">講者｜<span class="speaker">藥劑部 蘇慧真 部長</span></div>
+              <div class="text-sm text-slate-600">講者｜<span class="speaker">藥劑部 蘇慧真 部長</span></div>
             </li>
             <li class="py-3">
               <div class="font-medium"><strong>數位賦能</strong></div>
-              <div class="text-sm text-slate-600 speaker-line">講者｜<span class="speaker">教學部 廖家德 部長</span></div>
+              <div class="text-sm text-slate-600">講者｜<span class="speaker">教學部 廖家德 部長</span></div>
             </li>
             <li class="py-3">
               <div class="font-medium"><strong>師資培育</strong></div>
-              <div class="text-sm text-slate-600 speaker-line">講者｜<span class="speaker">教學部 陳伯榕 教學型主治醫師</span></div>
+              <div class="text-sm text-slate-600">講者｜<span class="speaker">教學部 陳伯榕 教學型主治醫師</span></div>
             </li>
             <li class="py-3">
               <div class="font-medium"><strong>CBME</strong></div>
-              <div class="text-sm text-slate-600 speaker-line">講者｜<span class="speaker">教學部一般科 郭妍伶 主任</span></div>
+              <div class="text-sm text-slate-600">講者｜<span class="speaker">教學部一般科 郭妍伶 主任</span></div>
             </li>
           </ul>
         </li>
@@ -923,7 +884,7 @@
             <span class="time">15:25–15:35</span>
             <span class="topic"><strong>評鑑條文展望</strong></span>
           </h3>
-          <p class="text-sm text-slate-600 speaker-line">講者｜<span class="speaker">廖家德 部長</span></p>
+          <p class="text-sm text-slate-600">講者｜<span class="speaker">廖家德 部長</span></p>
         </li>
 
         <li class="relative">
@@ -945,23 +906,23 @@
           <ul class="agenda-sublist mt-3 divide-y divide-slate-200">
             <li class="py-3">
               <div class="font-medium"><strong>教育輔導組</strong></div>
-              <div class="text-sm text-slate-600 speaker-line"><span class="speaker">謝孟倉 主任（召集人）／黃琪雅 醫師（執行秘書）</span></div>
+              <div class="text-sm text-slate-600"><span class="speaker">謝孟倉 主任（召集人）／黃琪雅 醫師（執行秘書）</span></div>
             </li>
             <li class="py-3">
               <div class="font-medium"><strong>數位賦能組</strong></div>
-              <div class="text-sm text-slate-600 speaker-line"><span class="speaker">劉忠峰 主任（召集人）／黃博裕 醫師（執行秘書）</span></div>
+              <div class="text-sm text-slate-600"><span class="speaker">劉忠峰 主任（召集人）／黃博裕 醫師（執行秘書）</span></div>
             </li>
             <li class="py-3">
               <div class="font-medium"><strong>醫學人文組</strong></div>
-              <div class="text-sm text-slate-600 speaker-line"><span class="speaker">蘇慧真 部長（召集人）／陳憶玲 組長（執行秘書）</span></div>
+              <div class="text-sm text-slate-600"><span class="speaker">蘇慧真 部長（召集人）／陳憶玲 組長（執行秘書）</span></div>
             </li>
             <li class="py-3">
               <div class="font-medium"><strong>核心能力組</strong></div>
-              <div class="text-sm text-slate-600 speaker-line"><span class="speaker">陳志偉 主任（召集人）／陳伯榕 醫師（執行秘書）</span></div>
+              <div class="text-sm text-slate-600"><span class="speaker">陳志偉 主任（召集人）／陳伯榕 醫師（執行秘書）</span></div>
             </li>
             <li class="py-3">
               <div class="font-medium"><strong>教學品質組</strong></div>
-              <div class="text-sm text-slate-600 speaker-line"><span class="speaker">蔡長志 主任（召集人）／鄭舒帆 主任（執行秘書）／陳俊嘉 主任（輔導）</span></div>
+              <div class="text-sm text-slate-600"><span class="speaker">蔡長志 主任（召集人）／鄭舒帆 主任（執行秘書）／陳俊嘉 主任（輔導）</span></div>
             </li>
           </ul>
         </li>
