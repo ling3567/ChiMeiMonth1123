@@ -6,9 +6,16 @@
   <title>醫學教育共識營 即時報到儀表板</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    /* NEW THEME: Founder's Painting Background + Warm Beige Cards */
+    /* NEW THEME (v3): Refined Painting Theme
+      - Add background image
+      - Use warm beige main card (rgba(248, 247, 245, 0.95))
+      - Use "Blue" from painting as primary color
+      - Use "Orange" from painting as alert color
+      - Enhance shadows for more depth
+      - Refine tab and header styles
+    */
     body {
-      /* !!! 這裡是您圖片的網址 !!! */
+      /* !!! 這裡是您圖片的網址 (請確認已填上) !!! */
       background-image: url('images/許文龍.jpg'); 
       background-size: cover; 
       background-position: center; 
@@ -27,21 +34,21 @@
       width: calc(100% - 2rem); 
     }
 
-    /* 統計卡片設計 */
+    /* 統計卡片設計 (!!! NEW: 陰影加深 !!!) */
     .stat-card {
       background-color: #FFFFFF; /* 純白 */
       border: 1px solid #E5E7EB;
       border-radius: 0.75rem;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.03);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); /* (加深陰影) */
     }
     
-    /* 組別統計卡片 */
+    /* 組別統計卡片 (!!! NEW: 陰影加深 !!!) */
     .group-stat-card {
       background-color: #FFFFFF; /* 純白 */
       border: 1px solid #E5E7EB;
       border-radius: 0.75rem;
       padding: 1rem 1.25rem; 
-      box-shadow: 0 2px 4px rgba(0,0,0,0.03);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); /* (加深陰影) */
     }
 
     /* 按鈕樣式 (立即更新) - 使用畫作 "藍色" */
@@ -60,7 +67,7 @@
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     }
 
-    /* 分頁按鈕 - 使用畫作 "藍色" */
+    /* 分頁按鈕 - (!!! NEW:  inactive 樣式調整 !!!) */
     .tab-button-active {
       background-color: #2563EB; /* (藍色) */
       color: #FFFFFF; 
@@ -69,29 +76,30 @@
       border-radius: 0.5rem;
       transition: all 0.3s ease;
       font-size: 1.125rem; /* text-lg (放大) */
+      border: 1px solid #2563EB;
     }
     .tab-button-inactive {
-      background-color: #E5E7EB; 
-      color: #374151; /* 深灰色文字 */
+      background-color: #FFFFFF; /* (改為白色) */
+      color: #1D4ED8; /* (改為深藍字) */
       font-weight: 500;
       padding: 0.5rem 1.5rem;
       border-radius: 0.5rem;
-      border: 1px solid transparent;
+      border: 1px solid #93C5FD; /* (改為淺藍邊框) */
       transition: all 0.3s ease;
       font-size: 1.125rem; /* text-lg (放大) */
     }
     .tab-button-inactive:hover {
-      background-color: #D1D5DB; 
+      background-color: #EFF6FF; /* Hover 淺藍 */
     }
 
 
-    /* 表格樣式 */
+    /* 表格樣式 (!!! NEW: 陰影加深 !!!) */
     .table-container {
       background-color: #FFFFFF; /* 白色背景 */
       border-radius: 0.75rem;
       border: 1px solid #E5E7EB;
       overflow: hidden; 
-      box-shadow: 0 2px 4px rgba(0,0,0,0.03);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); /* (加深陰影) */
     }
     .table-fixed-header {
       overflow-y: auto; 
@@ -215,25 +223,25 @@
         <!-- 報到率 -->
         <div class="stat-card p-6 rounded-lg text-center">
           <h2 class="text-lg font-semibold text-gray-600">報到率</h2>
-          <p class="text-5xl font-extrabold text-blue-600 mt-2"> <!-- (改為藍色) -->
+          <p class="text-5xl font-extrabold text-blue-600 mt-2"> <!-- (藍色) -->
             <span id="statRate">0</span><span class="text-3xl">%</span>
           </p>
         </div>
         <!-- 已報到總人數 -->
         <div class="stat-card p-6 rounded-lg text-center">
           <h2 class="text-lg font-semibold text-gray-600">已報到總人數</h2>
-          <p class="text-5xl font-extrabold text-blue-600 mt-2" id="statCheckedIn">0</p> <!-- (改為藍色) -->
+          <p class="text-5xl font-extrabold text-blue-600 mt-2" id="statCheckedIn">0</p> <!-- (!!! NEW: 確保為藍色 !!!) -->
         </div>
         <!-- 未報到人數 -->
         <div class="stat-card p-6 rounded-lg text-center">
           <h2 class="text-lg font-semibold text-gray-600">未報到人數</h2>
-          <p class="text-5xl font-extrabold text-orange-500 mt-2" id="statPending">0</p> <!-- (改為橘色) -->
+          <p class="text-5xl font-extrabold text-orange-500 mt-2" id="statPending">0</p> <!-- (橘色) -->
         </div>
       </div>
 
       <!-- 2. 各組報到狀況 -->
       <div id="groupStatsSection" class="mb-10">
-        <div class="flex items-baseline space-x-3 mb-4">
+        <div class="flex items-baseline space-x-3 mb-4 border-b-2 border-gray-200 pb-2"> <!-- (!!! NEW: 精緻化標題 !!!) -->
           <h2 class="text-2xl font-bold text-gray-800">各組報到狀況</h2>
           <span class="text-sm text-gray-500">(15:50–16:30各功能小組分組討論)</span>
         </div>
@@ -247,7 +255,7 @@
         
         <!-- 3a. 已報到名單 -->
         <div>
-          <h2 class="text-2xl font-bold text-gray-800 mb-4">
+          <h2 class="text-2xl font-bold text-gray-800 border-b-2 border-gray-200 pb-2 mb-4"> <!-- (!!! NEW: 精緻化標題 !!!) -->
             已報到名單 (<span id="checkedInListCount">0</span>)
           </h2>
           <div class="table-container overflow-hidden">
@@ -272,7 +280,7 @@
 
         <!-- 3b. 未報到名單 -->
         <div>
-          <h2 class="text-2xl font-bold text-gray-800 mb-4">
+          <h2 class="text-2xl font-bold text-gray-800 border-b-2 border-gray-200 pb-2 mb-4"> <!-- (!!! NEW: 精緻化標題 !!!) -->
             未報到名單 (<span id="pendingListCount">0</span>)
           </h2>
           <div class="table-container overflow-hidden">
@@ -431,7 +439,7 @@
         const now = new Date();
         lastUpdated.textContent = now.toLocaleTimeString('zh-TW');
 
-        // 2. 更新 [總覽分頁] - 統計卡
+        // 2. 更新 [總覽分頁] - 統計卡 (!!! NEW: 確保 statCheckedIn 顏色 !!!)
         document.getElementById('statRate').textContent = data.stats.rate;
         document.getElementById('statCheckedIn').textContent = data.stats.checkedIn;
         document.getElementById('statPending').textContent = data.stats.pending;
@@ -536,7 +544,7 @@
 
               const groupBlockHtml = `
                 <div>
-                  <h3 class="text-2xl font-bold text-gray-800 mb-3">
+                  <h3 class="text-2xl font-bold text-gray-800 border-b-2 border-gray-200 pb-2 mb-4"> <!-- (!!! NEW: 精緻化標題 !!!) -->
                     ${groupName} (已報到: ${checkedInCount} / ${members.length})
                   </h3>
                   <div class="table-container overflow-hidden">
