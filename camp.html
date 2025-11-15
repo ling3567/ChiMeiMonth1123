@@ -619,6 +619,48 @@
     }
   }
 
+  /* === 時間軸資訊列與副標題 === */
+  .time-entry{
+    display:flex;
+    flex-wrap:wrap;
+    align-items:baseline;
+    gap:8px;
+    margin:0;
+  }
+  .time-entry .time{
+    font-weight:700;
+    min-width:120px;
+    color:var(--ink);
+  }
+  .time-entry .topic{
+    display:flex;
+    align-items:baseline;
+    gap:8px;
+    color:var(--ink);
+  }
+  .time-entry .topic::before{
+    content:"｜";
+    color:var(--muted);
+  }
+  .section-subtitle{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding:0.5rem 1rem;
+    border-radius:1rem;
+    background:#fef8e7;
+    color:#0e1a22;
+    font-weight:700;
+    letter-spacing:0.03em;
+  }
+  #agenda-full ul.list-none > li.section-divider::before{
+    display:none;
+  }
+  .speaker{
+    font-weight:600;
+    color:var(--accent);
+  }
+
   /* === 內頁背景：主視覺以下全段 === */
   .page-background{
     position:relative;
@@ -722,127 +764,173 @@
       <!-- 時間軸外層，使用 before 畫出垂直線，位置更靠左避免壓到時間 --><div class="timeline">
 
         <!-- 清單本體：左側留白加大，避免圓點壓到時間文字 --><ul class="list-none space-y-8">
-        <!-- 節點元件：把圓點固定在 left: 6，並用 translate-x-1/2 微調靠左 --><!-- 12:45–13:00 --><li class="relative">
-          <h3 class="font-semibold text-lg">12:45–13:00｜報到及入場</h3>
+        <li class="relative">
+          <h3 class="font-semibold text-lg time-entry">
+            <span class="time">12:45–13:00</span>
+            <span class="topic"><strong>報到及入場</strong></span>
+          </h3>
         </li>
 
-        <!-- 13:00–13:10 接續在下 --><li class="relative">
-          <h3 class="font-semibold text-lg">13:00–13:10｜長官致詞</h3>
+        <li class="relative">
+          <h3 class="font-semibold text-lg time-entry">
+            <span class="time">13:00–13:10</span>
+            <span class="topic"><strong>長官致詞</strong></span>
+          </h3>
         </li>
 
-        <!-- 13:10–13:25 --><li class="relative">
-          <h3 class="font-semibold text-lg">13:10–13:25｜醫學教育前瞻與未來</h3>
-          <p class="text-sm text-slate-600">主講｜林宏榮 院長（邀請中）</p>
+        <li class="relative section-divider">
+          <div class="section-subtitle">啟動方向｜看見方向的光，開啟成長的旅程</div>
         </li>
 
-        <!-- 13:25–14:20（含小講題明細） --><li class="relative">
-          <h3 class="font-semibold text-lg">13:25–14:20｜醫學教育發展與教學型主治醫師未來教學計畫報告</h3>
+        <li class="relative">
+          <h3 class="font-semibold text-lg time-entry">
+            <span class="time">13:10–13:25</span>
+            <span class="topic"><strong>奇美醫教的北極星、創造360°人生</strong></span>
+          </h3>
+          <p class="text-sm text-slate-600">講者｜<span class="speaker">林宏榮 院長</span></p>
+        </li>
+
+        <li class="relative">
+          <h3 class="font-semibold text-lg time-entry">
+            <span class="time">13:25–13:45</span>
+            <span class="topic"><strong>現代醫療人員的修練－多元韌性成長</strong></span>
+          </h3>
+          <p class="text-sm text-slate-600">講者｜<span class="speaker">廖熏香 顧問</span></p>
+        </li>
+
+        <li class="relative">
+          <h3 class="font-semibold text-lg time-entry">
+            <span class="time">13:45–13:50</span>
+            <span class="topic"><strong>勇氣與實現的旅程：奇美醫學教育組織架構說明</strong></span>
+          </h3>
+          <p class="text-sm text-slate-600">講者｜<span class="speaker">廖家德 部長</span></p>
+        </li>
+
+        <li class="relative section-divider">
+          <div class="section-subtitle">聚焦實踐｜在行動中發光，在同行中前行</div>
+        </li>
+
+        <li class="relative">
+          <h3 class="font-semibold text-lg time-entry">
+            <span class="time">13:50–14:30</span>
+            <span class="topic"><strong>教學型主治醫師未來教學計畫報告</strong></span>
+          </h3>
           <ul class="agenda-sublist mt-3 divide-y divide-slate-200">
             <li class="py-3">
-              <div class="font-medium">13:25–13:35｜醫學教育—回首來時路 步步是力量</div>
-              <div class="text-sm text-slate-600">教學部  廖家德 部長</div>
+              <div class="font-medium"><strong>講題待確認</strong></div>
+              <div class="text-sm text-slate-600">講者｜<span class="speaker">教學部一般科 郭妍伶 主任</span></div>
             </li>
             <li class="py-3">
-              <div class="font-medium">13:35–13:50｜教學型主治醫師未來教學計畫報告</div>
-              <div class="text-sm text-slate-600">教學部 一般科 郭妍伶 主任</div>
+              <div class="font-medium"><strong>迷宮中仰望星斗：醫學教育路上的自我定位與未來</strong></div>
+              <div class="text-sm text-slate-600">講者｜<span class="speaker">教學部 陳伯榕 教學型主治醫師</span></div>
             </li>
             <li class="py-3">
-              <div class="font-medium">13:50–14:05｜迷宮中仰望星斗：醫學教育路上的自我定位與未來</div>
-              <div class="text-sm text-slate-600">教學部 陳伯榕 教學型主治醫師</div>
-            </li>
-            <li class="py-3">
-              <div class="font-medium">14:05–14:20｜教學型主治醫師未來教學計畫報告</div>
-              <div class="text-sm text-slate-600">一般內科 黃琪雅 醫師</div>
+              <div class="font-medium"><strong>乘著醫學教育之風－Lighter and Lighter</strong></div>
+              <div class="text-sm text-slate-600">講者｜<span class="speaker">一般內科 黃琪雅 醫師</span></div>
             </li>
           </ul>
         </li>
 
-        <!-- 14:20–14:30 --><li class="relative">
-          <h3 class="font-semibold text-lg agenda-break">14:20–14:30｜Break</h3>
-       </li>
+        <li class="relative">
+          <h3 class="font-semibold text-lg agenda-break time-entry">
+            <span class="time">14:30–14:45</span>
+            <span class="topic"><strong>Break</strong></span>
+          </h3>
+        </li>
 
-        <!-- 14:30–15:10 --><li class="relative">
-          <h3 class="font-semibold text-lg">14:30–15:10｜分組討論（策略擬定）I</h3>
+        <li class="relative section-divider">
+          <div class="section-subtitle">成果深化｜讓行動成章，讓願景生根</div>
+        </li>
+
+        <li class="relative">
+          <h3 class="font-semibold text-lg time-entry">
+            <span class="time">14:45–15:25</span>
+            <span class="topic"><strong>白皮書報告</strong></span>
+          </h3>
           <ul class="agenda-sublist mt-3 divide-y divide-slate-200">
             <li class="py-3">
-              <div class="font-medium">教學行政組</div>
-              <div class="text-sm text-slate-600">劉雯 副部長</div>
+              <div class="font-medium"><strong>醫學人文</strong></div>
+              <div class="text-sm text-slate-600">講者｜<span class="speaker">藥劑部 蘇慧真 部長</span></div>
             </li>
             <li class="py-3">
-              <div class="font-medium">一般科（全人照護中心）</div>
-              <div class="text-sm text-slate-600">郭妍伶 主任／黃琪雅 醫師（執行秘書）</div>
+              <div class="font-medium"><strong>數位賦能</strong></div>
+              <div class="text-sm text-slate-600">講者｜<span class="speaker">教學部 廖家德 部長</span></div>
             </li>
             <li class="py-3">
-              <div class="font-medium">教師培育中心</div>
-              <div class="text-sm text-slate-600">郭進榮 主任／陳伯榕 醫師（執行秘書）</div>
+              <div class="font-medium"><strong>師資培育</strong></div>
+              <div class="text-sm text-slate-600">講者｜<span class="speaker">教學部 陳伯榕 教學型主治醫師</span></div>
             </li>
             <li class="py-3">
-              <div class="font-medium">臨床技能中心</div>
-              <div class="text-sm text-slate-600">蔡長志 主任／林昱惠 醫師（執行秘書）</div>
-            </li>
-            <li class="py-3">
-              <div class="font-medium">實證醫學中心、醫學圖書館及視聽中心</div>
-              <div class="text-sm text-slate-600">實證醫學中心｜廖家德 部長／李美娟 小組長（執行秘書）</div>
-              <div class="text-sm text-slate-600">醫學圖書館　｜王藍浣 主任／陳憶玲 組長（執行秘書）</div>
-              <div class="text-sm text-slate-600">視聽中心　　｜陳志金 主任／許召玟、林雨蕎 小組長（執行秘書）</div>
+              <div class="font-medium"><strong>CBME</strong></div>
+              <div class="text-sm text-slate-600">講者｜<span class="speaker">教學部一般科 郭妍伶 主任</span></div>
             </li>
           </ul>
         </li>
 
-        <!-- 15:10–15:20 --><li class="relative">
-          <h3 class="font-semibold text-lg agenda-break">15:10–15:20｜Break</h3>
+        <li class="relative section-divider">
+          <div class="section-subtitle">品質文化｜讓光芒化為準則，讓準則成為文化</div>
         </li>
 
-        <!-- 15:20–16:00 --><li class="relative">
-          <h3 class="font-semibold text-lg">15:20–16:00｜分組討論（策略擬定）II</h3>
+        <li class="relative">
+          <h3 class="font-semibold text-lg time-entry">
+            <span class="time">15:25–15:35</span>
+            <span class="topic"><strong>評鑑條文展望</strong></span>
+          </h3>
+          <p class="text-sm text-slate-600">講者｜<span class="speaker">廖家德 部長</span></p>
+        </li>
+
+        <li class="relative">
+          <h3 class="font-semibold text-lg agenda-break time-entry">
+            <span class="time">15:35–15:50</span>
+            <span class="topic"><strong>Break</strong></span>
+          </h3>
+        </li>
+
+        <li class="relative section-divider">
+          <div class="section-subtitle">策略共識｜讓力量化為行動，讓行動照亮未來</div>
+        </li>
+
+        <li class="relative">
+          <h3 class="font-semibold text-lg time-entry">
+            <span class="time">15:50–16:30</span>
+            <span class="topic"><strong>各功能小組分組討論</strong></span>
+          </h3>
           <ul class="agenda-sublist mt-3 divide-y divide-slate-200">
             <li class="py-3">
-              <div class="font-medium">教育輔導組</div>
-              <div class="text-sm text-slate-600">謝孟倉 主任（召集人）／黃琪雅 醫師（執行秘書）</div>
+              <div class="font-medium"><strong>教育輔導組</strong></div>
+              <div class="text-sm text-slate-600"><span class="speaker">謝孟倉 主任（召集人）／黃琪雅 醫師（執行秘書）</span></div>
             </li>
             <li class="py-3">
-              <div class="font-medium">數位賦能組</div>
-              <div class="text-sm text-slate-600">劉忠峰 主任（召集人）／黃博裕 醫師（執行秘書）</div>
+              <div class="font-medium"><strong>數位賦能組</strong></div>
+              <div class="text-sm text-slate-600"><span class="speaker">劉忠峰 主任（召集人）／黃博裕 醫師（執行秘書）</span></div>
             </li>
             <li class="py-3">
-              <div class="font-medium">醫學人文組</div>
-              <div class="text-sm text-slate-600">蘇慧真 部長（召集人）／陳憶玲 組長（執行秘書）</div>
+              <div class="font-medium"><strong>醫學人文組</strong></div>
+              <div class="text-sm text-slate-600"><span class="speaker">蘇慧真 部長（召集人）／陳憶玲 組長（執行秘書）</span></div>
             </li>
             <li class="py-3">
-              <div class="font-medium">核心能力組</div>
-              <div class="text-sm text-slate-600">陳志偉 主任（召集人）／陳伯榕 醫師（執行秘書）</div>
+              <div class="font-medium"><strong>核心能力組</strong></div>
+              <div class="text-sm text-slate-600"><span class="speaker">陳志偉 主任（召集人）／陳伯榕 醫師（執行秘書）</span></div>
             </li>
             <li class="py-3">
-              <div class="font-medium">教學品質組</div>
-              <div class="text-sm text-slate-600">蔡長志 主任（召集人）</div>
+              <div class="font-medium"><strong>教學品質組</strong></div>
+              <div class="text-sm text-slate-600"><span class="speaker">蔡長志 主任（召集人）／鄭舒帆 主任（執行秘書）／陳俊嘉 主任（輔導）</span></div>
             </li>
           </ul>
         </li>
 
-        <!-- 16:00–16:10 --><li class="relative">
-          <h3 class="font-semibold text-lg agenda-break">16:00–16:10｜Break</h3>
-     
+        <li class="relative">
+          <h3 class="font-semibold text-lg time-entry">
+            <span class="time">16:30–17:00</span>
+            <span class="topic"><strong>各功能小組未來規劃報告（每組5分鐘）</strong></span>
+          </h3>
         </li>
 
-        <!-- 16:10–17:00 --><li class="relative">
-          <h3 class="font-semibold text-lg">16:10–17:00｜各中心／功能小組未來規劃報告（每組5分）</h3>
-          <ul class="agenda-sublist agenda-sublist-grid mt-3 grid gap-2 md:grid-cols-2">
-            <li>教學行政組</li>
-            <li>一般科（全人照護中心）</li>
-            <li>教師培育中心</li>
-            <li>臨床技能中心</li>
-            <li>實證醫學中心、醫學圖書館及視聽中心</li>
-            <li>教育輔導組</li>
-            <li>數位賦能組</li>
-            <li>醫學人文組</li>
-            <li>核心能力組</li>
-            <li>教學品質組</li>
-          </ul>
-        </li>
-
-        <!-- 17:00–17:10 --><li class="relative">
-          <h3 class="font-semibold text-lg">17:00–17:10｜長官勉勵</h3>
-    
+        <li class="relative">
+          <h3 class="font-semibold text-lg time-entry">
+            <span class="time">17:00–17:10</span>
+            <span class="topic"><strong>長官勉勵</strong></span>
+          </h3>
         </li>
         </ul>
       </div>
