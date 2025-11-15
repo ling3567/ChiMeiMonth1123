@@ -8,7 +8,8 @@
   <style>
     /* 設定背景圖片 */
     body {
-      background-image: url("images/許文龍.jpg") ; /* !!! 請替換成您圖片的實際網址 !!! */
+      /* !!! 請確認這裡的網址是您圖片的正確網址 !!! */
+      background-image: url('https://i.imgur.com/your_image_hash.jpg'); 
       background-size: cover; /* 覆蓋整個視窗 */
       background-position: center; /* 圖片置中 */
       background-attachment: fixed; /* 圖片固定不滾動 */
@@ -16,39 +17,33 @@
       align-items: center;
       justify-content: center;
       min-height: 100vh;
-      font-family: 'Noto Sans TC', sans-serif; /* 使用思源黑體或其他優雅字體 */
+      font-family: 'Noto Sans TC', sans-serif; /* 使用思源黑體 */
       color: #fff; /* 預設文字顏色為白色 */
     }
-    /* 為文字內容提供一個半透明疊加層，以提高可讀性 */
-    .overlay-container {
-      background-color: rgba(0, 0, 0, 0.4); /* 半透明深色疊加 */
-      padding: 2rem;
-      border-radius: 0.75rem; /* 與卡片圓角一致 */
-      margin: 1rem;
-    }
 
-    /* 卡片設計 - 優雅的半透明毛玻璃效果 */
+    /* 卡片設計 - 深棕色半透明 */
     .glass-card {
-      background-color: rgba(68, 55, 46, 0.75); /* 改為深暖棕色 (75% 透明度) */
-      backdrop-filter: blur(10px); /* 稍微加強模糊 */
-      border: 1px solid rgba(255, 255, 255, 0.2); /* 柔和的白色邊框 */
-      border-radius: 1rem; /* 更圓潤的邊角 */
-      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3); /* 更深邃的陰影 */
-      max-width: 28rem; /* 限制最大寬度 */
+      background-color: rgba(68, 55, 46, 0.8); /* 深暖棕色 (80% 透明度) */
+      backdrop-filter: blur(10px); 
+      border: 1px solid rgba(255, 255, 255, 0.2); 
+      border-radius: 1rem; 
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3); 
+      max-width: 28rem; 
       width: 100%;
+      margin: 1rem; /* 手機邊界 */
     }
 
-    /* 輸入框和按鈕的樣式 */
+    /* 輸入框 */
     .input-field {
-      background-color: rgba(0, 0, 0, 0.2); /* 淺色半透明背景 -> 黑色半透明 */
-      border: 1px solid rgba(255, 255, 255, 0.4); /* 邊框加深 */
+      background-color: rgba(0, 0, 0, 0.2); 
+      border: 1px solid rgba(255, 255, 255, 0.4); 
       color: #fff;
       padding: 0.75rem 1rem;
       border-radius: 0.5rem;
       transition: all 0.3s ease;
     }
     .input-field::placeholder {
-      color: rgba(255, 255, 255, 0.7); /* 提高 placeholder 亮度 */
+      color: rgba(255, 255, 255, 0.7); 
     }
     .input-field:focus {
       border-color: rgba(255, 255, 255, 0.6);
@@ -56,42 +51,65 @@
       box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.3);
     }
 
+    /* 按鈕 (送出 / 返回) */
     .submit-button, .reset-button {
-      background-color: rgba(255, 255, 255, 0.85); /* 改為不透明的米白色 */
+      background-color: rgba(255, 255, 255, 0.85); /* 不透明的米白色 */
       border: 1px solid rgba(255, 255, 255, 0.3);
       color: #44372E; /* 按鈕文字改為深棕色 */
       font-weight: bold;
       padding: 0.75rem 1.5rem;
       border-radius: 0.5rem;
       transition: all 0.3s ease;
+      cursor: pointer;
     }
     .submit-button:hover, .reset-button:hover {
       background-color: rgba(255, 255, 255, 1); /* Hover 時變為全白 */
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     }
-    .submit-button:focus, .reset-button:focus {
-      outline: none;
-      box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.4);
-    }
     
+    /* 議程按鈕 (半透明) */
+    .agenda-button {
+      background-color: rgba(255, 255, 255, 0.15);
+      color: #fff; 
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      display: block; 
+      text-decoration: none;
+    }
+    .agenda-button:hover {
+      background-color: rgba(255, 255, 255, 0.3);
+    }
+
     /* Spinner 調整為白色 */
     .spinner {
+      display: inline-block;
+      width: 2rem;
+      height: 2rem;
+      vertical-align: text-bottom;
       border: 4px solid rgba(255, 255, 255, 0.3);
       border-left-color: #fff;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
     }
 
     /* 訊息文字顏色調整 */
-    .text-success { color: #C6F6D5; } /* 柔和的淺綠色 (Tailwind green-200) */
-    .text-error { color: #FED7D7; }   /* 柔和的淺紅色 (Tailwind red-200) */
+    .text-success { color: #C6F6D5; } /* 柔和的淺綠色 */
+    .text-error { color: #FED7D7; }   /* 柔和的淺紅色 */
   </style>
   <!-- 引入 Google Fonts (思源黑體) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
 </head>
-<body>
-  <!-- 這裡放置背景圖 --><!-- 由於圖片網址是變數，我們讓您手動替換 --><div class="overlay-container glass-card p-8 md:p-12 text-center">
+<body class="bg-gray-900">
+  
+  <div class="glass-card p-8 md:p-12 text-center">
     
-    <!-- 標題區 --><div class="mb-8">
+    <!-- 標題區 -->
+    <div class="mb-8">
       <h1 class="text-3xl md:text-4xl font-bold text-white mb-4 leading-tight">
         「創造360°人生」<br>醫學教育共識營<br>報到系統
       </h1>
@@ -99,16 +117,17 @@
         2025/11/23（日）12:45–17:10
       </p>
       <p class="text-lg md:text-xl text-gray-200 mt-1">
-        奇美博物館 豐收廳
+        奇美博物館 豐收廳、貓頭鷹手作坊
       </p>
     </div>
 
-    <!-- 報到表單 --><div id="checkInForm">
+    <!-- 報到表單 -->
+    <div id="checkInForm">
       <label for="employeeId" class="block text-lg font-medium text-gray-100 mb-2">
         請輸入您的人事號
       </label>
       <input type="tel" id="employeeId" name="employeeId" 
-             class="w-full input-field text-xl focus:ring-white/80" 
+             class="w-full input-field text-xl text-center" 
              placeholder="範例：1001">
       
       <button id="submitButton" 
@@ -118,17 +137,30 @@
       </button>
     </div>
 
-    <!-- 載入中畫面 --><div id="loadingIndicator" class="hidden text-center py-8">
+    <!-- 載入中畫面 -->
+    <div id="loadingIndicator" class="hidden text-center py-8">
       <div class="spinner mx-auto"></div>
       <p class="text-lg text-gray-200 mt-4">報到中，請稍候...</p>
     </div>
 
-    <!-- 結果訊息 --><div id="resultMessage" class="hidden mt-6 text-center">
+    <!-- 結果訊息 -->
+    <div id="resultMessage" class="hidden mt-6 text-center">
       <p id="messageText" class="text-2xl font-semibold"></p>
-      <p id="groupText" class="text-3xl font-bold text-white mt-4"></p>
+      <p id="groupText" class="text-2xl font-semibold text-gray-200 mt-4"></p>
+      <p id="locationText" class="text-2xl font-semibold text-gray-200 mt-2"></p>
+      
+      <!-- 議程按鈕 -->
+      <a id="agendaLink" 
+         href="https://ling3567.github.io/ChiMeiMonth1123/camp?v=2" 
+         target="_blank"
+         class="hidden w-full reset-button agenda-button text-lg mt-6">
+        查看共識營議程
+      </a>
+      
+      <!-- 返回按鈕 -->
       <button onclick="resetForm()" 
-              class="w-full reset-button text-lg mt-8">
-        返回報到
+              class="w-full reset-button text-lg mt-4">
+        返回報到首頁
       </button>
     </div>
 
@@ -142,13 +174,14 @@
     const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbweDq70D9T01XvspyieBBLVFmXOY3WsP0ZaWR0k68XM5IRtgmKmtODfoT43h0JCMrIbwg/exec";
     // -----------------------------------------------------------------
 
-
     // 取得頁面上的元件
     const form = document.getElementById('checkInForm');
     const loading = document.getElementById('loadingIndicator');
     const resultDiv = document.getElementById('resultMessage');
     const messageText = document.getElementById('messageText');
     const groupText = document.getElementById('groupText');
+    const locationText = document.getElementById('locationText');
+    const agendaLink = document.getElementById('agendaLink');
     const input = document.getElementById('employeeId');
 
     /**
@@ -157,6 +190,7 @@
     async function handleCheckIn() {
       const employeeId = input.value;
       if (!employeeId) {
+        // 暫時使用 alert，因為自訂提示框較複雜
         alert("請輸入人事號！"); 
         return;
       }
@@ -202,9 +236,13 @@
       if (result.success) {
         messageText.className = "text-2xl font-semibold text-success";
         groupText.textContent = result.group;
+        locationText.textContent = result.location;
+        agendaLink.classList.remove('hidden'); // 顯示議程按鈕
       } else {
         messageText.className = "text-2xl font-semibold text-error";
         groupText.textContent = result.group || '';
+        locationText.textContent = result.location || ''; // (用於顯示"已報到"時的地點)
+        agendaLink.classList.add('hidden'); // 隱藏議程按鈕
       }
       
       resultDiv.classList.remove('hidden');
@@ -219,6 +257,8 @@
       messageText.textContent = "發生錯誤：" + error.message;
       messageText.className = "text-2xl font-semibold text-error";
       groupText.textContent = "請洽詢工作人員。";
+      locationText.textContent = '';
+      agendaLink.classList.add('hidden'); // 隱藏議程按鈕
       resultDiv.classList.remove('hidden');
     }
 
@@ -230,6 +270,11 @@
       resultDiv.classList.add('hidden');
       form.classList.remove('hidden');
       loading.classList.add('hidden');
+      
+      // 清理舊資料
+      groupText.textContent = ''; 
+      locationText.textContent = ''; 
+      agendaLink.classList.add('hidden'); 
     }
 
     // 讓使用者可以在輸入框按 Enter 鍵送出
