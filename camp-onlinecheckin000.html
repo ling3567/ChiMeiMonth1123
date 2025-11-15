@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>醫學教育共識營 即時報到儀表板</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* 設定背景圖片 */
+    body {
+      /* !!! 請確認這裡的網址是您圖片的正確網址 !!! */
+      background-image: url('images/許文龍.jpg'); 
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      font-family: 'Noto Sans TC', sans-serif;
+      color: #fff; /* 預設文字顏色為白色 */
+    }
+    /* 為內容提供一個半透明疊加層，以提高可讀性 */
+    .overlay-content {
+      background-color: rgba(68, 55, 46, 0.85); /* 深暖棕色 (85% 透明度) */
+      backdrop-filter: blur(10px); 
+      border: 1px solid rgba(255, 255, 255, 0.2); 
+      border-radius: 1rem; 
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3); 
+      margin: 1rem auto; /* 置中 */
+      max-width: 90rem; /* 限制儀表板最大寬度 */
+      width: calc(100% - 2rem); /* 留出邊界 */
+    }
+
+    /* 統計卡片設計 */
+    .stat-card {
+      background-color: rgba(0, 0, 0, 0.2); /* 更深的半透明 */
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 0.75rem;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    }
+    
+    /* 組別統計卡片 */
+    .group-stat-card {
+      background-color: rgba(0, 0, 0, 0.25);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 0.75rem;
+      padding: 1rem 1.25rem; /* 增加內距 */
+    }
+
+    /* 按鈕樣式 */
+    .action-button {
+      background-color: rgba(255, 255, 255, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      color: #44372E; /* 深棕色文字 */
+      font-weight: bold;
+      padding: 0.5rem 1.25rem;
+      border-radius: 0.5rem;
+      transition: all 0.3s ease;
+      font-size: 0.875rem; /* text-sm */
+    }
+    .action-button:hover {
+      background-color: rgba(255, 255, 255, 1);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    /* 分頁按鈕 */
+    .tab-button-active {
+      background-color: rgba(255, 255, 255, 0.85);
+      color: #44372E; /* 深棕色文字 */
+      font-weight: bold;
+      padding: 0.5rem 1.5rem; /* 增加內距 */
+      border-radius: 0.5rem;
+      transition: all 0.3s ease;
+      font-size: 1.125rem; /* text-lg (放大) */
+    }
+    .tab-button-inactive {
+      background-color: rgba(0, 0, 0, 0.2);
+      color: #E5E7EB; /* 淺灰色文字 */
+      font-weight: 500;
+      padding: 0.5rem 1.5rem;
+      border-radius: 0.5rem;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      transition: all 0.3s ease;
+      font-size: 1.125rem; /* text-lg (放大) */
+    }
+    .tab-button-inactive:hover {
+      background-color: rgba(0, 0, 0, 0.4);
+      color: #fff;
+    }
+
+
+    /* 表格樣式 */
+    .table-container {
+      background-color: rgba(0, 0, 0, 0.2); /* 表格區域的背景 */
+      border-radius: 0.75rem;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      overflow: hidden; /* 確保圓角 */
+    }
+    .table-fixed-header {
+      overflow-y: auto; /* 如果內容真的非常長，保持瀏覽器捲軸可用 */
+      /* !!! REMOVED: max-height: 500px; !!! */
+    }
+    .table-fixed-header thead th {
+      /* !!! REMOVED: position: sticky; top: 0; !!! (因為頁面會拉長,不再需要) */
+      background-color: rgba(0, 0, 0, 0.5); /* 表頭背景深一點 */
+      color: #f0f0f0; /* 表頭文字淺色 */
+      border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+      font-size: 0.875rem; /* text-sm (放大) */
+    }
+    .table-fixed-header tbody td {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1); /* 柔和的行分隔線 */
+      color: #e0e0e0;
+      font-size: 1rem; /* text-base (放大) */
+    }
+    .table-fixed-header tbody tr:hover {
+      background-color: rgba(255, 255, 255, 0.1); /* hover 效果 */
+    }
+    
+    /* 報到狀態文字顏色 */
+    .text-success {
+      color: #93C5FD; /* 柔和淺藍 (from image) */
+      font-weight: bold;
+    }
+    .text-error-light {
+      color: #FED7D7; /* 柔和淺紅 */
+    }
+
+    /* 錯誤訊息 */
+    .error-box {
+      background-color: rgba(255, 0, 0, 0.2);
+      border-color: rgba(255, 0, 0, 0.5);
+      color: #f0c0c0;
+    }
+    
+    /* Spinner */
+    .spinner-small {
+      display: inline-block;
+      width: 1rem;
+      height: 1rem;
+      vertical-align: text-bottom;
+      border: 2px solid rgba(75, 85, 99, 0.4); /* (深棕色按鈕用) */
+      border-left-color: #44372E;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* 引入 Google Fonts (思源黑體) */
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap');
+  </style>
+</head>
+<body class="bg-gray-900">
+  <div class="max-w-7xl mx-auto p-4 md:p-8 overlay-content">
+    
+    <!-- 標題 -->
+    <div class="flex flex-col md:flex-row justify-between items-center mb-6">
+      <h1 class="text-3xl font-bold text-white mb-4 md:mb-0 text-center md:text-left">
+        醫學教育共識營 即時報到儀表板
+      </h1>
+      <!-- Container for button and metadata -->
+      <div class="flex flex-col items-center md:items-end">
+        <button id="refreshButton" onclick="fetchData()" class="action-button">
+          <span id="refreshSpinner" class="hidden spinner-small"></span>
+          <span id="refreshText">立即更新</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- 分頁按鈕 + Metadata -->
+    <div class="flex flex-col md:flex-row justify-between items-baseline mb-6 border-b-2 border-gray-700/50 pb-2">
+      
+      <!-- Left side: Tabs + Total Count -->
+      <div class="flex flex-col md:flex-row md:items-baseline space-y-4 md:space-y-0 md:space-x-4">
+        <div class="flex space-x-2">
+          <button id="tabButtonOverview" onclick="showTab('Overview')" class="tab-button-active">
+            總覽儀表板
+          </button>
+          <button id="tabButtonGroupRosters" onclick="showTab('GroupRosters')" class="tab-button-inactive">
+            各組詳細名單
+          </button>
+        </div>
+        <!-- Total Count -->
+        <p id="totalCountMetadata" class="hidden text-gray-200 text-lg"> <!-- (放大) -->
+          總報名人數：<span id="statTotal" class="font-bold">0</span> 人
+        </p>
+      </div>
+
+      <!-- Right side: Last Updated Time -->
+      <div id="lastUpdatedMetadata" class="hidden text-base text-gray-300 mt-4 md:mt-0"> <!-- (放大) -->
+        最後更新時間：<span id="lastUpdated" class="font-semibold">N/A</span>
+        (每 30 秒更新)
+      </div>
+
+    </div>
+
+
+    <!-- 載入中... (僅限第一次) -->
+    <div id="fullLoading" class="text-center py-20">
+      <p class="text-2xl text-gray-200">載入報到資料中，請稍候...</p>
+    </div>
+
+    <!-- 錯誤訊息 -->
+    <div id="errorMessage" class="hidden error-box px-4 py-3 rounded-lg relative mb-6">
+      <strong class="font-bold">發生錯誤：</strong>
+      <span class="block sm:inline" id="errorText"></span>
+      <p id="errorHint" class="hidden mt-2 text-sm">提示：如果看到 `Cannot read properties of undefined` 錯誤，通常表示您需要**重新部署** Google Apps Script (`Code.gs`)。</p>
+    </div>
+
+
+    <!-- ========================================================== -->
+    <!-- 分頁一：總覽儀表板 -->
+    <!-- ========================================================== -->
+    <div id="tabOverview">
+
+      <!-- 1. 總覽統計卡 -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <!-- 報到率 -->
+        <div class="stat-card p-6 rounded-lg text-center">
+          <h2 class="text-lg font-semibold text-gray-200">報到率</h2>
+          <p class="text-5xl font-extrabold text-[#93C5FD] mt-2"> <!-- (改為藍色) -->
+            <span id="statRate">0</span><span class="text-3xl">%</span>
+          </p>
+        </div>
+        <!-- 已報到總人數 -->
+        <div class="stat-card p-6 rounded-lg text-center">
+          <h2 class="text-lg font-semibold text-gray-200">已報到總人數</h2> <!-- (文字更新) -->
+          <p class="text-5xl font-extrabold text-[#93C5FD] mt-2" id="statCheckedIn">0</p> <!-- (改為藍色) -->
+        </div>
+        <!-- 未報到人數 -->
+        <div class="stat-card p-6 rounded-lg text-center">
+          <h2 class="text-lg font-semibold text-gray-200">未報到人數</h2> <!-- (文字更新) -->
+          <p class="text-5xl font-extrabold text-[#FED7D7] mt-2" id="statPending">0</p> 
+        </div>
+      </div>
+
+      <!-- 2. 各組報到狀況 -->
+      <div id="groupStatsSection" class="mb-10">
+        <div class="flex items-baseline space-x-3 mb-4">
+          <h2 class="text-2xl font-bold text-white">各組報到狀況</h2>
+          <span class="text-sm text-gray-400">(15:50–16:30各功能小組分組討論)</span> <!-- (文字更新) -->
+        </div>
+        <div id="groupStatsContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          <!-- JS 會在這裡填入卡片 -->
+        </div>
+      </div>
+      
+      <!-- 3. 詳細名單 (上下排列) -->
+      <!-- (!!! UPDATED: 移除 lg:grid-cols-2, 改為單欄堆疊 !!!) -->
+      <div class="grid grid-cols-1 gap-10"> 
+        
+        <!-- 3a. 已報到名單 -->
+        <div>
+          <h2 class="text-2xl font-bold text-white mb-4">
+            已報到名單 (<span id="checkedInListCount">0</span>)
+          </h2>
+          <div class="table-container overflow-hidden">
+            <div class="table-fixed-header">
+              <table class="min-w-full divide-y divide-gray-700">
+                <thead>
+                  <tr>
+                    <th class="px-6 py-4 text-left text-sm font-medium uppercase tracking-wider">姓名</th> <!-- (放大/加寬) -->
+                    <th class="px-6 py-4 text-left text-sm font-medium uppercase tracking-wider">單位</th> <!-- (放大/加寬) -->
+                    <th class="px-6 py-4 text-left text-sm font-medium uppercase tracking-wider">職稱</th> <!-- (放大/加寬) -->
+                    <th class="px-6 py-4 text-left text-sm font-medium uppercase tracking-wider">組別</th> <!-- (放大/加寬) -->
+                    <th class="px-6 py-4 text-left text-sm font-medium uppercase tracking-wider">上課地點</th> <!-- (放大/加寬) -->
+                    <!-- !!! REMOVED: 報到時間 th !!! -->
+                  </tr>
+                </thead>
+                <tbody id="checkedInTableBody" class="divide-y divide-gray-800">
+                  <!-- JS 會在這裡填入資料 -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3b. 未報到名單 -->
+        <div>
+          <h2 class="text-2xl font-bold text-white mb-4">
+            未報到名單 (<span id="pendingListCount">0</span>)
+          </h2>
+          <div class="table-container overflow-hidden">
+            <div class="table-fixed-header">
+              <table class="min-w-full divide-y divide-gray-700">
+                <thead>
+                  <tr>
+                    <th class="px-6 py-4 text-left text-sm font-medium uppercase tracking-wider">姓名</th> <!-- (放大/加寬) -->
+                    <th class="px-6 py-4 text-left text-sm font-medium uppercase tracking-wider">單位</th> <!-- (放大/加寬) -->
+                    <th class="px-6 py-4 text-left text-sm font-medium uppercase tracking-wider">職稱</th> <!-- (放大/加寬) -->
+                    <th class="px-6 py-4 text-left text-sm font-medium uppercase tracking-wider">組別</th> <!-- (放大/加寬) -->
+                    <th class="px-6 py-4 text-left text-sm font-medium uppercase tracking-wider">上課地點</th> <!-- (放大/加寬) -->
+                  </tr>
+                </thead>
+                <tbody id="pendingTableBody" class="divide-y divide-gray-800">
+                  <!-- JS 會在這裡填入資料 -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <!-- ========================================================== -->
+    <!-- 分頁二：各組詳細名單 -->
+    <!-- ========================================================== -->
+    <div id="tabGroupRosters" class="hidden">
+      <p class="text-base text-gray-300 mb-6"> <!-- (放大) -->
+        此處顯示所有組別的完整名單及個人的即時報到狀態。
+      </p>
+      
+      <!-- 防呆提示 (如果 Code.gs 未部署) -->
+      <div id="rosterErrorHint" class="hidden text-center p-8 bg-black/20 rounded-lg">
+        <p class="text-xl font-semibold text-error-light">
+          未偵測到「各組詳細名單」資料
+        </p>
+        <p class="text-lg text-gray-300 mt-2">
+          請確認您已經將最新的 `Code.gs` 檔案**重新部署**。
+        </p>
+      </div>
+
+      <!-- 組別列表容器 -->
+      <div id="groupRosterContainer" class="space-y-10">
+        <!-- JS 會在這裡填入每個組別的區塊 -->
+      </div>
+
+    </div>
+
+  </div>
+
+  <script>
+    // -----------------------------------------------------------------
+    // !!! 關鍵設定：您專屬的 Google Apps Script 網址 !!!
+    // (這個不需要變動)
+    // -----------------------------------------------------------------
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbweDq70D9T01XvspyieBBLVFmXOY3WsP0ZaWR0k68XM5IRtgmKmtODfoT43h0JCMrIbwg/exec";
+    // -----------------------------------------------------------------
+    
+    // (!!! NEW: 組別順序定義 !!!)
+    const GROUP_ORDER = ["指導長官", "教育輔導組", "數位賦能組", "醫學人文組", "核心能力組", "教學品質組", "其他"];
+
+    // 取得頁面元件
+    const fullLoading = document.getElementById('fullLoading');
+    // (!!! FIX: 移除 mainContent 宣告 !!!)
+    const errorMessage = document.getElementById('errorMessage');
+    const errorText = document.getElementById('errorText');
+    const errorHint = document.getElementById('errorHint'); // (防呆)
+    
+    const refreshButton = document.getElementById('refreshButton');
+    const refreshText = document.getElementById('refreshText');
+    const refreshSpinner = document.getElementById('refreshSpinner');
+    
+    const totalCountMetadata = document.getElementById('totalCountMetadata'); 
+    const lastUpdatedMetadata = document.getElementById('lastUpdatedMetadata'); 
+    const statTotal = document.getElementById('statTotal');
+    const lastUpdated = document.getElementById('lastUpdated');
+    
+    const groupStatsSection = document.getElementById('groupStatsSection');
+    const groupStatsContainer = document.getElementById('groupStatsContainer');
+
+    // 分頁元件
+    const tabOverview = document.getElementById('tabOverview');
+    const tabGroupRosters = document.getElementById('tabGroupRosters');
+    const tabButtonOverview = document.getElementById('tabButtonOverview');
+    const tabButtonGroupRosters = document.getElementById('tabButtonGroupRosters');
+    const rosterErrorHint = document.getElementById('rosterErrorHint');
+    const groupRosterContainer = document.getElementById('groupRosterContainer');
+
+    /**
+     * 切換分頁
+     */
+    function showTab(tabName) {
+      if (tabName === 'Overview') {
+        tabOverview.classList.remove('hidden');
+        tabGroupRosters.classList.add('hidden');
+        tabButtonOverview.className = 'tab-button-active';
+        tabButtonGroupRosters.className = 'tab-button-inactive';
+      } else {
+        tabOverview.classList.add('hidden');
+        tabGroupRosters.classList.remove('hidden');
+        tabButtonOverview.className = 'tab-button-inactive';
+        tabButtonGroupRosters.className = 'tab-button-active';
+      }
+    }
+
+
+    /**
+     * 獲取後端資料
+     */
+    async function fetchData() {
+      console.log("Fetching data...");
+      refreshText.textContent = "更新中...";
+      refreshSpinner.classList.remove('hidden');
+      refreshButton.disabled = true;
+
+      try {
+        const response = await fetch(WEB_APP_URL, {
+          method: 'POST',
+          mode: 'cors',
+          headers: {
+            'Content-Type': 'text/plain;charset=utf-8',
+          },
+          body: JSON.stringify({
+            action: "getDashboardData"
+          })
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP 錯誤! 狀態: ${response.status}`);
+        }
+
+        const data = await response.json();
+        updateDashboard(data);
+
+      } catch (error) {
+        console.error("Fetch 錯誤:", error);
+        showError(error);
+      }
+    }
+
+    /**
+     * 更新儀表板 (成功回呼)
+     * @param {object} data - 從後端傳回的資料物件
+     */
+    function updateDashboard(data) {
+      console.log("Data received:", data);
+      fullLoading.classList.add('hidden');
+      
+      if (data.success) {
+        // (!!! FIX: 移除 mainContent 使用 !!!)
+        totalCountMetadata.classList.remove('hidden');
+        lastUpdatedMetadata.classList.remove('hidden');
+        errorMessage.classList.add('hidden');
+
+        // ===========================================
+        // 1. 更新全局統計 (標頭)
+        // ===========================================
+        statTotal.textContent = data.stats.total;
+        const now = new Date();
+        lastUpdated.textContent = now.toLocaleTimeString('zh-TW');
+
+        // ===========================================
+        // 2. 更新 [總覽分頁] - 統計卡
+        // ===========================================
+        document.getElementById('statRate').textContent = data.stats.rate;
+        document.getElementById('statCheckedIn').textContent = data.stats.checkedIn;
+        document.getElementById('statPending').textContent = data.stats.pending;
+
+
+        // ===========================================
+        // 3. 更新 [總覽分頁] - 各組報到狀況卡片
+        // ===========================================
+        groupStatsContainer.innerHTML = '';
+        if (data.groupStats) {
+          // (!!! NEW: 排序組別 !!!)
+          const sortedGroupStats = data.groupStats.sort((a, b) => {
+            const indexA = GROUP_ORDER.indexOf(a.name);
+            const indexB = GROUP_ORDER.indexOf(b.name);
+            return (indexA === -1 ? 99 : indexA) - (indexB === -1 ? 99 : indexB);
+          });
+
+          sortedGroupStats.forEach(group => {
+            // (!!! FIX: 移除 if (group.total > 0) 過濾 !!!)
+            const cardHtml = `
+              <div class="group-stat-card">
+                <div class="flex justify-between items-center">
+                  <h3 class="text-lg font-semibold text-gray-100 truncate" title="${group.name}">${group.name}</h3>
+                  <span class="text-base font-bold text-white">${group.checkedIn} <span class="text-sm font-normal text-gray-400">/ ${group.total}</span></span>
+                </div>
+                <div class="w-full bg-gray-700 rounded-full h-2.5 mt-3">
+                  <div class="bg-gradient-to-r from-blue-400 to-blue-500 h-2.5 rounded-full" style="width: ${group.rate}%"></div> <!-- (改為藍色) -->
+                </div>
+              </div>
+            `;
+            groupStatsContainer.innerHTML += cardHtml;
+          });
+        }
+
+
+        // ===========================================
+        // 4. 更新 [總覽分頁] - 已報到 / 未報到總名單
+        // ===========================================
+        
+        // 4a. 產生已報到列表
+        const checkedInBody = document.getElementById('checkedInTableBody');
+        checkedInBody.innerHTML = '';
+        document.getElementById('checkedInListCount').textContent = data.lists.checkedIn.length;
+        if (data.lists.checkedIn.length === 0) {
+          checkedInBody.innerHTML = `<tr><td colspan="5" class="px-6 py-4 text-center text-gray-400 text-base">目前無人報到</td></tr>`; // (!!! CHANGED: colspan="5" !!!)
+        } else {
+          data.lists.checkedIn.forEach(p => {
+            checkedInBody.innerHTML += `
+              <tr class="hover:bg-gray-800">
+                <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-200">${p.name}</td> <!-- (放大/加寬) -->
+                <td class="px-6 py-4 whitespace-nowrap text-gray-300">${p.unit}</td> <!-- (放大/加寬) -->
+                <td class="px-6 py-4 whitespace-nowrap text-gray-300">${p.title}</td> <!-- (放大/加寬) -->
+                <td class="px-6 py-4 whitespace-nowrap text-gray-300">${p.group}</td> <!-- (放大/加寬) -->
+                <td class="px-6 py-4 whitespace-nowrap text-gray-300">${p.location}</td> <!-- (放大/加寬) -->
+                <!-- !!! REMOVED: p.time td !!! -->
+              </tr>
+            `;
+          });
+        }
+        
+        // 4b. 產生未報到列表
+        const pendingBody = document.getElementById('pendingTableBody');
+        pendingBody.innerHTML = '';
+        document.getElementById('pendingListCount').textContent = data.lists.pending.length;
+        if (data.lists.pending.length === 0) {
+          pendingBody.innerHTML = `<tr><td colspan="5" class="px-6 py-4 text-center text-gray-400 text-base">全員到齊！</td></tr>`; // (放大/加寬)
+        } else {
+          data.lists.pending.forEach(p => {
+            pendingBody.innerHTML += `
+              <tr class="hover:bg-gray-800">
+                <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-200">${p.name}</td> <!-- (放大/加寬) -->
+                <td class="px-6 py-4 whitespace-nowrap text-gray-300">${p.unit}</td> <!-- (放大/加寬) -->
+                <td class="px-6 py-4 whitespace-nowrap text-gray-300">${p.title}</td> <!-- (放大/加寬) -->
+                <td class="px-6 py-4 whitespace-nowrap text-gray-300">${p.group}</td> <!-- (放大/加D) -->
+                <td class="px-6 py-4 whitespace-nowrap text-gray-300">${p.location}</td> <!-- (放大/加寬) -->
+              </tr>
+            `;
+          });
+        }
+        
+        // ===========================================
+        // 5. 更新 [各組詳細名單] 分頁
+        // ===========================================
+        const rosters = data.groupedRosters;
+        groupRosterContainer.innerHTML = '';
+        
+        // (!!! NEW: 防呆檢查 !!!)
+        if (!rosters) {
+          rosterErrorHint.classList.remove('hidden');
+        } else {
+          rosterErrorHint.classList.add('hidden');
+          
+          // (!!! NEW: 依照 GROUP_ORDER 排序顯示 !!!)
+          GROUP_ORDER.forEach(groupName => {
+            const members = rosters[groupName];
+            // 只有在該組有成員時才顯示
+            if (members && members.length > 0) {
+              
+              const checkedInCount = members.filter(m => m.status === '已報到').length;
+              
+              let tableBody = '';
+              members.forEach(member => {
+                const statusClass = member.status === '已報到' ? 'text-success' : 'text-error-light';
+                const statusText = member.status === '已報到' ? 'ˇ 已報到' : '未報到';
+                tableBody += `
+                  <tr class_="hover:bg-gray-800">
+                    <td class="w-1/4 px-6 py-4 whitespace-nowrap font-medium text-gray-200">${member.name}</td> <!-- (放大/加寬/固定寬度) -->
+                    <td class="w-1/4 px-6 py-4 whitespace-nowrap text-gray-300">${member.unit}</td> <!-- (放大/加寬/固定寬度) -->
+                    <td class="w-1/4 px-6 py-4 whitespace-nowrap text-gray-300">${member.title}</td> <!-- (放大/加寬/固定寬度) -->
+                    <td class="w-1/4 px-6 py-4 whitespace-nowrap ${statusClass}">${statusText}</td> <!-- (放大/加寬/固定寬度) -->
+                  </tr>
+                `;
+              });
+
+              const groupBlockHtml = `
+                <div>
+                  <h3 class="text-2xl font-bold text-white mb-3">
+                    ${groupName} (已報到: ${checkedInCount} / ${members.length})
+                  </h3>
+                  <div class="table-container overflow-hidden">
+                    <table class="min-w-full divide-y divide-gray-700 table-fixed"> <!-- (!!! NEW: table-fixed !!!) -->
+                      <thead>
+                        <tr>
+                          <th class="w-1/4 px-6 py-4 text-left text-sm font-medium uppercase tracking-wider">姓名</th> <!-- (放大/加寬/固定寬度) -->
+                          <th class="w-1/4 px-6 py-4 text-left text-sm font-medium uppercase tracking-wider">單位</th> <!-- (放大/加寬/固定寬度) -->
+                          <th class="w-1/4 px-6 py-4 text-left text-sm font-medium uppercase tracking-wider">職稱</th> <!-- (放大/加寬/固定寬d) -->
+                          <th class="w-1/4 px-6 py-4 text-left text-sm font-medium uppercase tracking-wider">報到狀態</th> <!-- (放大/加寬/固定寬度) -->
+                        </tr>
+                      </thead>
+                      <tbody class="divide-y divide-gray-800">
+                        ${tableBody}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              `;
+              groupRosterContainer.innerHTML += groupBlockHtml;
+            }
+          });
+        }
+
+      } else {
+        // 如果 data.success 是 false
+        showError({ message: data.message || "從後端回傳的資料格式不正確" });
+      }
+
+      refreshText.textContent = "立即更新";
+      refreshSpinner.classList.add('hidden');
+      refreshButton.disabled = false;
+    }
+
+    /**
+     * 顯示錯誤 (失敗回呼)
+     * @param {Error} error - 錯誤物件
+     */
+    function showError(error) {
+      console.error("Failed to fetch data:", error);
+      fullLoading.classList.add('hidden');
+      // (!!! FIX: 移除 mainContent 使用 !!!)
+      
+      totalCountMetadata.classList.add('hidden');
+      lastUpdatedMetadata.classList.add('hidden');
+      
+      errorText.textContent = error.message;
+      errorMessage.classList.remove('hidden');
+
+      // (!!! NEW: 檢查是否為部署錯誤 !!!)
+      if (error.message && error.message.includes("Cannot read properties of undefined")) {
+        errorHint.classList.remove('hidden');
+      } else {
+        errorHint.classList.add('hidden');
+      }
+
+      refreshText.textContent = "立即更新";
+      refreshSpinner.classList.add('hidden');
+      refreshButton.disabled = false;
+    }
+
+    // --------------------------------------------------
+    // 頁面初始化
+    // --------------------------------------------------
+    
+    // 頁面載入時馬上抓一次資料
+    document.addEventListener('DOMContentLoaded', fetchData);
+    
+    // 設定每 30 秒自動更新
+    setInterval(fetchData, 30000); 
+    
+  </script>
+</body>
+</html>
