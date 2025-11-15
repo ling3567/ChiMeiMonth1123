@@ -567,11 +567,20 @@
 
   /* 黃點：以 li 為基準，向左位移「gutter」回到灰線上 */
   #agenda-full ul.list-none > li{ position: relative; }
-  #agenda-full ul.list-none > li::before{
+
+  .timeline-row{
+    position:relative;
+    display:flex;
+    align-items:center;
+    gap:0.75rem;
+    min-height:48px;
+  }
+
+  .timeline-row::before{
     content:"";
     position:absolute;
     left: calc(-1 * var(--gutter) + 1px); /* +1px 微調，讓圓心壓線 */
-    top: 0.92em;
+    top: 50%;
     transform: translate(-50%,-50%);
     width:12px; height:12px; border-radius:50%;
     background: var(--yellow);
@@ -614,8 +623,8 @@
   /* 手機：更緊湊一點（可改 44~48） */
   @media (max-width: 768px){
     #agenda-full ul.list-none{ --gutter: 48px; }
-    #agenda-full ul.list-none > li::before{
-      width:10px; height:10px; top:.9em;
+    .timeline-row::before{
+      width:10px; height:10px;
     }
   }
 
@@ -623,7 +632,7 @@
   .time-entry{
     display:flex;
     flex-wrap:wrap;
-    align-items:baseline;
+    align-items:center;
     gap:0.75rem;
     margin:0;
   }
@@ -812,17 +821,21 @@
 
         <!-- 清單本體：左側留白加大，避免圓點壓到時間文字 --><ul class="list-none space-y-8">
         <li class="relative">
-          <h3 class="font-semibold text-lg time-entry">
-            <span class="time">12:45–13:00</span>
-            <span class="topic"><strong>報到及入場</strong></span>
-          </h3>
+          <div class="timeline-row">
+            <h3 class="font-semibold text-lg time-entry">
+              <span class="time">12:45–13:00</span>
+              <span class="topic"><strong>報到及入場</strong></span>
+            </h3>
+          </div>
         </li>
 
         <li class="relative">
-          <h3 class="font-semibold text-lg time-entry">
-            <span class="time">13:00–13:10</span>
-            <span class="topic"><strong>長官致詞</strong></span>
-          </h3>
+          <div class="timeline-row">
+            <h3 class="font-semibold text-lg time-entry">
+              <span class="time">13:00–13:10</span>
+              <span class="topic"><strong>長官致詞</strong></span>
+            </h3>
+          </div>
         </li>
 
         <li class="relative section-divider">
@@ -830,26 +843,32 @@
         </li>
 
         <li class="relative">
-          <h3 class="font-semibold text-lg time-entry">
-            <span class="time">13:10–13:25</span>
-            <span class="topic"><strong>講題待確認</strong></span>
-          </h3>
+          <div class="timeline-row">
+            <h3 class="font-semibold text-lg time-entry">
+              <span class="time">13:10–13:25</span>
+              <span class="topic"><strong>講題待確認</strong></span>
+            </h3>
+          </div>
           <p class="text-sm text-slate-600">講者｜<span class="speaker">林宏榮院長</span></p>
         </li>
 
         <li class="relative">
-          <h3 class="font-semibold text-lg time-entry">
-            <span class="time">13:25–13:45</span>
-            <span class="topic"><strong>現代醫療人員的修練－多元韌性成長</strong></span>
-          </h3>
+          <div class="timeline-row">
+            <h3 class="font-semibold text-lg time-entry">
+              <span class="time">13:25–13:45</span>
+              <span class="topic"><strong>現代醫療人員的修練－多元韌性成長</strong></span>
+            </h3>
+          </div>
           <p class="text-sm text-slate-600">講者｜<span class="speaker">廖熏香顧問</span></p>
         </li>
 
         <li class="relative">
-          <h3 class="font-semibold text-lg time-entry">
-            <span class="time">13:45–13:50</span>
-            <span class="topic"><strong>勇氣與實現的旅程：奇美醫學教育組織架構說明</strong></span>
-          </h3>
+          <div class="timeline-row">
+            <h3 class="font-semibold text-lg time-entry">
+              <span class="time">13:45–13:50</span>
+              <span class="topic"><strong>勇氣與實現的旅程：奇美醫學教育組織架構說明</strong></span>
+            </h3>
+          </div>
           <p class="text-sm text-slate-600">講者｜<span class="speaker">教學部 廖家德部長</span></p>
         </li>
 
@@ -858,10 +877,12 @@
         </li>
 
         <li class="relative">
-          <h3 class="font-semibold text-lg time-entry">
-            <span class="time">13:50–14:30</span>
-            <span class="topic"><strong>教學型主治醫師未來教學計畫報告</strong></span>
-          </h3>
+          <div class="timeline-row">
+            <h3 class="font-semibold text-lg time-entry">
+              <span class="time">13:50–14:30</span>
+              <span class="topic"><strong>教學型主治醫師未來教學計畫報告</strong></span>
+            </h3>
+          </div>
           <ul class="agenda-sublist mt-3 divide-y divide-slate-200">
             <li class="py-3">
               <div class="font-medium"><strong>講題待確認</strong></div>
@@ -879,10 +900,12 @@
         </li>
 
         <li class="relative">
-          <h3 class="font-semibold text-lg agenda-break time-entry">
-            <span class="time">14:30–14:45</span>
-            <span class="topic"><strong>Break</strong></span>
-          </h3>
+          <div class="timeline-row">
+            <h3 class="font-semibold text-lg agenda-break time-entry">
+              <span class="time">14:30–14:45</span>
+              <span class="topic"><strong>Break</strong></span>
+            </h3>
+          </div>
         </li>
 
         <li class="relative section-divider">
@@ -890,10 +913,12 @@
         </li>
 
         <li class="relative">
-          <h3 class="font-semibold text-lg time-entry">
-            <span class="time">14:45–15:25</span>
-            <span class="topic"><strong>白皮書報告</strong></span>
-          </h3>
+          <div class="timeline-row">
+            <h3 class="font-semibold text-lg time-entry">
+              <span class="time">14:45–15:25</span>
+              <span class="topic"><strong>白皮書報告</strong></span>
+            </h3>
+          </div>
           <ul class="agenda-sublist mt-3 divide-y divide-slate-200">
             <li class="py-3">
               <div class="font-medium"><strong>醫學人文</strong></div>
@@ -919,18 +944,22 @@
         </li>
 
         <li class="relative">
-          <h3 class="font-semibold text-lg time-entry">
-            <span class="time">15:25–15:35</span>
-            <span class="topic"><strong>評鑑條文展望</strong></span>
-          </h3>
+          <div class="timeline-row">
+            <h3 class="font-semibold text-lg time-entry">
+              <span class="time">15:25–15:35</span>
+              <span class="topic"><strong>評鑑條文展望</strong></span>
+            </h3>
+          </div>
           <p class="text-sm text-slate-600">講者｜<span class="speaker">教學部 廖家德部長</span></p>
         </li>
 
         <li class="relative">
-          <h3 class="font-semibold text-lg agenda-break time-entry">
-            <span class="time">15:35–15:50</span>
-            <span class="topic"><strong>Break</strong></span>
-          </h3>
+          <div class="timeline-row">
+            <h3 class="font-semibold text-lg agenda-break time-entry">
+              <span class="time">15:35–15:50</span>
+              <span class="topic"><strong>Break</strong></span>
+            </h3>
+          </div>
         </li>
 
         <li class="relative section-divider">
@@ -938,10 +967,12 @@
         </li>
 
         <li class="relative">
-          <h3 class="font-semibold text-lg time-entry">
-            <span class="time">15:50–16:30</span>
-            <span class="topic"><strong>各功能小組分組討論</strong></span>
-          </h3>
+          <div class="timeline-row">
+            <h3 class="font-semibold text-lg time-entry">
+              <span class="time">15:50–16:30</span>
+              <span class="topic"><strong>各功能小組分組討論</strong></span>
+            </h3>
+          </div>
           <ul class="agenda-sublist mt-3 divide-y divide-slate-200">
             <li class="py-3">
               <div class="font-medium"><strong>教育輔導組</strong></div>
@@ -967,17 +998,21 @@
         </li>
 
         <li class="relative">
-          <h3 class="font-semibold text-lg time-entry">
-            <span class="time">16:30–17:00</span>
-            <span class="topic"><strong>各功能小組未來規劃報告（每組5分鐘）</strong></span>
-          </h3>
+          <div class="timeline-row">
+            <h3 class="font-semibold text-lg time-entry">
+              <span class="time">16:30–17:00</span>
+              <span class="topic"><strong>各功能小組未來規劃報告（每組5分鐘）</strong></span>
+            </h3>
+          </div>
         </li>
 
         <li class="relative">
-          <h3 class="font-semibold text-lg time-entry">
-            <span class="time">17:00–17:10</span>
-            <span class="topic"><strong>長官勉勵</strong></span>
-          </h3>
+          <div class="timeline-row">
+            <h3 class="font-semibold text-lg time-entry">
+              <span class="time">17:00–17:10</span>
+              <span class="topic"><strong>長官勉勵</strong></span>
+            </h3>
+          </div>
         </li>
         </ul>
       </div>
