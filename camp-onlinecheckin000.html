@@ -6,9 +6,9 @@
   <title>醫學教育共識營 即時報到儀表板</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    /* NEW THEME (v3): Refined Painting Theme
+    /* NEW THEME (v4): Refined Painting Theme
       - Add background image
-      - Use warm beige main card (rgba(248, 247, 245, 0.95))
+      - Use warm beige main card (rgba(248, 247, 245, 0.85)) <-- User requested transparency
       - Use "Blue" from painting as primary color
       - Use "Orange" from painting as alert color
       - Enhance shadows for more depth
@@ -34,7 +34,7 @@
       width: calc(100% - 2rem); 
     }
 
-    /* 統計卡片設計 (!!! NEW: 陰影加深 !!!) */
+    /* 統計卡片設計 (陰影加深) */
     .stat-card {
       background-color: #FFFFFF; /* 純白 */
       border: 1px solid #E5E7EB;
@@ -42,7 +42,7 @@
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); /* (加深陰影) */
     }
     
-    /* 組別統計卡片 (!!! NEW: 陰影加深 !!!) */
+    /* 組別統計卡片 (陰影加深) */
     .group-stat-card {
       background-color: #FFFFFF; /* 純白 */
       border: 1px solid #E5E7EB;
@@ -67,7 +67,7 @@
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     }
 
-    /* 分頁按鈕 - (!!! NEW:  inactive 樣式調整 !!!) */
+    /* 分頁按鈕 - (inactive 樣式調整) */
     .tab-button-active {
       background-color: #2563EB; /* (藍色) */
       color: #FFFFFF; 
@@ -93,7 +93,7 @@
     }
 
 
-    /* 表格樣式 (!!! NEW: 陰影加深 !!!) */
+    /* 表格樣式 (陰影加深) */
     .table-container {
       background-color: #FFFFFF; /* 白色背景 */
       border-radius: 0.75rem;
@@ -230,7 +230,7 @@
         <!-- 已報到總人數 -->
         <div class="stat-card p-6 rounded-lg text-center">
           <h2 class="text-lg font-semibold text-gray-600">已報到總人數</h2>
-          <p class="text-5xl font-extrabold text-blue-600 mt-2" id="statCheckedIn">0</p> <!-- (!!! NEW: 確保為藍色 !!!) -->
+          <p class="text-5xl font-extrabold text-blue-600 mt-2" id="statCheckedIn">0</p> <!-- (確保為藍色) -->
         </div>
         <!-- 未報到人數 -->
         <div class="stat-card p-6 rounded-lg text-center">
@@ -241,7 +241,7 @@
 
       <!-- 2. 各組報到狀況 -->
       <div id="groupStatsSection" class="mb-10">
-        <div class="flex items-baseline space-x-3 mb-4 border-b-2 border-gray-200 pb-2"> <!-- (!!! NEW: 精緻化標題 !!!) -->
+        <div class="flex items-baseline space-x-3 mb-4 border-b-2 border-gray-200 pb-2"> <!-- (精緻化標題) -->
           <h2 class="text-2xl font-bold text-gray-800">各組報到狀況</h2>
           <span class="text-sm text-gray-500">(15:50–16:30各功能小組分組討論)</span>
         </div>
@@ -255,7 +255,7 @@
         
         <!-- 3a. 已報到名單 -->
         <div>
-          <h2 class="text-2xl font-bold text-gray-800 border-b-2 border-gray-200 pb-2 mb-4"> <!-- (!!! NEW: 精緻化標題 !!!) -->
+          <h2 class="text-2xl font-bold text-gray-800 border-b-2 border-gray-200 pb-2 mb-4"> <!-- (精緻化標題) -->
             已報到名單 (<span id="checkedInListCount">0</span>)
           </h2>
           <div class="table-container overflow-hidden">
@@ -280,7 +280,7 @@
 
         <!-- 3b. 未報到名單 -->
         <div>
-          <h2 class="text-2xl font-bold text-gray-800 border-b-2 border-gray-200 pb-2 mb-4"> <!-- (!!! NEW: 精緻化標題 !!!) -->
+          <h2 class="text-2xl font-bold text-gray-800 border-b-2 border-gray-200 pb-2 mb-4"> <!-- (精緻化標題) -->
             未報到名單 (<span id="pendingListCount">0</span>)
           </h2>
           <div class="table-container overflow-hidden">
@@ -439,7 +439,7 @@
         const now = new Date();
         lastUpdated.textContent = now.toLocaleTimeString('zh-TW');
 
-        // 2. 更新 [總覽分頁] - 統計卡 (!!! NEW: 確保 statCheckedIn 顏色 !!!)
+        // 2. 更新 [總覽分頁] - 統計卡 (確保 statCheckedIn 顏色)
         document.getElementById('statRate').textContent = data.stats.rate;
         document.getElementById('statCheckedIn').textContent = data.stats.checkedIn;
         document.getElementById('statPending').textContent = data.stats.pending;
@@ -531,7 +531,7 @@
               let tableBody = '';
               members.forEach(member => {
                 const statusClass = member.status === '已報到' ? 'text-success' : 'text-error-light';
-                const statusText = member.status === '已報到' ? 'ˇ 已報到' : '未報到';
+                const statusText = member.status === '已報到' ? '已報到' : '未報到'; // (!!! NEW: 移除 ˇ 符號 !!!)
                 tableBody += `
                   <tr class_="hover:bg-gray-50">
                     <td class="w-1/4 px-6 py-4 whitespace-nowrap font-medium text-gray-900">${member.name}</td>
@@ -544,7 +544,7 @@
 
               const groupBlockHtml = `
                 <div>
-                  <h3 class="text-2xl font-bold text-gray-800 border-b-2 border-gray-200 pb-2 mb-4"> <!-- (!!! NEW: 精緻化標題 !!!) -->
+                  <h3 class="text-2xl font-bold text-gray-800 border-b-2 border-gray-200 pb-2 mb-4"> <!-- (精緻化標題) -->
                     ${groupName} (已報到: ${checkedInCount} / ${members.length})
                   </h3>
                   <div class="table-container overflow-hidden">
