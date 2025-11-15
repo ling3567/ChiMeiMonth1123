@@ -566,10 +566,7 @@
   }
 
   /* 黃點：以 li 為基準，向左位移「gutter」回到灰線上 */
-  #agenda-full ul.list-none > li{
-    position: relative;
-    padding-block: clamp(1rem, 2.2vw, 1.6rem);
-  }
+  #agenda-full ul.list-none > li{ position: relative; }
   #agenda-full ul.list-none > li::before{
     content:"";
     position:absolute;
@@ -626,25 +623,20 @@
   .time-entry{
     display:flex;
     flex-wrap:wrap;
-    align-items:flex-start;
-    gap:12px;
+    align-items:baseline;
+    gap:8px;
     margin:0;
-    font-size:clamp(1rem, 2.5vw, 1.25rem);
-    line-height:1.45;
   }
   .time-entry .time{
-    font-weight:700;
+    font-weight:500;
     min-width:120px;
-    color:var(--ink);
-    font-size:inherit;
-    line-height:1.4;
+    color:var(--muted);
   }
   .time-entry .topic{
     display:flex;
-    align-items:flex-start;
+    align-items:baseline;
     gap:8px;
     color:var(--ink);
-    font-weight:700;
   }
   .time-entry .topic::before{
     content:"｜";
@@ -663,28 +655,14 @@
     letter-spacing:0.04em;
   }
   .agenda-sublist{
-    margin-top:0.85rem;
+    margin-top:1rem;
   }
   .agenda-sublist > li{
-    padding-top:1.1rem;
-    padding-bottom:1.1rem;
-  }
-  #agenda-full .agenda-sublist > li > .font-medium{
-    margin-bottom:0.4rem;
-    line-height:1.4;
-  }
-  #agenda-full .time-entry + p,
-  #agenda-full .time-entry + .agenda-sublist,
-  #agenda-full .agenda-sublist > li > .text-sm.text-slate-600{
-    margin-top:0.5rem;
+    padding-top:1.2rem;
+    padding-bottom:1.2rem;
   }
   #agenda-full ul.list-none > li.section-divider::before{
     display:none;
-  }
-  #agenda-full .text-sm.text-slate-600{
-    font-size:clamp(0.95rem, 2.4vw, 1.05rem);
-    line-height:1.7;
-    color:#4b5967;
   }
   .speaker{
     font-weight:600;
