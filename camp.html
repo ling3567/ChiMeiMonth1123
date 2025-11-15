@@ -587,6 +587,7 @@
   /* 子清單小圓點：凸顯各小組 */
   #agenda-full ul.agenda-sublist > li{
     position: relative;
+    padding: 18px 0;
     padding-left: 22px;
   }
 #agenda-full ul.agenda-sublist > li::before{
@@ -628,9 +629,9 @@
     margin:0;
   }
   .time-entry .time{
-    font-weight:700;
+    font-weight:500;
     min-width:120px;
-    color:var(--ink);
+    color:#f1f5f9;
   }
   .time-entry .topic{
     display:flex;
@@ -646,11 +647,12 @@
     display:inline-flex;
     align-items:center;
     gap:8px;
-    padding:0.5rem 1rem;
+    padding:0.6rem 1.2rem;
     border-radius:1rem;
-    background:#fef8e7;
-    color:#0e1a22;
-    font-weight:700;
+    background:rgba(14,122,168,0.3);
+    color:#fff;
+    font-weight:600;
+    font-size:0.98rem;
     letter-spacing:0.03em;
   }
   #agenda-full ul.list-none > li.section-divider::before{
