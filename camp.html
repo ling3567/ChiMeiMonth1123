@@ -628,9 +628,9 @@
     margin:0;
   }
   .time-entry .time{
-    font-weight:700;
+    font-weight:500;
     min-width:120px;
-    color:var(--ink);
+    color:var(--muted);
   }
   .time-entry .topic{
     display:flex;
@@ -650,8 +650,16 @@
     border-radius:1rem;
     background:#fef8e7;
     color:#0e1a22;
-    font-weight:700;
-    letter-spacing:0.03em;
+    font-weight:800;
+    font-size:clamp(1rem, 2vw, 1.15rem);
+    letter-spacing:0.04em;
+  }
+  .agenda-sublist{
+    margin-top:1rem;
+  }
+  .agenda-sublist > li{
+    padding-top:1.2rem;
+    padding-bottom:1.2rem;
   }
   #agenda-full ul.list-none > li.section-divider::before{
     display:none;
