@@ -552,6 +552,9 @@
     list-style: none;
     margin: 0;
     padding-left: var(--gutter);
+    display:flex;
+    flex-direction:column;
+    gap:8px;             /* 緊湊但仍保有呼吸的間距 */
   }
 
   /* 灰線畫在 ul 的 padding 左緣（= 0） */
@@ -574,6 +577,48 @@
     align-items:center;
     gap:0.75rem;
     min-height:48px;
+  }
+
+  .time-entry{
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    column-gap:12px;
+    row-gap:4px;
+    margin:0;
+    font-size:inherit;
+    color:inherit;
+  }
+
+  .time-entry .time,
+  .time-entry .topic{
+    display:inline-flex;
+    align-items:center;
+    font-size:inherit;
+    color:inherit;
+  }
+
+  .time-entry .time{
+    font-weight:600;
+    min-width:110px;
+  }
+
+  @media (max-width:640px){
+    .time-entry{
+      column-gap:8px;
+    }
+    .time-entry .time{
+      min-width:auto;
+    }
+  }
+
+  #agenda-full ul.list-none > li > p{
+    margin:4px 0 0;
+  }
+
+  #agenda-full ul.list-none > li.section-divider{
+    margin-top:16px;
+    margin-bottom:4px;
   }
 
   .timeline-row::before{
@@ -819,7 +864,7 @@
 
       <!-- 時間軸外層，使用 before 畫出垂直線，位置更靠左避免壓到時間 --><div class="timeline">
 
-        <!-- 清單本體：左側留白加大，避免圓點壓到時間文字 --><ul class="list-none space-y-8">
+        <!-- 清單本體：左側留白加大，避免圓點壓到時間文字 --><ul class="list-none">
         <li class="relative">
           <div class="timeline-row">
             <h3 class="font-semibold text-lg time-entry">
