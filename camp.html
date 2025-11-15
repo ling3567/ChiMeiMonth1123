@@ -574,7 +574,6 @@
     align-items:center;
     gap:0.75rem;
     min-height:48px;
-    margin-bottom:4px;
   }
 
   .timeline-row::before{
@@ -634,7 +633,7 @@
     display:flex;
     flex-wrap:wrap;
     align-items:center;
-    gap:8px;
+    gap:0.75rem;
     margin:0;
   }
   .time-entry .time{
@@ -678,18 +677,18 @@
   }
   #agenda-full ul.list-none.space-y-8 > li{
     margin-top:0;
-    padding-top:clamp(0.45rem, 1.4vw, 0.75rem);
-    padding-bottom:clamp(0.45rem, 1.4vw, 0.75rem);
+    padding-top:clamp(0.65rem, 1.6vw, 1rem);
+    padding-bottom:clamp(0.65rem, 1.6vw, 1rem);
   }
   #agenda-full ul.list-none.space-y-8 > li + li{
-    margin-top:8px;
+    margin-top:clamp(1rem, 2.8vw, 1.9rem);
   }
   #agenda-full ul.list-none > li.section-divider{
     padding:0;
-    margin-top:clamp(0.85rem, 2.1vw, 1.35rem);
+    margin-top:clamp(1.25rem, 2.5vw, 1.9rem);
   }
   #agenda-full ul.list-none > li.section-divider + li{
-    margin-top:clamp(0.6rem, 1.8vw, 1rem);
+    margin-top:clamp(1rem, 2.4vw, 1.6rem);
   }
   #agenda-full p.text-slate-600,
   #agenda-full .agenda-sublist .text-sm{
@@ -705,24 +704,16 @@
     color:var(--accent);
   }
   @media (max-width:640px){
-    .timeline-row{
-      gap:0.5rem;
-      margin-bottom:3px;
-      min-height:42px;
-    }
     .time-entry{
       flex-direction:column;
       align-items:flex-start;
-      gap:6px;
+      gap:0.35rem;
     }
     .time-entry .time{
       min-width:auto;
     }
     .time-entry .topic::before{
       display:none;
-    }
-    #agenda-full ul.list-none.space-y-8 > li + li{
-      margin-top:6px;
     }
   }
 
