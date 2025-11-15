@@ -8,7 +8,7 @@
   <style>
     /* 設定背景圖片 */
     body {
-      background-image: url("images/許文龍.jpg") ; /* !!! 請替換成您圖片的實際網址 !!! */
+      background-image: url('https://i.imgur.com/your_image_hash.jpg'); /* !!! 請替換成您圖片的實際網址 !!! */
       background-size: cover; /* 覆蓋整個視窗 */
       background-position: center; /* 圖片置中 */
       background-attachment: fixed; /* 圖片固定不滾動 */
@@ -29,8 +29,8 @@
 
     /* 卡片設計 - 優雅的半透明毛玻璃效果 */
     .glass-card {
-      background-color: rgba(255, 255, 255, 0.15); /* 更透明的白色 */
-      backdrop-filter: blur(8px); /* 稍微加強模糊 */
+      background-color: rgba(68, 55, 46, 0.75); /* 改為深暖棕色 (75% 透明度) */
+      backdrop-filter: blur(10px); /* 稍微加強模糊 */
       border: 1px solid rgba(255, 255, 255, 0.2); /* 柔和的白色邊框 */
       border-radius: 1rem; /* 更圓潤的邊角 */
       box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3); /* 更深邃的陰影 */
@@ -40,15 +40,15 @@
 
     /* 輸入框和按鈕的樣式 */
     .input-field {
-      background-color: rgba(255, 255, 255, 0.1); /* 淺色半透明背景 */
-      border: 1px solid rgba(255, 255, 255, 0.3);
+      background-color: rgba(0, 0, 0, 0.2); /* 淺色半透明背景 -> 黑色半透明 */
+      border: 1px solid rgba(255, 255, 255, 0.4); /* 邊框加深 */
       color: #fff;
       padding: 0.75rem 1rem;
       border-radius: 0.5rem;
       transition: all 0.3s ease;
     }
     .input-field::placeholder {
-      color: rgba(255, 255, 255, 0.6);
+      color: rgba(255, 255, 255, 0.7); /* 提高 placeholder 亮度 */
     }
     .input-field:focus {
       border-color: rgba(255, 255, 255, 0.6);
@@ -57,16 +57,16 @@
     }
 
     .submit-button, .reset-button {
-      background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.1) 100%); /* 淺色漸層 */
+      background-color: rgba(255, 255, 255, 0.85); /* 改為不透明的米白色 */
       border: 1px solid rgba(255, 255, 255, 0.3);
-      color: #fff;
+      color: #44372E; /* 按鈕文字改為深棕色 */
       font-weight: bold;
       padding: 0.75rem 1.5rem;
       border-radius: 0.5rem;
       transition: all 0.3s ease;
     }
     .submit-button:hover, .reset-button:hover {
-      background: linear-gradient(135deg, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.15) 100%);
+      background-color: rgba(255, 255, 255, 1); /* Hover 時變為全白 */
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     }
     .submit-button:focus, .reset-button:focus {
@@ -81,10 +81,10 @@
     }
 
     /* 訊息文字顏色調整 */
-    .text-success { color: #d0f0c0; } /* 柔和的淺綠色 */
-    .text-error { color: #f0c0c0; }   /* 柔和的淺紅色 */
+    .text-success { color: #C6F6D5; } /* 柔和的淺綠色 (Tailwind green-200) */
+    .text-error { color: #FED7D7; }   /* 柔和的淺紅色 (Tailwind red-200) */
   </style>
-  <!-- 引入 Google Fonts (思源黑體) --><link rel="preconnect" href="https://fonts.googleapis.com">
+  <!-- 引入 Google Fonts (思源黑體) -->
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
 </head>
@@ -93,7 +93,7 @@
     
     <!-- 標題區 --><div class="mb-8">
       <h1 class="text-3xl md:text-4xl font-bold text-white mb-4 leading-tight">
-        「創造360°人生」<br>醫學教育共識營 報到系統
+        「創造360°人生」<br>醫學教育共識營<br>報到系統
       </h1>
       <p class="text-lg md:text-xl text-gray-200 mt-4">
         2025/11/23（日）12:45–17:10
