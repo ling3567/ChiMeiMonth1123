@@ -6,56 +6,55 @@
   <title>「創造360°人生」 醫學教育共識營 報到系統</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    /* 設定背景圖片 */
+    /* NEW THEME: Founder's Painting Background + Warm Beige Cards */
     body {
-      /* !!! 請確認這裡的網址是您圖片的正確網址 !!! */
+      /* !!! 這裡是您圖片的網址 !!! */
       background-image: url('images/許文龍.jpg'); 
-      background-size: cover; /* 覆蓋整個視窗 */
-      background-position: center; /* 圖片置中 */
-      background-attachment: fixed; /* 圖片固定不滾動 */
+      background-size: cover; 
+      background-position: center; 
+      background-attachment: fixed; 
       display: flex;
       align-items: center;
       justify-content: center;
       min-height: 100vh;
-      font-family: 'Noto Sans TC', sans-serif; /* 使用思源黑體 */
-      color: #fff; /* 預設文字顏色為白色 */
+      font-family: 'Noto Sans TC', sans-serif; 
+      color: #333; 
     }
 
-    /* 卡片設計 - 深棕色半透明 */
+    /* 卡片設計 - 擷取畫作文字區的 "淺米色" (95%不透明) */
     .glass-card {
-      background-color: rgba(68, 55, 46, 0.8); /* 深暖棕色 (80% 透明度) */
-      backdrop-filter: blur(10px); 
-      border: 1px solid rgba(255, 255, 255, 0.2); 
-      border-radius: 1rem; 
-      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3); 
+      background-color: rgba(248, 247, 245, 0.95); /* 溫暖的淺米色 (95% Opacity) */
+      border: 1px solid rgba(255, 255, 255, 0.3); 
+      border-radius: 1.5rem; 
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1), 0 5px 10px rgba(0, 0, 0, 0.05); 
       max-width: 28rem; 
       width: 100%;
-      margin: 1rem; /* 手機邊界 */
+      margin: 1rem; 
     }
 
     /* 輸入框 */
     .input-field {
-      background-color: rgba(0, 0, 0, 0.2); 
-      border: 1px solid rgba(255, 255, 255, 0.4); 
-      color: #fff;
+      background-color: #F3F4F6; 
+      border: 1px solid #D1D5DB; 
+      color: #1F2937; 
       padding: 0.75rem 1rem;
       border-radius: 0.5rem;
       transition: all 0.3s ease;
     }
     .input-field::placeholder {
-      color: rgba(255, 255, 255, 0.7); 
+      color: #9CA3AF; 
     }
     .input-field:focus {
-      border-color: rgba(255, 255, 255, 0.6);
+      border-color: #2563EB; /* (藍色) */
       outline: none;
-      box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.3);
+      box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
     }
 
-    /* 按鈕 (送出 / 返回) */
+    /* 按鈕 (送出 / 返回) - 使用畫作 "藍色" */
     .submit-button, .reset-button {
-      background-color: rgba(255, 255, 255, 0.85); /* 不透明的米白色 */
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      color: #44372E; /* 按鈕文字改為深棕色 */
+      background-color: #2563EB; /* (藍色) */
+      border: 1px solid #2563EB;
+      color: #FFFFFF; /* 白色文字 */
       font-weight: bold;
       padding: 0.75rem 1.5rem;
       border-radius: 0.5rem;
@@ -63,30 +62,30 @@
       cursor: pointer;
     }
     .submit-button:hover, .reset-button:hover {
-      background-color: rgba(255, 255, 255, 1); /* Hover 時變為全白 */
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      background-color: #1D4ED8; /* Hover 加深 */
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     }
     
-    /* 議程按鈕 (半透明) */
+    /* 議程按鈕 (次要按鈕) */
     .agenda-button {
-      background-color: rgba(255, 255, 255, 0.15);
-      color: #fff; 
-      border: 1px solid rgba(255, 255, 255, 0.3);
+      background-color: #FFFFFF; 
+      color: #374151; /* 深灰色文字 */
+      border: 1px solid #D1D5DB; 
       display: block; 
       text-decoration: none;
     }
     .agenda-button:hover {
-      background-color: rgba(255, 255, 255, 0.3);
+      background-color: #F9FAFB; 
     }
 
-    /* Spinner 調整為白色 */
+    /* Spinner */
     .spinner {
       display: inline-block;
       width: 2rem;
       height: 2rem;
       vertical-align: text-bottom;
-      border: 4px solid rgba(255, 255, 255, 0.3);
-      border-left-color: #fff;
+      border: 4px solid rgba(0, 0, 0, 0.1);
+      border-left-color: #2563EB; /* (藍色) */
       border-radius: 50%;
       animation: spin 1s linear infinite;
     }
@@ -96,34 +95,34 @@
     }
 
     /* 訊息文字顏色調整 */
-    .text-success { color: #C6F6D5; } /* 柔和的淺綠色 */
-    .text-error { color: #FED7D7; }   /* 柔和的淺紅色 */
+    .text-success { color: #1D4ED8; } /* (藍色) */
+    .text-error { color: #D97706; }   /* 溫和的暖橘色 (來自桌面) */
   </style>
   <!-- 引入 Google Fonts (思源黑體) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
 </head>
-<body class="bg-gray-900">
+<body class="bg-warm-gray-50">
   
   <div class="glass-card p-8 md:p-12 text-center">
     
     <!-- 標題區 -->
     <div class="mb-8">
-      <h1 class="text-3xl md:text-4xl font-bold text-white mb-4 leading-tight">
+      <h1 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4 leading-tight">
         「創造360°人生」<br>醫學教育共識營<br>報到系統
       </h1>
-      <p class="text-lg md:text-xl text-gray-200 mt-4">
+      <p class="text-lg md:text-xl text-gray-600 mt-4">
         2025/11/23（日）12:45–17:10
       </p>
-      <p class="text-lg md:text-xl text-gray-200 mt-1">
+      <p class="text-lg md:text-xl text-gray-600 mt-1">
         奇美博物館 豐收廳、貓頭鷹手作坊
       </p>
     </div>
 
     <!-- 報到表單 -->
     <div id="checkInForm">
-      <label for="employeeId" class="block text-lg font-medium text-gray-100 mb-2">
+      <label for="employeeId" class="block text-lg font-medium text-gray-700 mb-2">
         請輸入您的人事號
       </label>
       <input type="tel" id="employeeId" name="employeeId" 
@@ -140,14 +139,14 @@
     <!-- 載入中畫面 -->
     <div id="loadingIndicator" class="hidden text-center py-8">
       <div class="spinner mx-auto"></div>
-      <p class="text-lg text-gray-200 mt-4">報到中，請稍候...</p>
+      <p class="text-lg text-gray-600 mt-4">報到中，請稍候...</p>
     </div>
 
     <!-- 結果訊息 -->
     <div id="resultMessage" class="hidden mt-6 text-center">
       <p id="messageText" class="text-2xl font-semibold"></p>
-      <p id="groupText" class="text-2xl font-semibold text-gray-200 mt-4"></p>
-      <p id="locationText" class="text-2xl font-semibold text-gray-200 mt-2"></p>
+      <p id="groupText" class="text-2xl font-semibold text-gray-700 mt-4"></p>
+      <p id="locationText" class="text-2xl font-semibold text-gray-700 mt-2"></p>
       
       <!-- 議程按鈕 -->
       <a id="agendaLink" 
@@ -190,7 +189,6 @@
     async function handleCheckIn() {
       const employeeId = input.value;
       if (!employeeId) {
-        // 暫時使用 alert，因為自訂提示框較複雜
         alert("請輸入人事號！"); 
         return;
       }
