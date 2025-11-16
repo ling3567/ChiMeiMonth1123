@@ -21,9 +21,9 @@
       color: #333; 
     }
 
-    /* 卡片設計 - 擷取畫作文字區的 "淺米色" (!!! NEW: 調整為 85% 不透明 !!!) */
+    /* 卡片設計 - 擷取畫作文字區的 "淺米色" (85%不透明) */
     .glass-card {
-      background-color: rgba(248, 247, 245, 0.85); /* 溫暖的淺米色 (85% Opacity, 讓畫作隱約可見) */
+      background-color: rgba(248, 247, 245, 0.85); /* 溫暖的淺米色 (85% Opacity) */
       border: 1px solid rgba(255, 255, 255, 0.3); 
       border-radius: 1.5rem; 
       box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1), 0 5px 10px rgba(0, 0, 0, 0.05); 
@@ -97,6 +97,17 @@
     /* 訊息文字顏色調整 */
     .text-success { color: #1D4ED8; } /* (藍色) */
     .text-error { color: #D97706; }   /* 溫和的暖橘色 (來自桌面) */
+    
+    /* (!!! NEW: 提醒區塊樣式 !!!) */
+    .reminder-box {
+      background-color: #FFFBEB; /* 淺黃 (擷取自畫作文字區) */
+      border: 1px solid #FDE68A; /* 淺黃邊框 */
+      color: #92400E; /* 深橘/棕色文字 (擷取自畫作桌面) */
+      border-radius: 0.5rem;
+      padding: 0.75rem 1rem;
+      text-align: left;
+      line-height: 1.6;
+    }
   </style>
   <!-- 引入 Google Fonts (思源黑體) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -125,9 +136,9 @@
       <label for="employeeId" class="block text-lg font-medium text-gray-700 mb-2">
         請輸入您的人事號
       </label>
-      <input type="tel" id="employeeId" name="employeeId" 
+      <input type="text" id="employeeId" name="employeeId" 
              class="w-full input-field text-xl text-center" 
-             placeholder="範例：1001">
+             placeholder="範例：A12345"> <!-- (!!! UPDATED placeholder !!!) -->
       
       <button id="submitButton" 
               onclick="handleCheckIn()"
@@ -148,6 +159,13 @@
       <p id="groupText" class="text-2xl font-semibold text-gray-700 mt-4"></p>
       <p id="locationText" class="text-2xl font-semibold text-gray-700 mt-2"></p>
       
+      <!-- (!!! NEW: 提醒文字區塊 !!!) -->
+      <p id="reminderText" class="hidden text-base mt-6 reminder-box">
+        <strong>重要提醒：</strong><br>
+        請保留此頁面！議程、講義及滿意度調查將會顯示於此。
+      </p>
+      <!-- (!!! END NEW !!!) -->
+
       <!-- 議程按鈕 -->
       <a id="agendaLink" 
          href="https://ling3567.github.io/ChiMeiMonth1123/camp?v=2" 
@@ -155,6 +173,24 @@
          class="hidden w-full reset-button agenda-button text-lg mt-6">
         查看共識營議程
       </a>
+      
+      <!-- (!!! NEW: 新增按鈕 !!!) -->
+      <!-- 暫時使用 # 作為連結，您可以之後替換成您
+      的真實問卷網址 -->
+      <a id="groupDataLink" 
+         href="#" 
+         target="_blank"
+         class="hidden w-full reset-button agenda-button text-lg mt-2">
+        分組共識資料填寫
+      </a>
+      
+      <a id="surveyLink" 
+         href="#" 
+         target="_blank"
+         class="hidden w-full reset-button agenda-button text-lg mt-2">
+        滿意度問卷填寫
+      </a>
+      <!-- (!!! END NEW !!!) -->
       
       <!-- 返回按鈕 -->
       <button onclick="resetForm()" 
@@ -182,6 +218,12 @@
     const locationText = document.getElementById('locationText');
     const agendaLink = document.getElementById('agendaLink');
     const input = document.getElementById('employeeId');
+    const reminderText = document.getElementById('reminderText'); // (!!! NEW !!!)
+    
+    // (!!! NEW: 取得新按鈕 !!!)
+    const groupDataLink = document.getElementById('groupDataLink');
+    const surveyLink = document.getElementById('surveyLink');
+    // (!!! END NEW !!!)
 
     /**
      * 處理報到按鈕點擊
@@ -236,11 +278,24 @@
         groupText.textContent = result.group;
         locationText.textContent = result.location;
         agendaLink.classList.remove('hidden'); // 顯示議程按鈕
+        reminderText.classList.remove('hidden'); // (!!! NEW: 顯示提醒 !!!)
+        
+        // (!!! NEW: 顯示新按鈕 !!!)
+        groupDataLink.classList.remove('hidden');
+        surveyLink.classList.remove('hidden');
+        // (!!! END NEW !!!)
+        
       } else {
         messageText.className = "text-2xl font-semibold text-error";
         groupText.textContent = result.group || '';
         locationText.textContent = result.location || ''; // (用於顯示"已報到"時的地點)
         agendaLink.classList.add('hidden'); // 隱藏議程按鈕
+        reminderText.classList.add('hidden'); // (!!! NEW: 隱藏提醒 !!!)
+        
+        // (!!! NEW: 隱藏新按鈕 !!!)
+        groupDataLink.classList.add('hidden');
+        surveyLink.classList.add('hidden');
+        // (!!! END NEW !!!)
       }
       
       resultDiv.classList.remove('hidden');
@@ -257,6 +312,13 @@
       groupText.textContent = "請洽詢工作人員。";
       locationText.textContent = '';
       agendaLink.classList.add('hidden'); // 隱藏議程按鈕
+      reminderText.classList.add('hidden'); // (!!! NEW: 隱藏提醒 !!!)
+      
+      // (!!! NEW: 隱藏新按鈕 !!!)
+      groupDataLink.classList.add('hidden');
+      surveyLink.classList.add('hidden');
+      // (!!! END NEW !!!)
+      
       resultDiv.classList.remove('hidden');
     }
 
@@ -273,6 +335,12 @@
       groupText.textContent = ''; 
       locationText.textContent = ''; 
       agendaLink.classList.add('hidden'); 
+      reminderText.classList.add('hidden'); // (!!! NEW: 隱藏提醒 !!!)
+      
+      // (!!! NEW: 隱藏新按鈕 !!!)
+      groupDataLink.classList.add('hidden');
+      surveyLink.classList.add('hidden');
+      // (!!! END NEW !!!)
     }
 
     // 讓使用者可以在輸入框按 Enter 鍵送出
