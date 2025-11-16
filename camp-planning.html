@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>醫學教育委員會年度計畫填報</title>
+    <!-- 載入 Tailwind CSS 主程式 -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 載入 Noto Sans TC 字體 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- 
+      客製化 Tailwind 顏色
+      參考海報色系:
+      - 主視覺深紫: #4a2c9c
+      - 輔助薰衣草紫: #b8a8e0
+    -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'sans': ['"Noto Sans TC"', 'sans-serif'],
+                    },
+                    colors: {
+                        'cmh-purple': '#4a2c9c',
+                        'cmh-lavender': '#b8a8e0',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* 隱藏數字輸入框的上下箭頭 (for Chrome, Safari, Edge) */
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        /* 隱藏數字輸入框的上下箭頭 (for Firefox) */
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
+        
+        /* 確保在載入字體時佈局穩定 */
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+        }
+
+        /* 提交中 Spinner 樣式 */
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 3px solid rgba(74, 44, 156, 0.3); /* cmh-purple with opacity */
+            border-top-color: #4a2c9c; /* cmh-purple */
+            animation: spin 0.8s linear infinite;
+        }
+
+        /* 提交成功 Checkmark 樣式 */
+        @keyframes checkmark {
+            0% { transform: scale(0); }
+            100% { transform: scale(1); }
+        }
+        .checkmark {
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background-color: #4a2c9c; /* cmh-purple */
+            color: white;
+            animation: checkmark 0.3s ease-out;
+            text-align: center;
+            line-height: 24px;
+            font-weight: bold;
+        }
+
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen text-gray-900">
+
+    <!-- Header 區塊 (海報風格) -->
+    <header class="relative bg-cmh-purple pb-24 pt-12 text-white">
+        <div class="container mx-auto max-w-4xl px-4 text-center">
+            <!-- 【★★ 視覺修正：放大標題 ★★】 -->
+            <h1 class="text-4xl md:text-5xl font-bold mb-2">醫學教育共識營</h1>
+            <p class="text-2xl md:text-3xl opacity-90">功能小組年度策略填報</p>
+            <!-- 【★★ 修正結束 ★★】 -->
+        </div>
+        <!-- 斜角設計 -->
+        <div class="absolute bottom-0 left-0 w-full h-16 bg-gray-100" style="clip-path: polygon(0 100%, 100% 0, 100% 100%);"></div>
+    </header>
+
+    <!-- 表單容器 -->
+    <div class="container mx-auto max-w-4xl px-4 pb-24">
+        
+        <!-- 表單卡片 (疊在 Header 上方) -->
+        <form id="dataForm" class="relative -mt-16 bg-white rounded-xl shadow-2xl overflow-hidden">
+            
+            <!-- 表單主體 -->
+            <div class="p-6 md:p-10 space-y-8">
+                
+                <!-- 一、功能小Db basic資料 -->
+                <section class="space-y-4">
+                    <h2 class="text-2xl md:text-3xl font-bold text-cmh-purple border-b-2 border-cmh-lavender pb-2">
+                        一、功能小組基本資料
+                    </h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="groupName" class="block text-lg font-semibold mb-2 text-gray-700">功能小組名稱 *</label>
+                            <select id="groupName" name="groupName" required
+                                class="w-full text-base md:text-lg px-4 py-3 bg-gray-50 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-cmh-lavender focus:border-transparent transition duration-200">
+                                <option value="" disabled selected>請選擇您的功能小組</option>
+                                <option value="教育輔導組">教育輔導組</option>
+                                <option value="數位賦能組">數位賦能組</option>
+                                <option value="醫學人文組">醫學人文組</option>
+                                <option value="核心能力組">核心能力組</option>
+                                <option value="教學品質組">教學品質組</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="reporterName" class="block text-lg font-semibold mb-2 text-gray-700">報告人 *</label>
+                            <input type="text" id="reporterName" name="reporterName" required
+                                class="w-full text-base md:text-lg px-4 py-3 bg-gray-50 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-cmh-lavender focus:border-transparent transition duration-200"
+                                placeholder="請填寫您的姓名">
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 二、功能小組願景 -->
+                <section class="space-y-4">
+                    <h2 class="text-2xl md:text-3xl font-bold text-cmh-purple border-b-2 border-cmh-lavender pb-2">
+                        二、功能小組願景
+                    </h2>
+                    <div>
+                        <!-- 【★★ 視覺修正：更新 Label ★★】 -->
+                        <label for="vision" class="block text-lg font-semibold mb-2 text-gray-700">請問一句話描述小組希望奇美醫學教育變成什麼樣子。 *</label>
+                        <!-- 【★★ 修正結束 ★★】 -->
+                        <textarea id="vision" name="vision" rows="3" required
+                            class="w-full text-base md:text-lg px-4 py-3 bg-gray-50 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-cmh-lavender focus:border-transparent transition duration-200"
+                            placeholder="【範例】&#10;建立一套融合在地特色與個人化學習的醫學教育框架。"></textarea>
+                    </div>
+                </section>
+
+                <!-- 三、年度目標 -->
+                <section class="space-y-4">
+                    <h2 class="text-2xl md:text-3xl font-bold text-cmh-purple border-b-2 border-cmh-lavender pb-2">
+                        三、年度目標
+                    </h2>
+                    <div>
+                        <!-- 【★★ 視覺修正：更新 Label ★★】 -->
+                        <label for="goals" class="block text-lg font-semibold mb-2 text-gray-700">請寫小組未來一年最重要的 1–3 件事，並與願景連動 *</label>
+                        <!-- 【★★ 修正結束 ★★】 -->
+                        <textarea id="goals" name="goals" rows="4" required
+                            class="w-full text-base md:text-lg px-4 py-3 bg-gray-50 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-cmh-lavender focus:border-transparent transition duration-200"
+                            placeholder="【範例】&#10;1. 培養具備臨床實務能力的學員，強化能力導向的訓練品質。&#10;2. 建立持續監測與優化的制度循環，確保教學品質與評鑑要求一致。"></textarea>
+                    </div>
+                </section>
+
+                <!-- 四、年度計畫 -->
+                <section class="space-y-6">
+                    <h2 class="text-2xl md:text-3xl font-bold text-cmh-purple border-b-2 border-cmh-lavender pb-2">
+                        四、年度計畫
+                    </h2>
+                    <p class="text-base md:text-lg text-gray-600">
+                        請填寫具體的行動方案與可衡量的 KPI，最多 5 項。
+                    </p>
+
+                    <!-- 計畫 1 -->
+                    <div class="space-y-4 p-4 border border-gray-200 rounded-lg bg-gray-50">
+                        <h3 class="text-xl font-semibold text-gray-800">計畫 1</h3>
+                        <div class="grid grid-cols-1 gap-4">
+                            <div>
+                                <label for="actionName1" class="block text-base font-medium mb-1 text-gray-600">行動名稱</label>
+                                <input type="text" id="actionName1" name="actionName1"
+                                    class="w-full text-base md:text-lg px-4 py-3 bg-white rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-cmh-lavender"
+                                    placeholder="【範例】五階段藍圖">
+                            </div>
+                            <div>
+                                <label for="actionContent1" class="block text-base font-medium mb-1 text-gray-600">行動內容 (一句話)</label>
+                                <input type="text" id="actionContent1" name="actionContent1"
+                                    class="w-full text-base md:text-lg px-4 py-3 bg-white rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-cmh-lavender"
+                                    placeholder="【範例】完成「奠基—發展—實施—監控—優化」五階段推動架構並啟動示範科別導入。">
+                            </div>
+                            <div>
+                                <label for="kpi1" class="block text-base font-medium mb-1 text-gray-600">KPI (量化或完成度)</label>
+                                <input type="text" id="kpi1" name="kpi1"
+                                    class="w-full text-base md:text-lg px-4 py-3 bg-white rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-cmh-lavender"
+                                    placeholder="【範例】推動藍圖完成度 100%；至少 1 科完成示範導入。">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 計畫 2 -->
+                    <div class="space-y-4 p-4 border border-gray-200 rounded-lg bg-gray-50">
+                        <h3 class="text-xl font-semibold text-gray-800">計畫 2</h3>
+                        <div class="grid grid-cols-1 gap-4">
+                            <div>
+                                <label for="actionName2" class="block text-base font-medium mb-1 text-gray-600">行動名稱</label>
+                                <input type="text" id="actionName2" name="actionName2"
+                                    class="w-full text-base md:text-lg px-4 py-3 bg-white rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-cmh-lavender"
+                                    placeholder="【範例】在地化能力">
+                            </div>
+                            <div>
+                                <label for="actionContent2" class="block text-base font-medium mb-1 text-gray-600">行動內容 (一句話)</label>
+                                <input type="text" id="actionContent2" name="actionContent2"
+                                    class="w-full text-base md:text-lg px-4 py-3 bg-white rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-cmh-lavender"
+                                    placeholder="【範例】發展適用於本院的在地化能力評核項目，例如全人照護、數位能力、人文素養等。">
+                            </div>
+                            <div>
+                                <label for="kpi2" class="block text-base font-medium mb-1 text-gray-600">KPI (量化或完成度)</label>
+                                <input type="text" id="kpi2" name="kpi2"
+                                    class="w-full text-base md:text-lg px-4 py-3 bg-white rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-cmh-lavender"
+                                    placeholder="【範例】至少 2 項在地化能力草案完成並通過審查。">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 計畫 3 -->
+                    <div class="space-y-4 p-4 border border-gray-200 rounded-lg bg-gray-50">
+                        <h3 class="text-xl font-semibold text-gray-800">計畫 3</h3>
+                        <div class="grid grid-cols-1 gap-4">
+                            <div>
+                                <label for="actionName3" class="block text-base font-medium mb-1 text-gray-600">行動名稱</label>
+                                <input type="text" id="actionName3" name="actionName3"
+                                    class="w-full text-base md:text-lg px-4 py-3 bg-white rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-cmh-lavender"
+                                    placeholder="【範例】個人化輔導">
+                            </div>
+                            <div>
+                                <label for="actionContent3" class="block text-base font-medium mb-1 text-gray-600">行動內容 (一句話)</label>
+                                <input type="text" id="actionContent3" name="actionContent3"
+                                    class="w-full text-base md:text-lg px-4 py-3 bg-white rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-cmh-lavender"
+                                    placeholder="【範例】建立即時回饋與個人化學習輔導機制，協助能力落後之學員進步。">
+                            </div>
+                            <div>
+                                <label for="kpi3" class="block text-base font-medium mb-1 text-gray-600">KPI (量化或完成度)</label>
+                                <input type="text" id="kpi3" name="kpi3"
+                                    class="w-full text-base md:text-lg px-4 py-3 bg-white rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-cmh-lavender"
+                                    placeholder="【範例】3–5 名學員完成個人化輔導示範案例。">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 計畫 4 -->
+                    <div class="space-y-4 p-4 border border-gray-200 rounded-lg bg-gray-50">
+                        <h3 class="text-xl font-semibold text-gray-800">計畫 4</h3>
+                        <div class="grid grid-cols-1 gap-4">
+                            <div>
+                                <label for="actionName4" class="block text-base font-medium mb-1 text-gray-600">行動名稱</label>
+                                <input type="text" id="actionName4" name="actionName4"
+                                    class="w-full text-base md:text-lg px-4 py-3 bg-white rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-cmh-lavender"
+                                    placeholder="【範例】教師發展">
+                            </div>
+                            <div>
+                                <label for="actionContent4" class="block text-base font-medium mb-1 text-gray-600">行動內容 (一句話)</label>
+                                <input type="text" id="actionContent4" name="actionContent4"
+                                    class="w-full text-base md:text-lg px-4 py-3 bg-white rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-cmh-lavender"
+                                    placeholder="【範例】辦理能力導向醫學教育(CBME)相關師資培育工作坊。">
+                            </div>
+                            <div>
+                                <label for="kpi4" class="block text-base font-medium mb-1 text-gray-600">KPI (量化或完成度)</label>
+                                <input type="text" id="kpi4" name="kpi4"
+                                    class="w-full text-base md:text-lg px-4 py-3 bg-white rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-cmh-lavender"
+                                    placeholder="【範例】至少辦理 2 場工作坊，總參與人次達 50 人。">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 計畫 5 -->
+                    <div class="space-y-4 p-4 border border-gray-200 rounded-lg bg-gray-50">
+                        <h3 class="text-xl font-semibold text-gray-800">計畫 5</h3>
+                        <div class="grid grid-cols-1 gap-4">
+                            <div>
+                                <label for="actionName5" class="block text-base font-medium mb-1 text-gray-600">行動名稱</label>
+                                <input type="text" id="actionName5" name="actionName5"
+                                    class="w-full text-base md:text-lg px-4 py-3 bg-white rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-cmh-lavender"
+                                    placeholder="【範例】數位學習平台">
+                            </div>
+                            <div>
+                                <label for="actionContent5" class="block text-base font-medium mb-1 text-gray-600">行動內容 (一句話)</label>
+                                <input type="text" id="actionContent5" name="actionContent5"
+                                    class="w-full text-base md:text-lg px-4 py-3 bg-white rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-cmh-lavender"
+                                    placeholder="【範例】優化數位學習平台(LMS)功能，導入學員學習歷程與評核數據。">
+                            </div>
+                            <div>
+                                <label for="kpi5" class="block text-base font-medium mb-1 text-gray-600">KPI (量化或完成度)</label>
+                                <input type="text" id="kpi5" name="kpi5"
+                                    class="w-full text-base md:text-lg px-4 py-3 bg-white rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-cmh-lavender"
+                                    placeholder="【範例】LMS 優化功能上線完成度 100%。">
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 五、需要的支持與合作 -->
+                <section class="space-y-4">
+                    <h2 class="text-2xl md:text-3xl font-bold text-cmh-purple border-b-2 border-cmh-lavender pb-2">
+                        五、需要的支持與合作
+                    </h2>
+                    <div>
+                        <label for="support" class="block text-lg font-semibold mb-2 text-gray-700">您需要哪些支持 (選填)</label>
+                        <textarea id="support" name="support" rows="4"
+                            class="w-full text-base md:text-lg px-4 py-3 bg-gray-50 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-cmh-lavender focus:border-transparent transition duration-200"
+                            placeholder="【範例】&#10;1. 需協調各科主任共同進行能力需求盤點與對焦。&#10;2. 需跨科教師投入能力項目討論與評估標準修訂。&#10;3. 需協助安排制度文件審查流程與共識營呈現方式。"></textarea>
+                    </div>
+                </section>
+            </div>
+
+            <!-- 表單底部 (提交按鈕) -->
+            <footer class="bg-gray-50 px-6 md:px-10 py-6 border-t border-gray-200">
+                <div class="flex justify-between items-center">
+                    
+                    <!-- 狀態訊息 -->
+                    <div id="statusMessage" class="text-lg text-gray-600 flex items-center space-x-2">
+                        <!-- 狀態將顯示於此 -->
+                    </div>
+
+                    <!-- 提交按鈕 -->
+                    <button type="submit" id="submitButton"
+                        class="px-8 py-3 bg-cmh-lavender text-cmh-purple text-lg md:text-xl font-bold rounded-lg shadow-md hover:bg-opacity-90 transition duration-300 focus:outline-none focus:ring-2 focus:ring-cmh-purple focus:ring-opacity-50 disabled:opacity-50 disabled:cursor-not-allowed">
+                        <span id="submitButtonText">提交資料</span>
+                    </button>
+                </div>
+            </footer>
+        </form>
+
+    </div>
+
+    <!-- JavaScript 腳本 -->
+    <script>
+        // -------------------------------------------------------------------------
+        // ！！！Google Apps Script 網路應用程式 URL！！！
+        // -------------------------------------------------------------------------
+        const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwDUbCccWxlzNlIJgelPQnpXwbN_Bys9MkWJ-jm3qZlxsCkeZ6uY7sy8Rmvxe0CfQsJ/exec';
+        // -------------------------------------------------------------------------
+
+        const form = document.getElementById('dataForm');
+        const submitButton = document.getElementById('submitButton');
+        const submitButtonText = document.getElementById('submitButtonText');
+        const statusMessage = document.getElementById('statusMessage');
+
+        form.addEventListener('submit', function(event) {
+            event.preventDefault(); // 防止表單傳統提交
+            
+            // 檢查表單有效性
+            if (!form.checkValidity()) {
+                // 提示用戶填寫必填欄位
+                statusMessage.innerHTML = '<span class="text-red-600">請填寫所有 * 必填欄位。</span>';
+                // 觸發表單原生的驗證提示
+                form.reportValidity();
+                return;
+            }
+
+            // 1. 禁用按鈕並顯示載入中
+            submitButton.disabled = true;
+            submitButtonText.textContent = '提交中...';
+            statusMessage.innerHTML = '<div class="spinner"></div><span>傳送資料...</span>';
+
+            // 2. 獲取表單資料
+            const formData = new FormData(form);
+            const data = {};
+            formData.forEach((value, key) => {
+                data[key] = value;
+            });
+
+            // 3. 將提交時間加入資料中 (GTM+8)
+            data.timestamp = new Date().toLocaleString("zh-TW", { timeZone: "Asia/Taipei" });
+            
+            // 4. 使用 fetch API 將資料 POST 到 Google Apps Script
+            fetch(GOOGLE_APPS_SCRIPT_URL, {
+                method: 'POST',
+                
+                // 【★★ 關鍵修正 ★★】
+                // 'no-cors' 模式：
+                // 1. 允許我們發送請求到不同網域 (script.google.com)。
+                // 2. 這是一種「只管送，不讀取回應」的模式。
+                // 3. 這可以 100% 繞過 Failed to fetch (CORS) 錯誤。
+                // 4. 代價是：我們無法 *讀取* Code.gs 的成功/失敗 JSON 回應。
+                // 5. 但我們知道資料已經送達了 (從 Google Sheet 驗證過)。
+                mode: 'no-cors', 
+                
+                cache: 'no-cache',
+                
+                // 使用 URLSearchParams 格式發送 (繞過 CORS 預檢)
+                body: new URLSearchParams(data),
+            })
+            .then(() => {
+                // 【★★ 關鍵修正 ★★】
+                // 因為是 'no-cors' 模式，我們 *永遠* 不會進入 .catch (除非是網路斷線)。
+                // 只要 .then 被觸發 (即使回應是 "不透明的")，
+                // 我們就假設 Google Apps Script 已經收到請求並成功處理。
+                
+                // 顯示成功訊息
+                statusMessage.innerHTML = '<div class="checkmark">✓</div><span class="text-cmh-purple font-semibold">提交成功！</span>';
+                submitButtonText.textContent = '已提交';
+                
+                // (可選) 5 秒後重置表單
+                setTimeout(() => {
+                    form.reset();
+                    submitButton.disabled = false;
+                    submitButtonText.textContent = '提交資料';
+                    statusMessage.innerHTML = '';
+                }, 5000);
+
+            })
+            .catch(error => {
+                // 只有在極少數情況下 (例如網路完全斷線) 才會進入這裡
+                console.error('提交錯誤:', error);
+                
+                // 顯示錯誤訊息
+                statusMessage.innerHTML = '<span class="text-red-600">提交失敗 (網路錯誤)</span>';
+                submitButton.disabled = false;
+                submitButtonText.textContent = '重新提交';
+            });
+        });
+    </script>
+
+</body>
+</html>
