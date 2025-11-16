@@ -13,9 +13,9 @@
     
     <!-- 
       客製化 Tailwind 顏色
-      參考海報色系:
-      - 主視覺深紫: #4a2c9c
-      - 輔助薰衣草紫: #b8a8e0
+      採用高對比、適合投影的深海軍藍
+      - 奇美深藍: #003D74
+      - 奇美淺藍 (點綴): #00B9E9 (來自 Logo)
     -->
     <script>
         tailwind.config = {
@@ -25,28 +25,43 @@
                         'sans': ['"Noto Sans TC"', 'sans-serif'],
                     },
                     colors: {
-                        'cmh-purple': '#4a2c9c',
-                        'cmh-lavender': '#b8a8e0',
+                        'cmh-blue': '#003D74',
+                        'cmh-accent': '#00B9E9',
                     }
                 }
             }
         }
     </script>
     <style>
-        /* 隱藏數字輸入框的上下箭頭 (for Chrome, Safari, Edge) */
+        /* 隱藏數字輸入框的上下箭頭 */
         input::-webkit-outer-spin-button,
         input::-webkit-inner-spin-button {
             -webkit-appearance: none;
             margin: 0;
         }
-        /* 隱藏數字輸入框的上下箭頭 (for Firefox) */
         input[type=number] {
             -moz-appearance: textfield;
         }
         
-        /* 確保在載入字體時佈局穩定 */
         body {
             font-family: 'Noto Sans TC', sans-serif;
+            display: flex; /* 為了讓 footer 能黏在底部 */
+            flex-direction: column; /* 垂直排列 */
+            min-height: 100vh; /* 至少一整個螢幕高 */
+            background-color: #F3F4F6; /* bg-gray-100 */
+        }
+        
+        /* 讓 main 內容區塊自動填滿中間 */
+        .main-content {
+            flex-grow: 1;
+        }
+        
+        /* 紅色星號 */
+        label sup {
+            color: #EF4444; /* text-red-500 */
+            font-weight: 600;
+            font-size: 1rem; /* text-base */
+            margin-left: 0.125rem; /* ml-0.5 */
         }
 
         /* 提交中 Spinner 樣式 */
@@ -58,10 +73,17 @@
             width: 20px;
             height: 20px;
             border-radius: 50%;
-            border: 3px solid rgba(74, 44, 156, 0.3); /* cmh-purple with opacity */
-            border-top-color: #4a2c9c; /* cmh-purple */
+            border: 3px solid rgba(255, 255, 255, 0.3); /* 白色 (適用於藍底按鈕) */
+            border-top-color: #FFFFFF; /* 白色 */
             animation: spin 0.8s linear infinite;
         }
+        
+        /* Modal 中的 Spinner (適用於淺色背景) */
+        .modal .spinner {
+            border: 3px solid rgba(0, 61, 116, 0.3); /* cmh-blue with opacity */
+            border-top-color: #003D74; /* cmh-blue */
+        }
+
 
         /* 提交成功 Checkmark 樣式 */
         @keyframes checkmark {
@@ -73,32 +95,85 @@
             width: 24px;
             height: 24px;
             border-radius: 50%;
-            background-color: #4a2c9c; /* cmh-purple */
+            background-color: #003D74; /* cmh-blue */
             color: white;
             animation: checkmark 0.3s ease-out;
             text-align: center;
             line-height: 24px;
             font-weight: bold;
         }
-
+        
+        /* 預覽視窗 Modal 樣式 */
+        .modal {
+            display: none; /* 預設隱藏 */
+            animation: fadeIn 0.3s ease-out;
+        }
+        .modal-content {
+            animation: slideIn 0.3s ease-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes slideIn {
+            from { transform: translateY(-30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        /* 預覽內容的樣式 */
+        .preview-content h3 {
+            font-size: 1.25rem; /* text-xl */
+            font-weight: 700; /* font-bold */
+            color: #003D74; /* text-cmh-blue */
+            margin-top: 1.5rem; /* mt-6 */
+        }
+        /* 【★★ 視覺修正：移除 white-space: pre-wrap; ★★】 */
+        .preview-content p, .preview-content div {
+            font-size: 1.125rem; /* text-lg */
+            color: #374151; /* text-gray-700 */
+            margin-top: 0.5rem; /* mt-2 */
+            word-break: break-word; /* 避免文字溢出 */
+            /* 移除 white-space: pre-wrap; 避免錯誤的空白列 */
+        }
+        .preview-content .plan-block {
+            margin-top: 1rem; /* mt-4 */
+            padding: 1rem; /* p-4 */
+            background-color: #F9FAFB; /* bg-gray-50 */
+            border-radius: 0.5rem; /* rounded-lg */
+        }
+        
+        /* 【★★ 視覺修正：Flexbox 對齊 ★★】 */
+        .preview-content .plan-item {
+            display: flex;
+            align-items: flex-start; /* 頂部對齊 */
+            margin-top: 0.5rem; /* mt-2 */
+        }
+        .preview-content .plan-item strong {
+            font-weight: 600; /* font-semibold */
+            color: #1F2937; /* text-gray-800 */
+            flex-shrink: 0; /* 標籤不壓縮 */
+            width: 170px; /* 固定寬度，確保對齊 */
+        }
+        .preview-content .plan-item span {
+            flex-grow: 1; /* 內容填滿剩餘空間 */
+        }
+        
     </style>
 </head>
-<body class="bg-gray-100 min-h-screen text-gray-900">
+<body class="bg-gray-100 text-gray-900">
 
-    <!-- Header 區塊 (海報風格) -->
-    <header class="relative bg-cmh-purple pb-24 pt-12 text-white">
+    <!-- Header 區塊 (高對比) -->
+    <header class="relative bg-cmh-blue pb-24 pt-12 text-white">
         <div class="container mx-auto max-w-4xl px-4 text-center">
-            <!-- 【★★ 視覺修正：放大標題 ★★】 -->
             <h1 class="text-4xl md:text-5xl font-bold mb-2">醫學教育共識營</h1>
             <p class="text-2xl md:text-3xl opacity-90">功能小組年度策略填報</p>
-            <!-- 【★★ 修正結束 ★★】 -->
         </div>
         <!-- 斜角設計 -->
         <div class="absolute bottom-0 left-0 w-full h-16 bg-gray-100" style="clip-path: polygon(0 100%, 100% 0, 100% 100%);"></div>
     </header>
 
-    <!-- 表單容器 -->
-    <div class="container mx-auto max-w-4xl px-4 pb-24">
+    <!-- 表單容器 (主要內容) -->
+    <div class="main-content container mx-auto max-w-4xl px-4 pb-24">
         
         <!-- 表單卡片 (疊在 Header 上方) -->
         <form id="dataForm" class="relative -mt-16 bg-white rounded-xl shadow-2xl overflow-hidden">
@@ -106,17 +181,17 @@
             <!-- 表單主體 -->
             <div class="p-6 md:p-10 space-y-8">
                 
-                <!-- 一、功能小Db basic資料 -->
+                <!-- 一、功能小組基本資料 -->
                 <section class="space-y-4">
-                    <h2 class="text-2xl md:text-3xl font-bold text-cmh-purple border-b-2 border-cmh-lavender pb-2">
+                    <h2 class="text-2xl md:text-3xl font-bold text-cmh-blue pb-2">
                         一、功能小組基本資料
                     </h2>
                     
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
-                            <label for="groupName" class="block text-lg font-semibold mb-2 text-gray-700">功能小組名稱 *</label>
+                            <label for="groupName" class="block text-lg font-semibold mb-2 text-gray-700">功能小組名稱 <sup>*</sup></label>
                             <select id="groupName" name="groupName" required
-                                class="w-full text-base md:text-lg px-4 py-3 bg-gray-50 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-cmh-lavender focus:border-transparent transition duration-200">
+                                class="w-full text-base md:text-lg px-4 py-3 bg-gray-50 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-cmh-blue focus:border-transparent transition duration-200">
                                 <option value="" disabled selected>請選擇您的功能小組</option>
                                 <option value="教育輔導組">教育輔導組</option>
                                 <option value="數位賦能組">數位賦能組</option>
@@ -126,9 +201,9 @@
                             </select>
                         </div>
                         <div>
-                            <label for="reporterName" class="block text-lg font-semibold mb-2 text-gray-700">報告人 *</label>
+                            <label for="reporterName" class="block text-lg font-semibold mb-2 text-gray-700">報告人 <sup>*</sup></label>
                             <input type="text" id="reporterName" name="reporterName" required
-                                class="w-full text-base md:text-lg px-4 py-3 bg-gray-50 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-cmh-lavender focus:border-transparent transition duration-200"
+                                class="w-full text-base md:text-lg px-4 py-3 bg-gray-50 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-cmh-blue focus:border-transparent transition duration-200"
                                 placeholder="請填寫您的姓名">
                         </div>
                     </div>
@@ -136,63 +211,59 @@
 
                 <!-- 二、功能小組願景 -->
                 <section class="space-y-4">
-                    <h2 class="text-2xl md:text-3xl font-bold text-cmh-purple border-b-2 border-cmh-lavender pb-2">
+                    <h2 class="text-2xl md:text-3xl font-bold text-cmh-blue pb-2">
                         二、功能小組願景
                     </h2>
                     <div>
-                        <!-- 【★★ 視覺修正：更新 Label ★★】 -->
-                        <label for="vision" class="block text-lg font-semibold mb-2 text-gray-700">請問一句話描述小組希望奇美醫學教育變成什麼樣子。 *</label>
-                        <!-- 【★★ 修正結束 ★★】 -->
+                        <label for="vision" class="block text-lg font-semibold mb-2 text-gray-700">請問一句話描述小組希望奇美醫學教育變成什麼樣子 <sup>*</sup></label>
                         <textarea id="vision" name="vision" rows="3" required
-                            class="w-full text-base md:text-lg px-4 py-3 bg-gray-50 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-cmh-lavender focus:border-transparent transition duration-200"
+                            class="w-full text-base md:text-lg px-4 py-3 bg-gray-50 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-cmh-blue focus:border-transparent transition duration-200"
                             placeholder="【範例】&#10;建立一套融合在地特色與個人化學習的醫學教育框架。"></textarea>
                     </div>
                 </section>
 
                 <!-- 三、年度目標 -->
                 <section class="space-y-4">
-                    <h2 class="text-2xl md:text-3xl font-bold text-cmh-purple border-b-2 border-cmh-lavender pb-2">
+                    <h2 class="text-2xl md:text-3xl font-bold text-cmh-blue pb-2">
                         三、年度目標
                     </h2>
                     <div>
-                        <!-- 【★★ 視覺修正：更新 Label ★★】 -->
-                        <label for="goals" class="block text-lg font-semibold mb-2 text-gray-700">請寫小組未來一年最重要的 1–3 件事，並與願景連動 *</label>
-                        <!-- 【★★ 修正結束 ★★】 -->
+                        <label for="goals" class="block text-lg font-semibold mb-2 text-gray-700">請寫小組未來一年最重要的 1–3 件事，並與願景連動 <sup>*</sup></label>
                         <textarea id="goals" name="goals" rows="4" required
-                            class="w-full text-base md:text-lg px-4 py-3 bg-gray-50 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-cmh-lavender focus:border-transparent transition duration-200"
+                            class="w-full text-base md:text-lg px-4 py-3 bg-gray-50 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-cmh-blue focus:border-transparent transition duration-200"
                             placeholder="【範例】&#10;1. 培養具備臨床實務能力的學員，強化能力導向的訓練品質。&#10;2. 建立持續監測與優化的制度循環，確保教學品質與評鑑要求一致。"></textarea>
                     </div>
                 </section>
 
                 <!-- 四、年度計畫 -->
                 <section class="space-y-6">
-                    <h2 class="text-2xl md:text-3xl font-bold text-cmh-purple border-b-2 border-cmh-lavender pb-2">
+                    <h2 class="text-2xl md:text-3xl font-bold text-cmh-blue pb-2">
                         四、年度計畫
                     </h2>
                     <p class="text-base md:text-lg text-gray-600">
                         請填寫具體的行動方案與可衡量的 KPI，最多 5 項。
                     </p>
 
-                    <!-- 計畫 1 -->
-                    <div class="space-y-4 p-4 border border-gray-200 rounded-lg bg-gray-50">
-                        <h3 class="text-xl font-semibold text-gray-800">計畫 1</h3>
+                    <!-- 計畫 1 (必填) -->
+                    <div class="space-y-4 p-4 border-2 border-cmh-blue border-opacity-30 rounded-lg bg-gray-50">
+                        <h3 class="text-xl font-semibold text-gray-800">計畫 1 (至少需填寫一項)</h3>
                         <div class="grid grid-cols-1 gap-4">
                             <div>
-                                <label for="actionName1" class="block text-base font-medium mb-1 text-gray-600">行動名稱</label>
-                                <input type="text" id="actionName1" name="actionName1"
-                                    class="w-full text-base md:text-lg px-4 py-3 bg-white rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-cmh-lavender"
+                                <label for="actionName1" class="block text-base font-medium mb-1 text-gray-600">行動名稱 <sup>*</sup></label>
+                                <input type="text" id="actionName1" name="actionName1" required
+                                    class="w-full text-base md:text-lg px-4 py-3 bg-white rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-cmh-blue"
                                     placeholder="【範例】五階段藍圖">
                             </div>
                             <div>
-                                <label for="actionContent1" class="block text-base font-medium mb-1 text-gray-600">行動內容 (一句話)</label>
-                                <input type="text" id="actionContent1" name="actionContent1"
-                                    class="w-full text-base md:text-lg px-4 py-3 bg-white rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-cmh-lavender"
+                                <label for="actionContent1" class="block text-base font-medium mb-1 text-gray-600">行動內容 (一句話) <sup>*</sup></label>
+                                <input type="text" id="actionContent1" name="actionContent1" required
+                                    class="w-full text-base md:text-lg px-4 py-3 bg-white rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-cmh-blue"
                                     placeholder="【範例】完成「奠基—發展—實施—監控—優化」五階段推動架構並啟動示範科別導入。">
                             </div>
                             <div>
-                                <label for="kpi1" class="block text-base font-medium mb-1 text-gray-600">KPI (量化或完成度)</label>
-                                <input type="text" id="kpi1" name="kpi1"
-                                    class="w-full text-base md:text-lg px-4 py-3 bg-white rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-cmh-lavender"
+                                <label for="kpi1" class="block text-base font-medium mb-1 text-gray-600">KPI (量化或完成度) <sup>*</sup></label>
+                                <input type="text" id="kpi1" name="kpi1" required
+                                    class="w-full text-base md:text-lg px-4 py-3 bg-white rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-cmh-blue"
                                     placeholder="【範例】推動藍圖完成度 100%；至少 1 科完成示範導入。">
                             </div>
                         </div>
@@ -205,19 +276,19 @@
                             <div>
                                 <label for="actionName2" class="block text-base font-medium mb-1 text-gray-600">行動名稱</label>
                                 <input type="text" id="actionName2" name="actionName2"
-                                    class="w-full text-base md:text-lg px-4 py-3 bg-white rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-cmh-lavender"
+                                    class="w-full text-base md:text-lg px-4 py-3 bg-white rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-cmh-blue"
                                     placeholder="【範例】在地化能力">
                             </div>
                             <div>
                                 <label for="actionContent2" class="block text-base font-medium mb-1 text-gray-600">行動內容 (一句話)</label>
                                 <input type="text" id="actionContent2" name="actionContent2"
-                                    class="w-full text-base md:text-lg px-4 py-3 bg-white rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-cmh-lavender"
+                                    class="w-full text-base md:text-lg px-4 py-3 bg-white rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-cmh-blue"
                                     placeholder="【範例】發展適用於本院的在地化能力評核項目，例如全人照護、數位能力、人文素養等。">
                             </div>
                             <div>
                                 <label for="kpi2" class="block text-base font-medium mb-1 text-gray-600">KPI (量化或完成度)</label>
                                 <input type="text" id="kpi2" name="kpi2"
-                                    class="w-full text-base md:text-lg px-4 py-3 bg-white rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-cmh-lavender"
+                                    class="w-full text-base md:text-lg px-4 py-3 bg-white rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-cmh-blue"
                                     placeholder="【範例】至少 2 項在地化能力草案完成並通過審查。">
                             </div>
                         </div>
@@ -230,19 +301,19 @@
                             <div>
                                 <label for="actionName3" class="block text-base font-medium mb-1 text-gray-600">行動名稱</label>
                                 <input type="text" id="actionName3" name="actionName3"
-                                    class="w-full text-base md:text-lg px-4 py-3 bg-white rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-cmh-lavender"
+                                    class="w-full text-base md:text-lg px-4 py-3 bg-white rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-cmh-blue"
                                     placeholder="【範例】個人化輔導">
                             </div>
                             <div>
                                 <label for="actionContent3" class="block text-base font-medium mb-1 text-gray-600">行動內容 (一句話)</label>
                                 <input type="text" id="actionContent3" name="actionContent3"
-                                    class="w-full text-base md:text-lg px-4 py-3 bg-white rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-cmh-lavender"
+                                    class="w-full text-base md:text-lg px-4 py-3 bg-white rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-cmh-blue"
                                     placeholder="【範例】建立即時回饋與個人化學習輔導機制，協助能力落後之學員進步。">
                             </div>
                             <div>
                                 <label for="kpi3" class="block text-base font-medium mb-1 text-gray-600">KPI (量化或完成度)</label>
                                 <input type="text" id="kpi3" name="kpi3"
-                                    class="w-full text-base md:text-lg px-4 py-3 bg-white rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-cmh-lavender"
+                                    class="w-full text-base md:text-lg px-4 py-3 bg-white rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-cmh-blue"
                                     placeholder="【範例】3–5 名學員完成個人化輔導示範案例。">
                             </div>
                         </div>
@@ -255,20 +326,20 @@
                             <div>
                                 <label for="actionName4" class="block text-base font-medium mb-1 text-gray-600">行動名稱</label>
                                 <input type="text" id="actionName4" name="actionName4"
-                                    class="w-full text-base md:text-lg px-4 py-3 bg-white rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-cmh-lavender"
-                                    placeholder="【範例】教師發展">
+                                    class="w-full text-base md:text-lg px-4 py-3 bg-white rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-cmh-blue"
+                                    placeholder="【範例】教學品質循環">
                             </div>
                             <div>
                                 <label for="actionContent4" class="block text-base font-medium mb-1 text-gray-600">行動內容 (一句話)</label>
                                 <input type="text" id="actionContent4" name="actionContent4"
-                                    class="w-full text-base md:text-lg px-4 py-3 bg-white rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-cmh-lavender"
-                                    placeholder="【範例】辦理能力導向醫學教育(CBME)相關師資培育工作坊。">
+                                    class="w-full text-base md:text-lg px-4 py-3 bg-white rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-cmh-blue"
+                                    placeholder="【範例】建立年度教學品質盤點、稽核與改善流程，協助臨床單位落實教學品質標準。">
                             </div>
                             <div>
                                 <label for="kpi4" class="block text-base font-medium mb-1 text-gray-600">KPI (量化或完成度)</label>
                                 <input type="text" id="kpi4" name="kpi4"
-                                    class="w-full text-base md:text-lg px-4 py-3 bg-white rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-cmh-lavender"
-                                    placeholder="【範例】至少辦理 2 場工作坊，總參與人次達 50 人。">
+                                    class="w-full text-base md:text-lg px-4 py-3 bg-white rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-cmh-blue"
+                                    placeholder="【範例】至少60%單位完成年度盤點；30%單位完成改善回饋。">
                             </div>
                         </div>
                     </div>
@@ -280,19 +351,19 @@
                             <div>
                                 <label for="actionName5" class="block text-base font-medium mb-1 text-gray-600">行動名稱</label>
                                 <input type="text" id="actionName5" name="actionName5"
-                                    class="w-full text-base md:text-lg px-4 py-3 bg-white rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-cmh-lavender"
+                                    class="w-full text-base md:text-lg px-4 py-3 bg-white rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-cmh-blue"
                                     placeholder="【範例】數位學習平台">
                             </div>
                             <div>
                                 <label for="actionContent5" class="block text-base font-medium mb-1 text-gray-600">行動內容 (一句話)</label>
                                 <input type="text" id="actionContent5" name="actionContent5"
-                                    class="w-full text-base md:text-lg px-4 py-3 bg-white rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-cmh-lavender"
+                                    class="w-full text-base md:text-lg px-4 py-3 bg-white rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-cmh-blue"
                                     placeholder="【範例】優化數位學習平台(LMS)功能，導入學員學習歷程與評核數據。">
                             </div>
                             <div>
                                 <label for="kpi5" class="block text-base font-medium mb-1 text-gray-600">KPI (量化或完成度)</label>
                                 <input type="text" id="kpi5" name="kpi5"
-                                    class="w-full text-base md:text-lg px-4 py-3 bg-white rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-cmh-lavender"
+                                    class="w-full text-base md:text-lg px-4 py-3 bg-white rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-cmh-blue"
                                     placeholder="【範例】LMS 優化功能上線完成度 100%。">
                             </div>
                         </div>
@@ -301,20 +372,34 @@
 
                 <!-- 五、需要的支持與合作 -->
                 <section class="space-y-4">
-                    <h2 class="text-2xl md:text-3xl font-bold text-cmh-purple border-b-2 border-cmh-lavender pb-2">
+                    <h2 class="text-2xl md:text-3xl font-bold text-cmh-blue pb-2">
                         五、需要的支持與合作
                     </h2>
                     <div>
                         <label for="support" class="block text-lg font-semibold mb-2 text-gray-700">您需要哪些支持 (選填)</label>
                         <textarea id="support" name="support" rows="4"
-                            class="w-full text-base md:text-lg px-4 py-3 bg-gray-50 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-cmh-lavender focus:border-transparent transition duration-200"
+                            class="w-full text-base md:text-lg px-4 py-3 bg-gray-50 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-cmh-blue focus:border-transparent transition duration-200"
                             placeholder="【範例】&#10;1. 需協調各科主任共同進行能力需求盤點與對焦。&#10;2. 需跨科教師投入能力項目討論與評估標準修訂。&#10;3. 需協助安排制度文件審查流程與共識營呈現方式。"></textarea>
                     </div>
                 </section>
+                
+                <!-- 六、其他補充 -->
+                <section class="space-y-4">
+                    <h2 class="text-2xl md:text-3xl font-bold text-cmh-blue pb-2">
+                        六、其他補充
+                    </h2>
+                    <div>
+                        <label for="other" class="block text-lg font-semibold mb-2 text-gray-700">其他您想補充的資料 (選填)</label>
+                        <textarea id="other" name="other" rows="4"
+                            class="w-full text-base md:text-lg px-4 py-3 bg-gray-50 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-cmh-blue focus:border-transparent transition duration-200"
+                            placeholder="任何未在上述欄位中，但您希望在報告時呈現的資料..."></textarea>
+                    </div>
+                </section>
+
             </div>
 
-            <!-- 表單底部 (提交按鈕) -->
-            <footer class="bg-gray-50 px-6 md:px-10 py-6 border-t border-gray-200">
+            <!-- 卡片 Footer (淺色) -->
+            <footer class="bg-gray-50 px-6 md:px-10 py-6 border-t border-gray-200 sticky bottom-0">
                 <div class="flex justify-between items-center">
                     
                     <!-- 狀態訊息 -->
@@ -322,16 +407,58 @@
                         <!-- 狀態將顯示於此 -->
                     </div>
 
-                    <!-- 提交按鈕 -->
+                    <!-- 提交按鈕 (藍底白字) -->
                     <button type="submit" id="submitButton"
-                        class="px-8 py-3 bg-cmh-lavender text-cmh-purple text-lg md:text-xl font-bold rounded-lg shadow-md hover:bg-opacity-90 transition duration-300 focus:outline-none focus:ring-2 focus:ring-cmh-purple focus:ring-opacity-50 disabled:opacity-50 disabled:cursor-not-allowed">
-                        <span id="submitButtonText">提交資料</span>
+                        class="px-8 py-3 bg-cmh-blue text-white text-lg md:text-xl font-bold rounded-lg shadow-md hover:bg-opacity-90 transition duration-300 focus:outline-none focus:ring-2 focus:ring-cmh-blue focus:ring-opacity-75 disabled:opacity-50 disabled:cursor-not-allowed">
+                        <span id="submitButtonText">預覽並提交</span>
                     </button>
                 </div>
             </footer>
         </form>
 
+    </div> <!-- .main-content 結束 -->
+
+    <!-- 全頁 Footer (深藍色) -->
+    <footer class="w-full bg-cmh-blue text-white mt-auto relative pt-20"> <!-- 增加 pt -->
+        <!-- 反向斜角 (使用頁面背景色) -->
+        <div class="absolute top-0 left-0 w-full h-20 bg-gray-100" style="clip-path: polygon(0 100%, 100% 0, 0 0);"></div>
+        
+        <!-- Footer 內容 -->
+        <div class="relative container mx-auto max-w-4xl px-4 py-6 text-center text-gray-300">
+            © 2025 Chi Mei Medical Center. All rights reserved.
+        </div>
+    </footer>
+
+
+    <!-- 【★★ 功能新增：預覽 Modal ★★】 -->
+    <div id="previewModal" class="modal fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center p-4 z-50">
+        <div class="modal-content bg-white rounded-xl shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col">
+            <!-- Modal Header -->
+            <header class="p-6 border-b border-gray-200">
+                <h2 class="text-3xl font-bold text-cmh-blue">內容預覽</h2>
+                <p class="text-lg text-gray-600 mt-1">請確認您填寫的資料是否正確。</p>
+            </header>
+            
+            <!-- Modal Body (可滾動) -->
+            <div id="previewContent" class="preview-content p-6 overflow-y-auto flex-grow">
+                <!-- 預覽內容將由 JS 動態填入 -->
+            </div>
+            
+            <!-- Modal Footer -->
+            <footer class="p-6 bg-gray-50 border-t border-gray-200 flex justify-end items-center space-x-4 rounded-b-xl">
+                <span id="modalStatus" class="text-lg text-gray-600 flex-grow flex items-center space-x-2"></span> <!-- 增加 flex 和 space-x -->
+                <button type="button" id="cancelButton"
+                    class="px-6 py-3 bg-gray-200 text-gray-700 text-lg font-semibold rounded-lg hover:bg-gray-300 transition duration-200">
+                    返回修改
+                </button>
+                <button type="button" id="confirmButton"
+                    class="px-6 py-3 bg-cmh-blue text-white text-lg font-bold rounded-lg shadow-md hover:bg-opacity-90 transition duration-300 disabled:opacity-50">
+                    <span id="confirmButtonText">確認送出</span>
+                </button>
+            </footer>
+        </div>
     </div>
+
 
     <!-- JavaScript 腳本 -->
     <script>
@@ -346,80 +473,193 @@
         const submitButtonText = document.getElementById('submitButtonText');
         const statusMessage = document.getElementById('statusMessage');
 
+        // Modal 元素
+        const previewModal = document.getElementById('previewModal');
+        const previewContent = document.getElementById('previewContent');
+        const cancelButton = document.getElementById('cancelButton');
+        const confirmButton = document.getElementById('confirmButton');
+        const confirmButtonText = document.getElementById('confirmButtonText');
+        const modalStatus = document.getElementById('modalStatus');
+
+        let formDataObject = {}; // 暫存表單資料
+
+        // 主提交按鈕 (點擊預覽)
         form.addEventListener('submit', function(event) {
             event.preventDefault(); // 防止表單傳統提交
             
-            // 檢查表單有效性
+            // 1. 檢查表單有效性
             if (!form.checkValidity()) {
-                // 提示用戶填寫必填欄位
-                statusMessage.innerHTML = '<span class="text-red-600">請填寫所有 * 必填欄位。</span>';
-                // 觸發表單原生的驗證提示
-                form.reportValidity();
+                statusMessage.innerHTML = '<span class="text-red-500 font-semibold">請填寫所有 <sup>*</sup> 必填欄位。</span>';
+                form.reportValidity(); // 觸發瀏覽器內建的驗證提示
                 return;
             }
 
-            // 1. 禁用按鈕並顯示載入中
-            submitButton.disabled = true;
-            submitButtonText.textContent = '提交中...';
-            statusMessage.innerHTML = '<div class="spinner"></div><span>傳送資料...</span>';
-
-            // 2. 獲取表單資料
+            // 2. 清除舊狀態
+            statusMessage.innerHTML = '';
+            
+            // 3. 獲取表單資料
             const formData = new FormData(form);
-            const data = {};
+            formDataObject = {};
             formData.forEach((value, key) => {
-                data[key] = value;
+                formDataObject[key] = value;
             });
 
-            // 3. 將提交時間加入資料中 (GTM+8)
+            // 4. 產生預覽 HTML
+            previewContent.innerHTML = generatePreviewHTML(formDataObject);
+            
+            // 5. 重置 Modal 按鈕狀態
+            confirmButton.disabled = false;
+            confirmButtonText.textContent = '確認送出';
+            modalStatus.innerHTML = '';
+            
+            // 6. 顯示 Modal
+            previewModal.style.display = 'flex';
+        });
+
+        // Modal - "返回修改" 按鈕
+        cancelButton.addEventListener('click', () => {
+            previewModal.style.display = 'none';
+        });
+
+        // Modal - "確認送出" 按鈕
+        confirmButton.addEventListener('click', () => {
+            submitData(formDataObject);
+        });
+        
+        /**
+         * 輔助函數：處理空值和保留換行
+         * @param {string} text - 原始文字
+         * @returns {string} - 格式化後的 HTML
+         */
+        const formatText = (text) => {
+            if (!text || text.trim() === '') {
+                return '<span class="text-gray-400">未填寫</span>'; // 直接回傳 HTML
+            }
+            // 只對有內容的文字進行編碼
+            const encodedText = text.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+            return encodedText.replace(/\n/g, '<br>'); // 轉換換行符
+        };
+
+        /**
+         * 【★★ 視覺修正：Flexbox 對齊 ★★】
+         * 輔助函數：產生單一計畫項目的 HTML (使用 Flexbox 對齊)
+         * @param {string} label - 標籤 (例如 "行動名稱 1:")
+         * @param {string} content - 填寫的內容
+         * @returns {string} - 格式化後的 HTML
+         */
+        const createPlanItem = (label, content) => {
+            if (!content || content.trim() === '') {
+                return ''; // 如果內容為空，不顯示這一行
+            }
+            // 【★★ 視覺修正：移除 white-space: pre-wrap; 後，必須手動將 \n 轉為 <br> ★★】
+            const encodedContent = content.replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\n/g, '<br>');
+            return `
+                <div class="plan-item">
+                    <strong>${label}:</strong>
+                    <span>${encodedContent}</span>
+                </div>`;
+        };
+        
+        // 產生預覽內容的 HTML
+        function generatePreviewHTML(data) {
+            
+            // 產生年度計畫 HTML
+            let plansHtml = '';
+            for (let i = 1; i <= 5; i++) {
+                const name = data[`actionName${i}`];
+                const content = data[`actionContent${i}`];
+                const kpi = data[`kpi${i}`];
+                
+                // 【★★ 視覺修正：只顯示有填寫的欄位 ★★】
+                const nameHtml = createPlanItem(`行動名稱 ${i}`, name);
+                const contentHtml = createPlanItem(`行動內容 ${i}`, content);
+                const kpiHtml = createPlanItem(`KPI ${i}`, kpi);
+
+                // 只有當三者中至少有一項
+                if (nameHtml || contentHtml || kpiHtml) {
+                    plansHtml += `
+                        <div class="plan-block">
+                            ${nameHtml}
+                            ${contentHtml}
+                            ${kpiHtml}
+                        </div>`;
+                }
+            }
+            if (plansHtml === '') {
+                // 如果五項都為空，顯示「未填寫」
+                plansHtml = `<div>${formatText(null)}</div>`; // 呼叫輔助函數並包在 div 中
+            }
+
+            return `
+                <h3>一、功能小組基本資料</h3>
+                <p><strong>功能小組名稱:</strong> ${formatText(data.groupName)}</p>
+                <p><strong>報告人:</strong> ${formatText(data.reporterName)}</p>
+
+                <h3>二、功能小組願景</h3>
+                <p>${formatText(data.vision)}</p>
+
+                <h3>三、年度目標</h3>
+                <div>${formatText(data.goals)}</div>
+
+                <h3>四、年度計畫</h3>
+                ${plansHtml}
+
+                <h3>五、需要的支持與合作</h3>
+                <div>${formatText(data.support)}</div>
+
+                <h3>六、其他補充</h3>
+                <div>${formatText(data.other)}</div>
+            `;
+        }
+
+        // 真正提交資料的函數
+        function submitData(data) {
+            // 1. 禁用按鈕並顯示載入中
+            confirmButton.disabled = true;
+            confirmButtonText.textContent = '提交中...';
+            modalStatus.innerHTML = '<div class="spinner"></div><span> 傳送資料...</span>';
+
+            // 2. 將提交時間加入資料中 (GTM+8)
             data.timestamp = new Date().toLocaleString("zh-TW", { timeZone: "Asia/Taipei" });
             
-            // 4. 使用 fetch API 將資料 POST 到 Google Apps Script
+            // 3. 使用 fetch API 將資料 POST 到 Google Apps Script
             fetch(GOOGLE_APPS_SCRIPT_URL, {
                 method: 'POST',
-                
-                // 【★★ 關鍵修正 ★★】
-                // 'no-cors' 模式：
-                // 1. 允許我們發送請求到不同網域 (script.google.com)。
-                // 2. 這是一種「只管送，不讀取回應」的模式。
-                // 3. 這可以 100% 繞過 Failed to fetch (CORS) 錯誤。
-                // 4. 代價是：我們無法 *讀取* Code.gs 的成功/失敗 JSON 回應。
-                // 5. 但我們知道資料已經送達了 (從 Google Sheet 驗證過)。
-                mode: 'no-cors', 
-                
+                mode: 'no-cors', // 只管送，不讀取回應
                 cache: 'no-cache',
-                
-                // 使用 URLSearchParams 格式發送 (繞過 CORS 預檢)
-                body: new URLSearchParams(data),
+                body: new URLSearchParams(data), // 使用 URLSearchParams 格式
             })
             .then(() => {
-                // 【★★ 關鍵修正 ★★】
-                // 因為是 'no-cors' 模式，我們 *永遠* 不會進入 .catch (除非是網路斷線)。
-                // 只要 .then 被觸發 (即使回應是 "不透明的")，
-                // 我們就假設 Google Apps Script 已經收到請求並成功處理。
+                // 4. 'no-cors' 模式下，我們假設請求已成功
+                modalStatus.innerHTML = '<div class="checkmark">✓</div><span class="text-cmh-blue font-semibold"> 提交成功！</span>';
+                confirmButtonText.textContent = '已提交';
                 
-                // 顯示成功訊息
-                statusMessage.innerHTML = '<div class="checkmark">✓</div><span class="text-cmh-purple font-semibold">提交成功！</span>';
-                submitButtonText.textContent = '已提交';
+                cancelButton.style.display = 'none'; 
                 
-                // (可選) 5 秒後重置表單
-                setTimeout(() => {
-                    form.reset();
-                    submitButton.disabled = false;
-                    submitButtonText.textContent = '提交資料';
-                    statusMessage.innerHTML = '';
-                }, 5000);
+                confirmButton.disabled = false;
+                confirmButtonText.textContent = '關閉';
+                confirmButton.onclick = () => { // 重新綁定事件
+                    previewModal.style.display = 'none';
+                    form.reset(); // 清空表單
+                    
+                    statusMessage.innerHTML = '<span class="text-green-600 font-semibold">✓ 資料已成功提交。</span>';
+                    window.scrollTo(0, 0); // 滾動到最上方
+                    
+                    // 恢復按鈕原始狀態
+                    cancelButton.style.display = 'inline-flex';
+                    confirmButton.onclick = () => submitData(formDataObject); // 綁回原事件
+                };
 
             })
             .catch(error => {
-                // 只有在極少數情況下 (例如網路完全斷線) 才會進入這裡
+                // 5. 網路斷線等錯誤
                 console.error('提交錯誤:', error);
                 
-                // 顯示錯誤訊息
-                statusMessage.innerHTML = '<span class="text-red-600">提交失敗 (網路錯誤)</span>';
-                submitButton.disabled = false;
-                submitButtonText.textContent = '重新提交';
+                modalStatus.innerHTML = `<span class="text-red-600">提交失敗 (網路錯誤): ${error.message}</span>`;
+                confirmButton.disabled = false;
+                confirmButtonText.textContent = '重新提交';
             });
-        });
+        }
     </script>
 
 </body>
