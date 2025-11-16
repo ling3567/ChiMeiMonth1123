@@ -56,7 +56,7 @@
             flex-grow: 1;
         }
         
-        /* 紅色星號 */
+        /* 【★★ 功能：紅色星號 ★★】 */
         label sup {
             color: #EF4444; /* text-red-500 */
             font-weight: 600;
@@ -105,7 +105,8 @@
         
         /* 預覽視窗 Modal 樣式 */
         .modal {
-            display: none; /* 預設隱藏 */
+            /* 【★★ Bug 修正：(gen_45) 預設 *必須* 隱藏 ★★】 */
+            display: none; 
             animation: fadeIn 0.3s ease-out;
         }
         .modal-content {
@@ -127,13 +128,12 @@
             color: #003D74; /* text-cmh-blue */
             margin-top: 1.5rem; /* mt-6 */
         }
-        /* 【★★ 視覺修正：移除 white-space: pre-wrap; ★★】 */
+        /* 【★★ 視覺修正：(gen_44) 移除 white-space ★★】 */
         .preview-content p, .preview-content div {
             font-size: 1.125rem; /* text-lg */
             color: #374151; /* text-gray-700 */
             margin-top: 0.5rem; /* mt-2 */
             word-break: break-word; /* 避免文字溢出 */
-            /* 移除 white-space: pre-wrap; 避免錯誤的空白列 */
         }
         .preview-content .plan-block {
             margin-top: 1rem; /* mt-4 */
@@ -142,7 +142,7 @@
             border-radius: 0.5rem; /* rounded-lg */
         }
         
-        /* 【★★ 視覺修正：Flexbox 對齊 ★★】 */
+        /* 【★★ 視覺修正：(gen_43) Flexbox 對齊 ★★】 */
         .preview-content .plan-item {
             display: flex;
             align-items: flex-start; /* 頂部對齊 */
@@ -165,7 +165,7 @@
     <!-- Header 區塊 (高對比) -->
     <header class="relative bg-cmh-blue pb-24 pt-12 text-white">
         <div class="container mx-auto max-w-4xl px-4 text-center">
-            <h1 class="text-4xl md:text-5xl font-bold mb-2">醫學教育共識營</h1>
+            <h1 class="text-4xl md:text-5xl font-bold mb-2">「創造360°人生」醫學教育共識營</h1>
             <p class="text-2xl md:text-3xl opacity-90">功能小組年度策略填報</p>
         </div>
         <!-- 斜角設計 -->
@@ -194,7 +194,7 @@
                                 class="w-full text-base md:text-lg px-4 py-3 bg-gray-50 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-cmh-blue focus:border-transparent transition duration-200">
                                 <option value="" disabled selected>請選擇您的功能小組</option>
                                 <option value="教育輔導組">教育輔導組</option>
-                                <option value="數位賦能組">數位賦能組</option>
+                                <option value="數位賦能組">數位賦neng組</option>
                                 <option value="醫學人文組">醫學人文組</option>
                                 <option value="核心能力組">核心能力組</option>
                                 <option value="教學品質組">教學品質組</option>
@@ -398,7 +398,7 @@
 
             </div>
 
-            <!-- 卡片 Footer (淺色) -->
+            <!-- 【★★ 視覺修正：卡片 Footer (淺色) ★★】 -->
             <footer class="bg-gray-50 px-6 md:px-10 py-6 border-t border-gray-200 sticky bottom-0">
                 <div class="flex justify-between items-center">
                     
@@ -407,7 +407,7 @@
                         <!-- 狀態將顯示於此 -->
                     </div>
 
-                    <!-- 提交按鈕 (藍底白字) -->
+                    <!-- 【★★ 視覺修正：提交按鈕 (藍底白字) ★★】 -->
                     <button type="submit" id="submitButton"
                         class="px-8 py-3 bg-cmh-blue text-white text-lg md:text-xl font-bold rounded-lg shadow-md hover:bg-opacity-90 transition duration-300 focus:outline-none focus:ring-2 focus:ring-cmh-blue focus:ring-opacity-75 disabled:opacity-50 disabled:cursor-not-allowed">
                         <span id="submitButtonText">預覽並提交</span>
@@ -418,20 +418,22 @@
 
     </div> <!-- .main-content 結束 -->
 
-    <!-- 全頁 Footer (深藍色) -->
+    <!-- 【★★ 視覺修正：全頁 Footer (深藍色) ★★】 -->
     <footer class="w-full bg-cmh-blue text-white mt-auto relative pt-20"> <!-- 增加 pt -->
-        <!-- 反向斜角 (使用頁面背景色) -->
+        <!-- 【★★ 視覺修正：反向斜角 (使用頁面背景色) ★★】 -->
         <div class="absolute top-0 left-0 w-full h-20 bg-gray-100" style="clip-path: polygon(0 100%, 100% 0, 0 0);"></div>
         
         <!-- Footer 內容 -->
         <div class="relative container mx-auto max-w-4xl px-4 py-6 text-center text-gray-300">
+            <!-- 【★★ 文字修正 ★★】 -->
             © 2025 Chi Mei Medical Center. All rights reserved.
         </div>
     </footer>
 
 
     <!-- 【★★ 功能新增：預覽 Modal ★★】 -->
-    <div id="previewModal" class="modal fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center p-4 z-50">
+    <!-- 【★★ Bug 修正：(gen_45) 移除 'flex'，讓 Modal 預設隱藏 ★★】 -->
+    <div id="previewModal" class="modal fixed inset-0 bg-gray-800 bg-opacity-75 items-center justify-center p-4 z-50">
         <div class="modal-content bg-white rounded-xl shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col">
             <!-- Modal Header -->
             <header class="p-6 border-b border-gray-200">
@@ -465,7 +467,7 @@
         // -------------------------------------------------------------------------
         // ！！！Google Apps Script 網路應用程式 URL！！！
         // -------------------------------------------------------------------------
-        const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwDUbCccWxlzNlIJgelPQnpXwbN_Bys9MkWJ-jm3qZlxsCkeZ6uY7sy8Rmvxe0CfQsJ/exec';
+        const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx0dPktgN1xSRAe4fUZaP6ziqI2Qf_zl3ZeF22XHf1KvDcXBNUgrjaENpJrgzwBzE4R/exec';
         // -------------------------------------------------------------------------
 
         const form = document.getElementById('dataForm');
@@ -513,7 +515,7 @@
             modalStatus.innerHTML = '';
             
             // 6. 顯示 Modal
-            previewModal.style.display = 'flex';
+            previewModal.style.display = 'flex'; // 【★★ Bug 修正 (gen_45)：JS 在此處才顯示 Modal ★★】
         });
 
         // Modal - "返回修改" 按鈕
@@ -527,31 +529,40 @@
         });
         
         /**
+         * 【★★ Bug 修正：(gen_41) ★★】
          * 輔助函數：處理空值和保留換行
          * @param {string} text - 原始文字
          * @returns {string} - 格式化後的 HTML
          */
         const formatText = (text) => {
+            // 1. 檢查是否為空
             if (!text || text.trim() === '') {
-                return '<span class="text-gray-400">未填寫</span>'; // 直接回傳 HTML
+                // 【★★ Bug 修正：(gen_41) ★★】
+                // 直接回傳 *HTML*，而不是字串
+                return '<span class="text-gray-400">未填寫</span>';
             }
-            // 只對有內容的文字進行編碼
+            
+            // 2. 只對 *有內容* 的文字進行編碼
             const encodedText = text.replace(/</g, "&lt;").replace(/>/g, "&gt;");
-            return encodedText.replace(/\n/g, '<br>'); // 轉換換行符
+            
+            // 3. 轉換換行符
+            return encodedText.replace(/\n/g, '<br>');
         };
 
         /**
-         * 【★★ 視覺修正：Flexbox 對齊 ★★】
+         * 【★★ 視覺修正：(gen_43) Flexbox 對齊 ★★】
          * 輔助函數：產生單一計畫項目的 HTML (使用 Flexbox 對齊)
          * @param {string} label - 標籤 (例如 "行動名稱 1:")
          * @param {string} content - 填寫的內容
          * @returns {string} - 格式化後的 HTML
          */
         const createPlanItem = (label, content) => {
+            // 【★★ 視覺修正：(gen_42) 只顯示有填寫的欄位 ★★】
             if (!content || content.trim() === '') {
                 return ''; // 如果內容為空，不顯示這一行
             }
-            // 【★★ 視覺修正：移除 white-space: pre-wrap; 後，必須手動將 \n 轉為 <br> ★★】
+            // 【★★ 視覺修正：(gen_43) ★★】
+            // 內容也需要編碼和換行
             const encodedContent = content.replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\n/g, '<br>');
             return `
                 <div class="plan-item">
@@ -570,7 +581,7 @@
                 const content = data[`actionContent${i}`];
                 const kpi = data[`kpi${i}`];
                 
-                // 【★★ 視覺修正：只顯示有填寫的欄位 ★★】
+                // 【★★ 視覺修正：(gen_42) 只顯示有填寫的欄位 ★★】
                 const nameHtml = createPlanItem(`行動名稱 ${i}`, name);
                 const contentHtml = createPlanItem(`行動內容 ${i}`, content);
                 const kpiHtml = createPlanItem(`KPI ${i}`, kpi);
@@ -590,6 +601,8 @@
                 plansHtml = `<div>${formatText(null)}</div>`; // 呼叫輔助函數並包在 div 中
             }
 
+            // 【★★ 視覺修正：(gen_40) ★★】
+            // 將 <p> 改為 <div> 以搭配 formatText 的 <br>
             return `
                 <h3>一、功能小組基本資料</h3>
                 <p><strong>功能小組名稱:</strong> ${formatText(data.groupName)}</p>
