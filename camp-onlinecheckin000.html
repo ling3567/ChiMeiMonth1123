@@ -6,26 +6,32 @@
   <title>醫學教育共識營 即時報到儀表板</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    /* NEW THEME (v4): Refined Painting Theme
+    /* NEW THEME (v6): Founder's Painting + Mobile Fixes
       - Add background image
-      - Use warm beige main card (rgba(248, 247, 245, 0.85)) <-- User requested transparency
+      - Use warm beige main card (rgba(248, 247, 245, 0.85))
       - Use "Blue" from painting as primary color
       - Use "Orange" from painting as alert color
       - Enhance shadows for more depth
       - Refine tab and header styles
+      - Add horizontal scroll for all tables on mobile
+      - Add highlight row for "Checked In" status
+      - Fix header wrap on mobile
+      - (!!! NEW !!!) Use table-fixed and explicit widths for all tables.
+      - (!!! NEW !!!) Fix text-success color specificity.
     */
     body {
       /* !!! 這裡是您圖片的網址 (請確認已填上) !!! */
-      background-image: url('images/許文龍.jpg'); 
+      /* 例如: background-image: url('images/許文龍.jpg'); */
+      background-image: url('https://i.imgur.com/your_image_hash.jpg'); 
       background-size: cover; 
       background-position: center; 
       background-attachment: fixed; 
       font-family: 'Noto Sans TC', sans-serif;
       color: #374151; /* 預設文字顏色 (深灰) */
     }
-    /* 主要內容容器 (!!! NEW: 調整為 85% 不透明 !!!) */
+    /* 主要內容容器 */
     .overlay-content {
-      background-color: rgba(248, 247, 245, 0.85); /* 溫暖的淺米色 (85% Opacity, 讓畫作隱約可見) */
+      background-color: rgba(248, 247, 245, 0.85); /* 溫暖的淺米色 (85% Opacity) */
       border: 1px solid rgba(255, 255, 255, 0.3); 
       border-radius: 1.5rem; 
       box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1), 0 5px 10px rgba(0, 0, 0, 0.05); 
@@ -34,21 +40,21 @@
       width: calc(100% - 2rem); 
     }
 
-    /* 統計卡片設計 (陰影加深) */
+    /* 統計卡片設計 */
     .stat-card {
       background-color: #FFFFFF; /* 純白 */
       border: 1px solid #E5E7EB;
       border-radius: 0.75rem;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); /* (加深陰影) */
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.07); /* (柔和陰影) */
     }
     
-    /* 組別統計卡片 (陰影加深) */
+    /* 組別統計卡片 */
     .group-stat-card {
       background-color: #FFFFFF; /* 純白 */
       border: 1px solid #E5E7EB;
       border-radius: 0.75rem;
       padding: 1rem 1.25rem; 
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); /* (加深陰影) */
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.07); /* (柔和陰影) */
     }
 
     /* 按鈕樣式 (立即更新) - 使用畫作 "藍色" */
@@ -67,7 +73,7 @@
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     }
 
-    /* 分頁按鈕 - (inactive 樣式調整) */
+    /* 分頁按鈕 */
     .tab-button-active {
       background-color: #2563EB; /* (藍色) */
       color: #FFFFFF; 
@@ -79,12 +85,12 @@
       border: 1px solid #2563EB;
     }
     .tab-button-inactive {
-      background-color: #FFFFFF; /* (改為白色) */
-      color: #1D4ED8; /* (改為深藍字) */
+      background-color: #FFFFFF; /* (白色) */
+      color: #1D4ED8; /* (深藍字) */
       font-weight: 500;
       padding: 0.5rem 1.5rem;
       border-radius: 0.5rem;
-      border: 1px solid #93C5FD; /* (改為淺藍邊框) */
+      border: 1px solid #93C5FD; /* (淺藍邊框) */
       transition: all 0.3s ease;
       font-size: 1.125rem; /* text-lg (放大) */
     }
@@ -93,31 +99,49 @@
     }
 
 
-    /* 表格樣式 (陰影加深) */
+    /* 表格容器 - 可左右捲動 */
     .table-container {
       background-color: #FFFFFF; /* 白色背景 */
       border-radius: 0.75rem;
       border: 1px solid #E5E7EB;
       overflow: hidden; 
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); /* (加深陰影) */
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.07); /* (柔和陰影) */
     }
-    .table-fixed-header {
-      overflow-y: auto; 
+    .table-scroll-wrapper {
+      overflow-x: auto; /* 關鍵！允許水平捲動 */
+      -webkit-overflow-scrolling: touch; /* iOS 滾動優化 */
     }
-    .table-fixed-header thead th {
+    .table-scroll-wrapper thead th {
       background-color: #F9FAFB; /* 淺灰色表頭 */
       color: #4B5563; /* 暖灰色文字 */
       border-bottom: 1px solid #E5E7EB;
       font-size: 0.875rem; /* text-sm (放大) */
+      white-space: nowrap; /* 標題不換行 */
     }
-    .table-fixed-header tbody td {
+    .table-scroll-wrapper tbody td {
       border-bottom: 1px solid #E5E7EB; 
-      color: #374151; 
+      color: #374151; /* 預設文字顏色 (深灰) */
       font-size: 1rem; /* text-base (放大) */
+      white-space: nowrap; /* 內容不換行 */
+      /* (!!! NEW !!!) 修正 CSS 權重問題 */
+      /* 預設是深灰色, 但 .text-success 或 .text-error-light 會覆蓋它 */
     }
-    .table-fixed-header tbody tr:hover {
-      background-color: #F8F7F5; /* Hover 溫暖米色 */
+    
+    /* (!!! NEW: 已報到底色 !!!) */
+    .row-checked-in {
+      background-color: #EFF6FF; /* 柔和淺藍底色 */
     }
+    /* (!!! NEW !!!) 修正 CSS 權重問題: 確保底色中的 .text-success 依然是藍色 */
+    .row-checked-in td.text-success {
+       color: #1D4ED8 !important; /* (藍色) */
+    }
+    .row-checked-in:hover {
+      background-color: #DBEAFE; /* Hover 加深 */
+    }
+    .row-pending:hover {
+      background-color: #F9FAFB; /* Hover 淺灰 */
+    }
+    
     
     /* 報到狀態文字顏色 */
     .text-success {
@@ -130,9 +154,9 @@
 
     /* 錯誤訊息 */
     .error-box {
-      background-color: #FEF3C7; 
-      border: 1px solid #FDE68A; 
-      color: #92400E; 
+      background-color: #FFFBEB; /* 淺黃 (擷取自畫作文字區) */
+      border: 1px solid #FDE68A; /* 淺黃邊框 */
+      color: #92400E; /* 深橘/棕色文字 */
     }
     
     /* Spinner */
@@ -161,7 +185,9 @@
     <!-- 標題 -->
     <div class="flex flex-col md:flex-row justify-between items-center mb-6">
       <h1 class="text-3xl font-bold text-gray-800 mb-4 md:mb-0 text-center md:text-left">
-        醫學教育共識營 即時報到儀表板
+        醫學教育共識營
+        <!-- (手機版換行) -->
+        <span class="block sm:inline">即時報到儀表板</span> 
       </h1>
       <!-- Container for button and metadata -->
       <div class="flex flex-col items-center md:items-end">
@@ -230,7 +256,7 @@
         <!-- 已報到總人數 -->
         <div class="stat-card p-6 rounded-lg text-center">
           <h2 class="text-lg font-semibold text-gray-600">已報到總人數</h2>
-          <p class="text-5xl font-extrabold text-blue-600 mt-2" id="statCheckedIn">0</p> <!-- (確保為藍色) -->
+          <p class="text-5xl font-extrabold text-blue-600 mt-2" id="statCheckedIn">0</p> <!-- (藍色) -->
         </div>
         <!-- 未報到人數 -->
         <div class="stat-card p-6 rounded-lg text-center">
@@ -258,16 +284,19 @@
           <h2 class="text-2xl font-bold text-gray-800 border-b-2 border-gray-200 pb-2 mb-4"> <!-- (精緻化標題) -->
             已報到名單 (<span id="checkedInListCount">0</span>)
           </h2>
-          <div class="table-container overflow-hidden">
-            <div class="table-fixed-header">
-              <table class="min-w-full divide-y divide-gray-200">
+          <!-- (Table Scroll Wrapper) -->
+          <div class="table-container">
+            <div class="table-scroll-wrapper">
+              <!-- (!!! NEW: 加入 table-fixed 強制等寬 !!!) -->
+              <table class="min-w-full divide-y divide-gray-200 table-fixed">
                 <thead>
                   <tr>
-                    <th class="px-6 py-4 text-left text-sm font-medium uppercase tracking-wider">姓名</th> 
-                    <th class="px-6 py-4 text-left text-sm font-medium uppercase tracking-wider">單位</th> 
-                    <th class="px-6 py-4 text-left text-sm font-medium uppercase tracking-wider">職稱</th> 
-                    <th class="px-6 py-4 text-left text-sm font-medium uppercase tracking-wider">組別</th> 
-                    <th class="px-6 py-4 text-left text-sm font-medium uppercase tracking-wider">上課地點</th>
+                    <!-- (!!! NEW: 設定欄位寬度 !!!) -->
+                    <th class="px-6 py-4 text-left text-sm font-medium uppercase tracking-wider" style="width: 20%">姓名</th> 
+                    <th class="px-6 py-4 text-left text-sm font-medium uppercase tracking-wider" style="width: 30%">單位</th> 
+                    <th class="px-6 py-4 text-left text-sm font-medium uppercase tracking-wider" style="width: 20%">職稱</th> 
+                    <th class="px-6 py-4 text-left text-sm font-medium uppercase tracking-wider" style="width: 15%">組別</th> 
+                    <th class="px-6 py-4 text-left text-sm font-medium uppercase tracking-wider" style="width: 15%">上課地點</th>
                   </tr>
                 </thead>
                 <tbody id="checkedInTableBody" class="divide-y divide-gray-200">
@@ -283,16 +312,19 @@
           <h2 class="text-2xl font-bold text-gray-800 border-b-2 border-gray-200 pb-2 mb-4"> <!-- (精緻化標題) -->
             未報到名單 (<span id="pendingListCount">0</span>)
           </h2>
-          <div class="table-container overflow-hidden">
-            <div class="table-fixed-header">
-              <table class="min-w-full divide-y divide-gray-200">
+          <!-- (Table Scroll Wrapper) -->
+          <div class="table-container">
+            <div class="table-scroll-wrapper">
+              <!-- (!!! NEW: 加入 table-fixed 強制等寬 !!!) -->
+              <table class="min-w-full divide-y divide-gray-200 table-fixed">
                 <thead>
                   <tr>
-                    <th class="px-6 py-4 text-left text-sm font-medium uppercase tracking-wider">姓名</th>
-                    <th class="px-6 py-4 text-left text-sm font-medium uppercase tracking-wider">單位</th>
-                    <th class="px-6 py-4 text-left text-sm font-medium uppercase tracking-wider">職稱</th>
-                    <th class="px-6 py-4 text-left text-sm font-medium uppercase tracking-wider">組別</th>
-                    <th class="px-6 py-4 text-left text-sm font-medium uppercase tracking-wider">上課地點</th>
+                    <!-- (!!! NEW: 設定欄V寬度 !!!) -->
+                    <th class="px-6 py-4 text-left text-sm font-medium uppercase tracking-wider" style="width: 20%">姓名</th>
+                    <th class="px-6 py-4 text-left text-sm font-medium uppercase tracking-wider" style="width: 30%">單位</th>
+                    <th class="px-6 py-4 text-left text-sm font-medium uppercase tracking-wider" style="width: 20%">職稱</th>
+                    <th class="px-6 py-4 text-left text-sm font-medium uppercase tracking-wider" style="width: 15%">組別</th>
+                    <th class="px-6 py-4 text-left text-sm font-medium uppercase tracking-wider" style="width: 15%">上課地點</th>
                   </tr>
                 </thead>
                 <tbody id="pendingTableBody" class="divide-y divide-gray-200">
@@ -423,6 +455,7 @@
 
     /**
      * 更新儀表板 (成功回呼)
+     * (!!! UPDATED: 加入 rowClass !!!)
      * @param {object} data - 從後端傳回的資料物件
      */
     function updateDashboard(data) {
@@ -439,7 +472,7 @@
         const now = new Date();
         lastUpdated.textContent = now.toLocaleTimeString('zh-TW');
 
-        // 2. 更新 [總覽分頁] - 統計卡 (確保 statCheckedIn 顏色)
+        // 2. 更新 [總覽分頁] - 統計卡
         document.getElementById('statRate').textContent = data.stats.rate;
         document.getElementById('statCheckedIn').textContent = data.stats.checkedIn;
         document.getElementById('statPending').textContent = data.stats.pending;
@@ -462,7 +495,7 @@
                   <span class="text-base font-bold text-gray-800">${group.checkedIn} <span class="text-sm font-normal text-gray-500">/ ${group.total}</span></span>
                 </div>
                 <div class="w-full bg-gray-200 rounded-full h-2.5 mt-3">
-                  <div class="bg-gradient-to-r from-blue-400 to-blue-500 h-2.5 rounded-full" style="width: ${group.rate}%"></div> <!-- (改為藍色) -->
+                  <div class_x_="bg-gradient-to-r from-blue-400 to-blue-500 h-2.5 rounded-full" style="width: ${group.rate}%"></div> <!-- (藍色) -->
                 </div>
               </div>
             `;
@@ -473,7 +506,7 @@
 
         // 4. 更新 [總覽分頁] - 已報到 / 未報到總名單
         
-        // 4a. 產生已報到列表
+        // 4a. 產生已報到列表 (!!! NEW: 加入 rowClass !!!)
         const checkedInBody = document.getElementById('checkedInTableBody');
         checkedInBody.innerHTML = '';
         document.getElementById('checkedInListCount').textContent = data.lists.checkedIn.length;
@@ -482,7 +515,7 @@
         } else {
           data.lists.checkedIn.forEach(p => {
             checkedInBody.innerHTML += `
-              <tr class="hover:bg-gray-50">
+              <tr class="row-checked-in"> <!-- (!!! NEW: 已報到底色 !!!) -->
                 <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">${p.name}</td>
                 <td class="px-6 py-4 whitespace-nowrap text-gray-600">${p.unit}</td>
                 <td class="px-6 py-4 whitespace-nowrap text-gray-600">${p.title}</td>
@@ -502,7 +535,7 @@
         } else {
           data.lists.pending.forEach(p => {
             pendingBody.innerHTML += `
-              <tr class="hover:bg-gray-50">
+              <tr class="row-pending"> <!-- (!!! NEW: 未報到 hover !!!) -->
                 <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">${p.name}</td>
                 <td class="px-6 py-4 whitespace-nowrap text-gray-600">${p.unit}</td>
                 <td class="px-6 py-4 whitespace-nowrap text-gray-600">${p.title}</td>
@@ -513,7 +546,7 @@
           });
         }
         
-        // 5. 更新 [各組詳細名單] 分頁
+        // 5. 更新 [各組詳細名單] 分頁 (!!! NEW: 加入 rowClass, 固定寬度 !!!)
         const rosters = data.groupedRosters;
         groupRosterContainer.innerHTML = '';
         
@@ -530,14 +563,17 @@
               
               let tableBody = '';
               members.forEach(member => {
-                const statusClass = member.status === '已報到' ? 'text-success' : 'text-error-light';
-                const statusText = member.status === '已報到' ? '已報到' : '未報到'; // (!!! NEW: 移除 ˇ 符號 !!!)
+                const isCheckedIn = (member.status === '已報到');
+                const statusClass = isCheckedIn ? 'text-success' : 'text-error-light';
+                const statusText = isCheckedIn ? '已報到' : '未報到'; // (移除了 ˇ)
+                const rowClass = isCheckedIn ? 'row-checked-in' : 'row-pending'; // (!!! NEW !!!)
+                
                 tableBody += `
-                  <tr class_="hover:bg-gray-50">
-                    <td class="w-1/4 px-6 py-4 whitespace-nowrap font-medium text-gray-900">${member.name}</td>
-                    <td class="w-1/4 px-6 py-4 whitespace-nowrap text-gray-600">${member.unit}</td>
-                    <td class="w-1/4 px-6 py-4 whitespace-nowrap text-gray-600">${member.title}</td>
-                    <td class="w-1/4 px-6 py-4 whitespace-nowrap ${statusClass}">${statusText}</td>
+                  <tr class="${rowClass}">
+                    <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">${member.name}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-gray-600">${member.unit}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-gray-600">${member.title}</td>
+                    <td class="px-6 py-4 whitespace-nowrap ${statusClass}">${statusText}</td>
                   </tr>
                 `;
               });
@@ -547,20 +583,25 @@
                   <h3 class="text-2xl font-bold text-gray-800 border-b-2 border-gray-200 pb-2 mb-4"> <!-- (精緻化標題) -->
                     ${groupName} (已報到: ${checkedInCount} / ${members.length})
                   </h3>
-                  <div class="table-container overflow-hidden">
-                    <table class="min-w-full divide-y divide-gray-200 table-fixed"> 
-                      <thead>
-                        <tr>
-                          <th class="w-1/4 px-6 py-4 text-left text-sm font-medium uppercase tracking-wider">姓名</th>
-                          <th class="w-1/4 px-6 py-4 text-left text-sm font-medium uppercase tracking-wider">單位</th>
-                          <th class="w-1/4 px-6 py-4 text-left text-sm font-medium uppercase tracking-wider">職稱</th>
-                          <th class="w-1/4 px-6 py-4 text-left text-sm font-medium uppercase tracking-wider">報到狀態</th>
-                        </tr>
-                      </thead>
-                      <tbody class="divide-y divide-gray-200">
-                        ${tableBody}
-                      </tbody>
-                    </table>
+                  <!-- (Table Scroll Wrapper) -->
+                  <div class="table-container">
+                    <div class="table-scroll-wrapper">
+                      <!-- (!!! NEW: 加入 table-fixed 強制等寬 !!!) -->
+                      <table class="min-w-full divide-y divide-gray-200 table-fixed"> 
+                        <thead>
+                          <tr>
+                            <!-- (!!! NEW: 設定欄位寬度 !!!) -->
+                            <th class="px-6 py-4 text-left text-sm font-medium uppercase tracking-wider" style="width: 25%">姓名</th>
+                            <th class="px-6 py-4 text-left text-sm font-medium uppercase tracking-wider" style="width: 35%">單位</th>
+                            <th class="px-6 py-4 text-left text-sm font-medium uppercase tracking-wider" style="width: 25%">職稱</th>
+                            <th class="px-6 py-4 text-left text-sm font-medium uppercase tracking-wider" style="width: 15%">報到狀態</th>
+                          </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-200">
+                          ${tableBody}
+                        </tbody>
+                      </table>
+                    </div>
                   </div>
                 </div>
               `;
