@@ -807,6 +807,29 @@
     margin-top: 2px !important;
     line-height: 1.25 !important;
   }
+
+  /* === Agenda mobile timeline alignment overrides === */
+  #agenda-full .timeline-row {
+    min-height: auto !important;
+    align-items: flex-start !important;
+  }
+
+  #agenda-full .timeline-row::before {
+    top: 0.9em !important;
+    transform: translate(-50%, 0) !important;
+  }
+
+  @media (max-width: 640px) {
+    #agenda-full .time-entry {
+      flex-direction: row !important;
+      flex-wrap: wrap;
+      align-items: center !important;
+      gap: 6px !important;
+    }
+    #agenda-full .time-entry .time {
+      min-width: auto !important;
+    }
+  }
 </style>
 <meta property="og:title" content="創造360°人生 醫學教育共識營">
 <meta property="og:description" content="醫學教育共識營宣傳官網：日期地點、活動議程、立即回覆與加入行事曆。">
