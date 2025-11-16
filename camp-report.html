@@ -4,17 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>功能小組年度策略報告</title>
-    <!-- 載入 Tailwind CSS 主程式 -->
+    <!-- 載入 Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- 載入 Noto Sans TC 字體 -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
     
     <!-- 
       客製化 Tailwind 顏色
-      - 主視覺深紫: #4a2c9c
-      - 輔助薰衣草紫: #b8a8e0
+      採用高對比、適合投影的深海軍藍
     -->
     <script>
         tailwind.config = {
@@ -24,8 +23,8 @@
                         'sans': ['"Noto Sans TC"', 'sans-serif'],
                     },
                     colors: {
-                        'cmh-purple': '#4a2c9c',
-                        'cmh-lavender': '#b8a8e0',
+                        'cmh-blue': '#003D74',
+                        'cmh-accent': '#00B9E9',
                     }
                 }
             }
@@ -34,23 +33,33 @@
     <style>
         body {
             font-family: 'Noto Sans TC', sans-serif;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background-color: #F3F4F6; /* bg-gray-100 */
         }
-        /* 載入中 Spinner 樣式 */
+        
+        main {
+            flex-grow: 1;
+        }
+
+        /* 載入中 Spinner */
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
         .spinner {
             display: inline-block;
-            width: 50px;
-            height: 50px;
+            width: 5rem; /* 80px */
+            height: 5rem; /* 80px */
             border-radius: 50%;
-            border: 5px solid rgba(74, 44, 156, 0.3); /* cmh-purple with opacity */
-            border-top-color: #4a2c9c; /* cmh-purple */
+            border: 8px solid rgba(0, 61, 116, 0.2); /* cmh-blue with opacity */
+            border-top-color: #003D74; /* cmh-blue */
             animation: spin 1s linear infinite;
         }
-        /* 簡報內容的淡入效果 */
+
+        /* 幻燈片淡入動畫 */
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
+            from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
         .slide-content {
@@ -60,11 +69,12 @@
 </head>
 <body class="bg-gray-100 min-h-screen text-gray-900 flex flex-col">
 
-    <!-- Header 區塊 (風格呼應) -->
-    <header class="relative bg-cmh-purple pb-24 pt-12 text-white">
+    <!-- Header 區塊 (高對比) -->
+    <header class="relative bg-cmh-blue pb-24 pt-12 text-white">
+        <!-- 【★★ 視覺修正：調整標題層級 ★★】 -->
         <div class="container mx-auto max-w-6xl px-4 text-center">
-            <h1 class="text-4xl md:text-5xl font-bold mb-2">醫學教育共識營</h1>
-            <p class="text-2xl md:text-3xl opacity-90">功能小組年度策略報告</p>
+            <h1 class="text-4xl md:text-5xl font-black mb-2 tracking-wide">「創造360°人生」醫學教育共識營</h1>
+            <p class="text-2xl md:text-3xl opacity-90 font-medium"> 功能小組年度策略報告</p>
         </div>
         <!-- 斜角設計 -->
         <div class="absolute bottom-0 left-0 w-full h-16 bg-gray-100" style="clip-path: polygon(0 100%, 100% 0, 100% 100%);"></div>
@@ -74,210 +84,252 @@
     <main class="container mx-auto max-w-6xl px-4 pb-24 flex-grow">
         
         <!-- 載入中訊息 -->
-        <div id="loading" class="text-center -mt-16 relative bg-white rounded-xl shadow-2xl p-10">
-            <div class="spinner mx-auto"></div>
-            <p class="text-2xl font-semibold text-cmh-purple mt-4">正在從 Google Sheet 載入資料...</p>
+        <div id="loading" class="relative -mt-16 bg-white rounded-xl shadow-2xl p-10 md:p-16 text-center">
+            <div class="spinner"></div>
+            <p class="text-2xl font-semibold text-cmh-blue mt-4">正在從 Google Sheet 載入資料...</p>
         </div>
 
         <!-- 簡報幻燈片容器 (預設隱藏) -->
         <div id="reportContainer" class="hidden">
-            <!-- 幻燈片內容將由 JS 填入 -->
-            <div id="slideContainer" class="relative -mt-16 bg-white rounded-xl shadow-2xl overflow-hidden p-8 md:p-12">
-                <!-- Slide content goes here -->
+            <!-- 幻燈片主體 -->
+            <div id="slideContainer" class="relative -mt-16 bg-white rounded-xl shadow-2xl p-10 md:p-16">
+                <!-- 內容將由 JS 動態填入 -->
             </div>
-
-            <!-- 導覽列 -->
-            <nav class="mt-8 flex justify-between items-center">
-                <button id="prevButton" class="px-6 py-3 bg-cmh-lavender text-cmh-purple text-lg md:text-xl font-bold rounded-lg shadow-md hover:bg-opacity-90 transition duration-300 disabled:opacity-30 disabled:cursor-not-allowed">
-                    &larr; 上一組
-                </button>
-                <div id="slideCounter" class="text-xl md:text-2xl font-semibold text-gray-700">
-                    <!-- e.g., 1 / 5 -->
+            
+            <!-- 【★★ 視覺修正：導覽列移至右下方 ★★】 -->
+            <nav class="mt-8 flex justify-end">
+                <div class="w-full md:w-96">
+                    <label for="groupSelect" class="sr-only">請選擇要報告的組別</label>
+                    <select id="groupSelect"
+                        class="w-full text-center text-lg md:text-xl px-4 py-3 bg-white rounded-lg border-2 border-cmh-blue focus:outline-none focus:ring-2 focus:ring-cmh-blue focus:border-transparent transition duration-200 shadow-md font-semibold">
+                        <!-- 組別選項將由 JS 動態填入 -->
+                    </select>
                 </div>
-                <button id="nextButton" class="px-6 py-3 bg-cmh-lavender text-cmh-purple text-lg md:text-xl font-bold rounded-lg shadow-md hover:bg-opacity-90 transition duration-300 disabled:opacity-30 disabled:cursor-not-allowed">
-                    下一組 &rarr;
-                </button>
             </nav>
         </div>
 
     </main>
+
+    <!-- 【★★ 視覺修正：全頁 Footer (深藍色) ★★】 -->
+    <footer class="w-full bg-cmh-blue text-white mt-auto relative pt-20"> <!-- 增加 pt -->
+        <!-- 【★★ 視覺修正：反向斜角 (使用頁面背景色) ★★】 -->
+        <div class="absolute top-0 left-0 w-full h-20 bg-gray-100" style="clip-path: polygon(0 100%, 100% 0, 0 0);"></div>
+        
+        <!-- Footer 內容 -->
+        <div class="relative container mx-auto max-w-6xl px-4 py-6 text-center text-gray-300">
+            © 2025 Chi Mei Medical Center. All rights reserved.
+        </div>
+    </footer>
+
 
     <!-- JavaScript 腳本 -->
     <script>
         // -------------------------------------------------------------------------
         // ！！！Google Apps Script 網路應用程式 URL！！！
         // -------------------------------------------------------------------------
-        const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwDUbCccWxlzNlIJgelPQnpXwbN_Bys9MkWJ-jm3qZlxsCkeZ6uY7sy8Rmvxe0CfQsJ/exec';
+        const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx0dPktgN1xSRAe4fUZaP6ziqI2Qf_zl3ZeF22XHf1KvDcXBNUgrjaENpJrgzwBzE4R/exec';
         // -------------------------------------------------------------------------
 
         const loadingEl = document.getElementById('loading');
         const reportContainerEl = document.getElementById('reportContainer');
         const slideContainerEl = document.getElementById('slideContainer');
-        const prevButton = document.getElementById('prevButton');
-        const nextButton = document.getElementById('nextButton');
-        const slideCounterEl = document.getElementById('slideCounter');
+        const groupSelectEl = document.getElementById('groupSelect');
 
-        let submissions = []; // 儲存所有小組的資料
-        let currentIndex = 0; // 目前顯示的小組索引
+        let allData = []; // 用來儲存所有抓到的資料
+        let currentIndex = 0; // 目前顯示的資料索引
 
-        // 頁面載入時，自動抓取資料
-        document.addEventListener('DOMContentLoaded', fetchData);
-
-        // 【★★ 關鍵修正：改用 JSONP 方案 ★★】
-        
-        // 1. 這是 JSONP 成功時會呼叫的回呼函數
-        function handleData(data) {
-            try {
-                if (data && data.length > 0) {
-                    submissions = data;
-                    currentIndex = 0;
-                    renderSlide();
-                    loadingEl.classList.add('hidden');
-                    reportContainerEl.classList.remove('hidden');
-                } else if (data.result === 'error') {
-                     throw new Error(`Apps Script 錯誤: ${data.message}`);
-                } else {
-                    loadingEl.innerHTML = '<p class="text-2xl font-semibold text-red-600">目前沒有任何資料。</p>';
-                }
-            } catch (error) {
-                console.error('處理資料失敗:', error);
-                loadingEl.innerHTML = `<p class="text-2xl font-semibold text-red-600">處理資料失敗！</p><p class="text-gray-600 mt-2">${error.message}</p>`;
+        /**
+         * 輔助函數：處理空值和保留換行 (移除清單符號)
+         * @param {string} text - 原始文字
+         * @returns {string} - 格式化後的 HTML
+         */
+        const formatReportText = (text) => {
+            if (!text || text.trim() === '') {
+                return '<span class="text-gray-400">未填寫</span>';
             }
-        }
+            // 1. 編碼 (防止 XSS)
+            const encodedText = text.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+            // 2. 轉換換行符
+            return encodedText.replace(/\n/g, '<br>');
+        };
 
-        // 2. 這是抓取資料的主函數 (JSONP)
-        function fetchData() {
-            // 建立一個唯一的 JSONP 回呼函數名稱
-            const callbackName = 'handleData'; 
+        /**
+         * 輔助函數：產生單一計畫項目的 HTML
+         * @param {string} label - 標籤 (例如 "行動名稱 1:")
+         * @param {string} content - 填寫的內容
+         * @returns {string} - 格式化後的 HTML
+         */
+        const createPlanItemHTML = (label, content) => {
+            if (!content || content.trim() === '') {
+                return ''; // 如果內容為空，不顯示
+            }
+            const encodedContent = content.replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\n/g, '<br>');
+            return `
+                <div class="flex flex-col md:flex-row md:items-start mt-4">
+                    <strong class="text-xl md:text-2xl font-semibold text-gray-800 flex-shrink-0 w-full md:w-56">${label}:</strong>
+                    <div class="text-xl md:text-2xl text-gray-700 flex-grow mt-1 md:mt-0">${encodedContent}</div>
+                </div>`;
+        };
 
-            // 建立一個 <script> 標籤
-            const script = document.createElement('script');
-            
-            // 設定 URL，並在結尾加上 "?callback=handleData"
-            // Code.gs 中的 doGet 會讀取這個 "callback" 參數
-            script.src = `${GOOGLE_APPS_SCRIPT_URL}?callback=${callbackName}`;
-            
-            // 處理載入錯誤
-            script.onerror = function() {
-                console.error('抓取資料失敗 (JSONP 載入錯誤)');
-                loadingEl.innerHTML = `<p class="text-2xl font-semibold text-red-600">抓取資料失敗！<br>請檢查 Apps Script 部署狀態或網路連線。</p><p class="text-gray-600 mt-2">Failed to load script.</p>`;
-                document.body.removeChild(script);
-            };
-            
-            // 將 <script> 標籤加到頁面中，這會自動觸發請求
-            document.body.appendChild(script);
-        }
-
-        // 渲染目前索引的幻燈片
-        function renderSlide() {
-            if (submissions.length === 0) return;
-
-            const report = submissions[currentIndex];
-            
-            // --- 處理內容 ---
-            // 1. 處理「年度目標」(將換行符號轉為 HTML 列表)
-            const goalsList = report.goals.split('\n')
-                .filter(line => line.trim() !== '')
-                .map(line => `<li class="text-2xl md:text-3xl leading-relaxed">${line}</li>`)
-                .join('');
-
-            // 2. 建立「年度計畫」的 HTML
-            let actionPlansHtml = '';
+        /**
+         * 產生幻燈片 HTML 內容
+         * @param {object} data - 單一小組的資料
+         * @returns {string} - 完整的 HTML
+         */
+        const createSlideHTML = (data) => {
+            let plansHtml = '';
             for (let i = 1; i <= 5; i++) {
-                const name = report[`actionName${i}`];
-                const content = report[`actionContent${i}`];
-                const kpi = report[`kpi${i}`];
+                const name = data[`actionName${i}`];
+                const content = data[`actionContent${i}`];
+                const kpi = data[`kpi${i}`];
 
-                if (name && name.trim() !== '') {
-                    actionPlansHtml += `
-                        <div class="mt-6 p-6 bg-gray-50 rounded-lg border border-cmh-lavender">
-                            <h4 class="text-3xl font-bold text-cmh-purple">${name}</h4>
-                            <p class="text-2xl text-gray-800 mt-2">${content}</p>
-                            <p class="text-2xl text-gray-600 mt-2"><strong>KPI:</strong> ${kpi}</p>
-                        </div>
-                    `;
+                if (name || content || kpi) {
+                    plansHtml += `
+                        <div class="mt-6 pt-6 border-t border-gray-200">
+                            ${createPlanItemHTML(`行動名稱 ${i}`, name)}
+                            ${createPlanItemHTML(`行動內容 ${i}`, content)}
+                            ${createPlanItemHTML(`KPI ${i}`, kpi)}
+                        </div>`;
                 }
             }
-            if (actionPlansHtml === '') {
-                actionPlansHtml = '<p class="text-2xl text-gray-500">未填寫年度計畫。</p>';
+            if (plansHtml === '') {
+                plansHtml = `<div class="mt-4 text-xl md:text-2xl text-gray-500">未填寫年度計畫</div>`;
             }
 
-            // 3. 處理「支持與合作」
-            const support = (report.support && report.support.trim() !== '')
-                ? report.support.split('\n')
-                    .filter(line => line.trim() !== '')
-                    .map(line => `<li class="text-2xl md:text-3xl leading-relaxed">${line}</li>`)
-                    .join('')
-                : '<li class="text-2xl md:text-3xl text-gray-500">未填寫</li>';
-
-            
-            // --- 組合所有 HTML ---
-            slideContainerEl.innerHTML = `
-                <div class="slide-content space-y-12">
-                    <!-- 標題：功能小組 -->
-                    <div class="text-center border-b-4 border-cmh-lavender pb-6">
-                        <h2 class="text-5xl md:text-6xl font-bold text-cmh-purple">${report.groupName}</h2>
-                        <p class="text-2xl md:text-3xl text-gray-600 mt-2">報告人：${report.reporterName}</p>
-                    </div>
-
-                    <!-- 一、願景 -->
+            return `
+                <div class="slide-content space-y-10">
+                    <!-- 【★★ 視覺修正：(gen_36) 對調顏色 ★★】 -->
+                    <!-- 基本資料 -->
                     <section>
-                        <h3 class="text-4xl font-bold text-gray-800 mb-4">一、功能小組的願景</h3>
-                        <p class="text-2xl md:text-3xl text-cmh-purple bg-gray-50 p-6 rounded-lg leading-relaxed font-semibold">
-                            “ ${report.vision} ”
-                        </p>
-                    </section>
-
-                    <!-- 二、年度目標 -->
-                    <section>
-                        <h3 class="text-4xl font-bold text-gray-800 mb-4">二、年度目標</h3>
-                        <ul class="list-disc list-inside space-y-3 pl-2">
-                            ${goalsList}
-                        </ul>
-                    </section>
-
-                    <!-- 三、年度計畫 -->
-                    <section>
-                        <h3 class="text-4xl font-bold text-gray-800 mb-4">三、年度計畫</h3>
-                        <div class="space-y-4">
-                            ${actionPlansHtml}
-                        </div>
-                    </section>
-
-                    <!-- 四、需要的支持與合作 -->
-                    <section>
-                        <h3 class="text-4xl font-bold text-gray-800 mb-4">四、需要的支持與合作</h3>
-                        <ul class="list-disc list-inside space-y-3 pl-2">
-                            ${support}
-                        </ul>
+                        <h2 class="text-4xl md:text-5xl font-black text-cmh-accent">${data.groupName || '未提供組別'}</h2>
+                        <p class="text-2xl md:text-3xl font-semibold text-cmh-blue mt-2">${data.reporterName || '未提供報告人'}</p>
                     </section>
                     
-                    <p class="text-center text-gray-400 pt-8">提交時間：${report.timestamp}</p>
+                    <!-- 一、願景 -->
+                    <section>
+                        <h3 class="text-3xl md:text-4xl font-bold text-cmh-blue">一、功能小組的願景</h3>
+                        <div class="mt-4 text-2xl md:text-3xl font-medium text-gray-700 leading-normal">
+                            ${formatReportText(data.vision)}
+                        </div>
+                    </section>
+                    
+                    <!-- 二、年度目標 -->
+                    <section>
+                        <h3 class="text-3xl md:text-4xl font-bold text-cmh-blue">二、年度目標</h3>
+                        <div class="mt-4 text-xl md:text-2xl text-gray-700 space-y-2 leading-relaxed">
+                            ${formatReportText(data.goals)}
+                        </div>
+                    </section>
+                    
+                    <!-- 三、年度計畫 -->
+                    <section>
+                        <h3 class="text-3xl md:text-4xl font-bold text-cmh-blue">三、年度計畫</h3>
+                        ${plansHtml}
+                    </section>
+
+                    <!-- 四、支持與合作 -->
+                    <section>
+                        <h3 class="text-3xl md:text-4xl font-bold text-cmh-blue">四、需要的支持與合作</h3>
+                        <div class="mt-4 text-xl md:text-2xl text-gray-700 space-y-2 leading-relaxed">
+                             ${formatReportText(data.support)}
+                        </div>
+                    </section>
+                    
+                    <!-- 五、其他補充 -->
+                    <section>
+                        <h3 class="text-3xl md:text-4xl font-bold text-cmh-blue">五、其他補充</h3>
+                        <div class="mt-4 text-xl md:text-2xl text-gray-700 space-y-2 leading-relaxed">
+                             ${formatReportText(data.other)}
+                        </div>
+                    </section>
                 </div>
             `;
+        };
 
-            // 更新計數器和按鈕狀態
-            slideCounterEl.textContent = `${currentIndex + 1} / ${submissions.length}`;
-            prevButton.disabled = (currentIndex === 0);
-            nextButton.disabled = (currentIndex === submissions.length - 1);
-        }
+        /**
+         * 更新顯示的幻燈片
+         * @param {number} index - 資料的索引
+         */
+        const updateSlide = (index) => {
+            if (index < 0 || index >= allData.length) return;
+            
+            currentIndex = index;
+            const data = allData[index];
+            slideContainerEl.innerHTML = createSlideHTML(data);
+            
+            // 更新下拉選單的選中狀態
+            groupSelectEl.value = index;
+        };
 
-        // 導覽按鈕事件
-        prevButton.addEventListener('click', () => {
-            if (currentIndex > 0) {
-                currentIndex--;
-                renderSlide();
-                window.scrollTo(0, 0); // 換頁時滾動到最上方
+        /**
+         * 處理 JSONP 抓到的資料
+         * @param {object | object[]} data - 從 Apps Script 回傳的資料
+         */
+        window.handleData = (data) => {
+            if (data && data.result === 'error') {
+                // 處理 Code.gs 內部的錯誤
+                console.error('Apps Script 錯誤:', data.message);
+                loadingEl.innerHTML = `
+                    <p class="text-3xl font-bold text-red-600">抓取資料失敗！</p>
+                    <p class="text-xl text-gray-700 mt-4">請檢查 Apps Script 部署狀態或 Google Sheet 權限。</p>
+                    <p class="text-lg text-gray-500 mt-2">錯誤訊息: ${data.message}</p>
+                `;
+                return;
             }
-        });
 
-        nextButton.addEventListener('click', () => {
-            if (currentIndex < submissions.length - 1) {
-                currentIndex++;
-                renderSlide();
-                window.scrollTo(0, 0); // 換頁時滾動到最上方
+            if (data && data.length > 0) {
+                allData = data.filter(row => row.groupName && row.reporterName); // 過濾掉空行
+                
+                if (allData.length > 0) {
+                    // 填入下拉選單
+                    groupSelectEl.innerHTML = allData.map((item, index) => {
+                        return `<option value="${index}">${item.groupName} - ${item.reporterName}</option>`;
+                    }).join('');
+                    
+                    // 綁定下拉選單事件
+                    groupSelectEl.addEventListener('change', (e) => {
+                        updateSlide(parseInt(e.target.value, 10));
+                    });
+                    
+                    // 顯示第一筆資料
+                    updateSlide(0);
+                    
+                    // 顯示報告容器，隱藏載入中
+                    loadingEl.classList.add('hidden');
+                    reportContainerEl.classList.remove('hidden');
+
+                } else {
+                     loadingEl.innerHTML = '<p class="text-3xl font-bold text-cmh-blue">目前 Google Sheet 中沒有可顯示的資料。</p>';
+                }
+
+            } else {
+                // 沒有資料
+                loadingEl.innerHTML = '<p class="text-3xl font-bold text-cmh-blue">目前 Google Sheet 中沒有可顯示的資料。</p>';
             }
-        });
+        };
+
+        /**
+         * (主函數) 透過 JSONP 方式抓取資料
+         */
+        const fetchData = () => {
+            const script = document.createElement('script');
+            // 加上 callback=handleData 和一個隨機數 (防止快取)
+            script.src = `${GOOGLE_APPS_SCRIPT_URL}?callback=handleData&_=${new Date().getTime()}`;
+            
+            script.onerror = () => {
+                // 處理網路層級的錯誤 (例如 CORS 錯誤或網址錯誤)
+                console.error('抓取資料失敗: 網路或 JSONP 錯誤。');
+                loadingEl.innerHTML = `
+                    <p class="text-3xl font-bold text-red-600">抓取資料失敗！ (Fetch Error)</p>
+                    <p class="text-xl text-gray-700 mt-4">請檢查 Google Apps Script 網址是否正確，以及部署的「誰可以存取」是否設為「任何人」。</p>
+                `;
+            };
+            document.body.appendChild(script);
+        };
+
+        // 頁面載入時自動執行
+        document.addEventListener('DOMContentLoaded', fetchData);
+        
     </script>
 
 </body>
