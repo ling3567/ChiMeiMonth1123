@@ -70,7 +70,8 @@
 <body class="bg-gray-100 min-h-screen text-gray-900 flex flex-col">
 
     <!-- Header 區塊 (高對比) -->
-    <header class="relative bg-cmh-blue pb-24 pt-12 text-white">
+    <!-- 【★★ 功能新增：顏色將由 JS 動態切換 ★★】 -->
+    <header class="relative bg-cmh-blue pb-24 pt-12 text-white transition-colors duration-500">
         <!-- 【★★ 視覺修正：(gen_38) 調整標題層級 ★★】 -->
         <div class="container mx-auto max-w-6xl px-4 text-center">
             <p class="text-2xl md:text-3xl opacity-90 font-medium">「創造360°人生」醫學教育共識營</p>
@@ -100,8 +101,9 @@
             <nav class="mt-8 flex justify-end">
                 <div class="w-full md:w-96">
                     <label for="groupSelect" class="sr-only">請選擇要報告的組別</label>
+                    <!-- 【★★ 功能新增：顏色將由 JS 動態切換 ★★】 -->
                     <select id="groupSelect"
-                        class="w-full text-center text-lg md:text-xl px-4 py-3 bg-white rounded-lg border-2 border-cmh-blue focus:outline-none focus:ring-2 focus:ring-cmh-blue focus:border-transparent transition duration-200 shadow-md font-semibold">
+                        class="w-full text-center text-lg md:text-xl px-4 py-3 bg-white rounded-lg border-2 border-cmh-blue focus:outline-none focus:ring-2 focus:ring-cmh-blue focus:border-transparent transition-colors duration-500 shadow-md font-semibold">
                         <!-- 組別選項將由 JS 動態填入 -->
                     </select>
                 </div>
@@ -110,8 +112,8 @@
 
     </main>
 
-    <!-- 【★★ 視覺修正：全頁 Footer (深藍色) ★★】 -->
-    <footer class="w-full bg-cmh-blue text-white mt-auto relative pt-20"> <!-- 增加 pt -->
+    <!-- 【★★ 功能新增：顏色將由 JS 動態切換 ★★】 -->
+    <footer class="w-full bg-cmh-blue text-white mt-auto relative pt-20 transition-colors duration-500"> <!-- 增加 pt -->
         <!-- 【★★ 視覺修正：反向斜角 (使用頁面背景色) ★★】 -->
         <div class="absolute top-0 left-0 w-full h-20 bg-gray-100" style="clip-path: polygon(0 100%, 100% 0, 0 0);"></div>
         
@@ -126,7 +128,6 @@
     <script>
         // -------------------------------------------------------------------------
         // ！！！Google Apps Script 網路應用程式 URL！！！
-        // 【★★ 偵錯 (gen_51)：貼上 *全新* 的部署網址 (來自 gen_50) ★★】
         // -------------------------------------------------------------------------
         const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby6HlqKxbzbAdlyNksypmA6krSOSxHZTnTIamFWnSxgc3C6m7Zxb6ANMAkZ0M8ddgw/exec';
         // -------------------------------------------------------------------------
@@ -136,8 +137,74 @@
         const slideContainerEl = document.getElementById('slideContainer');
         const groupSelectEl = document.getElementById('groupSelect');
 
+        // 【★★ 功能新增：(gen_53) 取得 Header 和 Footer ★★】
+        const headerEl = document.querySelector('header');
+        const footerEl = document.querySelector('footer');
+
         let allData = []; // 用來儲存所有抓到的資料
         let currentIndex = 0; // 目前顯示的資料索引
+
+        // 【★★ 色彩修正：(gen_55) 第二套配色方案 ★★】
+        const groupThemes = {
+            '教育輔導組': { 
+                bg: 'bg-cmh-blue',      // 奇美藍 (標準)
+                text: 'text-cmh-blue', 
+                accent: 'text-cmh-accent', 
+                border: 'border-cmh-blue', 
+                ring: 'focus:ring-cmh-blue' 
+            },
+            '數位賦能組': { 
+                bg: 'bg-teal-700',      // 深青色 (靈感：杯子亮藍)
+                text: 'text-teal-700', 
+                accent: 'text-teal-400', 
+                border: 'border-teal-700', 
+                ring: 'focus:ring-teal-700' 
+            },
+            '醫學人文組': { 
+                bg: 'bg-amber-800',    // 暖琥珀色 (靈感：桌面)
+                text: 'text-amber-800', 
+                accent: 'text-amber-500', 
+                border: 'border-amber-800', 
+                ring: 'focus:ring-amber-800' 
+            },
+            '核心能力組': { 
+                bg: 'bg-indigo-800',    // 深靛藍 (專業)
+                text: 'text-indigo-800', 
+                accent: 'text-indigo-400', 
+                border: 'border-indigo-800', 
+                ring: 'focus:ring-indigo-800' 
+            },
+            '教學品質組': { 
+                bg: 'bg-green-800',     // 森林綠 (沉穩)
+                text: 'text-green-800', 
+                accent: 'text-green-400', 
+                border: 'border-green-800', 
+                ring: 'focus:ring-green-800' 
+            }
+        };
+        // 用來清除舊顏色的列表
+        const allThemeClasses = {
+            bg: ['bg-cmh-blue', 'bg-teal-700', 'bg-amber-800', 'bg-indigo-800', 'bg-green-800'],
+            border: ['border-cmh-blue', 'border-teal-700', 'border-amber-800', 'border-indigo-800', 'border-green-800'],
+            ring: ['focus:ring-cmh-blue', 'focus:ring-teal-700', 'focus:ring-amber-800', 'focus:ring-indigo-800', 'focus:ring-green-800']
+        };
+
+        /**
+         * 【★★ 功能新增：(gen_53) 動態套用主題色 ★★】
+         * @param {object} theme - 來自 groupThemes 的主題物件
+         */
+        const applyTheme = (theme) => {
+            // 1. 清除所有可能的舊顏色
+            headerEl.classList.remove(...allThemeClasses.bg);
+            footerEl.classList.remove(...allThemeClasses.bg);
+            groupSelectEl.classList.remove(...allThemeClasses.border, ...allThemeClasses.ring);
+
+            // 2. 套用新顏色
+            headerEl.classList.add(theme.bg);
+            footerEl.classList.add(theme.bg);
+            groupSelectEl.classList.add(theme.border, theme.ring);
+        };
+
 
         /**
          * 輔助函數：處理空值和保留換行 (移除清單符號)
@@ -177,9 +244,10 @@
         /**
          * 產生幻燈片 HTML 內容
          * @param {object} data - 單一小組的資料
+         * @param {object} theme - 【★★ 功能新增：(gen_53) 傳入主題物件 ★★】
          * @returns {string} - 完整的 HTML
          */
-        const createSlideHTML = (data) => {
+        const createSlideHTML = (data, theme) => {
             let plansHtml = '';
             for (let i = 1; i <= 5; i++) {
                 const name = data[`actionName${i}`];
@@ -203,19 +271,20 @@
                 plansHtml = `<div class="mt-4 text-xl md:text-2xl text-gray-500">無</div>`;
             }
 
+            // 【★★ 功能新增：(gen_53) 動態替換顏色 ★★】
+            // 【★★ 視覺修正：(gen_36) 顏色對調 ★★】
             return `
                 <div class="slide-content space-y-10">
-                    <!-- 【★★ 視覺修正：(gen_36) 對調顏色 ★★】 -->
                     <!-- 基本資料 -->
                     <section>
-                        <h2 class="text-4xl md:text-5xl font-black text-cmh-accent">${data.groupName || '未提供組別'}</h2>
-                        <p class="text-2xl md:text-3xl font-semibold text-cmh-blue mt-2">${data.reporterName || '未提供報告人'}</p>
+                        <h2 class="text-4xl md:text-5xl font-black ${theme.accent}">${data.groupName || '未提供組別'}</h2>
+                        <p class="text-2xl md:text-3xl font-semibold ${theme.text} mt-2">${data.reporterName || '未提供報告人'}</p>
                     </section>
                     
                     <!-- 一、願景 -->
                     <section>
-                        <h3 class="text-3xl md:text-4xl font-bold text-cmh-blue">一、功能小組的願景</h3>
-                        <!-- 【★★ 視覺修正：(gen_38) 統一字體大小 ★★】 -->
+                        <h3 class="text-3xl md:text-4xl font-bold ${theme.text}">一、功能小組的願景</h3>
+                        <!-- 【★★ 視覺修正：(gen_38) 統一內容字體 ★★】 -->
                         <div class="mt-4 text-xl md:text-2xl text-gray-700 space-y-2 leading-relaxed">
                             ${formatReportText(data.vision)}
                         </div>
@@ -223,7 +292,7 @@
                     
                     <!-- 二、年度目標 -->
                     <section>
-                        <h3 class="text-3xl md:text-4xl font-bold text-cmh-blue">二、年度目標</h3>
+                        <h3 class="text-3xl md:text-4xl font-bold ${theme.text}">二、年度目標</h3>
                         <div class="mt-4 text-xl md:text-2xl text-gray-700 space-y-2 leading-relaxed">
                             ${formatReportText(data.goals)}
                         </div>
@@ -231,13 +300,13 @@
                     
                     <!-- 三、年度計畫 -->
                     <section>
-                        <h3 class="text-3xl md:text-4xl font-bold text-cmh-blue">三、年度計畫</h3>
+                        <h3 class="text-3xl md:text-4xl font-bold ${theme.text}">三、年度計畫</h3>
                         ${plansHtml}
                     </section>
 
                     <!-- 四、支持與合作 -->
                     <section>
-                        <h3 class="text-3xl md:text-4xl font-bold text-cmh-blue">四、需要的支持與合作</h3>
+                        <h3 class="text-3xl md:text-4xl font-bold ${theme.text}">四、需要的支持與合作</h3>
                         <div class="mt-4 text-xl md:text-2xl text-gray-700 space-y-2 leading-relaxed">
                              ${formatReportText(data.support)}
                         </div>
@@ -245,7 +314,7 @@
                     
                     <!-- 五、其他補充 -->
                     <section>
-                        <h3 class="text-3xl md:text-4xl font-bold text-cmh-blue">五、其他補充</h3>
+                        <h3 class="text-3xl md:text-4xl font-bold ${theme.text}">五、其他補充</h3>
                         <div class="mt-4 text-xl md:text-2xl text-gray-700 space-y-2 leading-relaxed">
                              ${formatReportText(data.other)}
                         </div>
@@ -263,7 +332,17 @@
             
             currentIndex = index;
             const data = allData[index];
-            slideContainerEl.innerHTML = createSlideHTML(data);
+            
+            // 【★★ 功能新增：(gen_53) 根據組別名稱決定主題 ★★】
+            const groupName = data.groupName || '教育輔導組'; // 預設為奇美藍
+            // 【★★ 色彩修正：(gen_54) / (gen_55) ★★】
+            const theme = groupThemes[groupName] || groupThemes['教育輔導組'];
+            
+            // 【★★ 功能新增：(gen_53) 套用主題色 ★★】
+            applyTheme(theme);
+            
+            // 【★★ 功能新增：(gen_53) 將主題色傳入 ★★】
+            slideContainerEl.innerHTML = createSlideHTML(data, theme);
             
             // 更新下拉選單的選中狀態
             groupSelectEl.value = index;
