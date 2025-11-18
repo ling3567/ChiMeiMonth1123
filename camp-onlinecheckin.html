@@ -6,9 +6,16 @@
   <title>「創造360°人生」 醫學教育共識營 報到系統</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    /* NEW THEME: Founder's Painting Background + Warm Beige Cards */
+    /* v8 FINAL THEME: Founder's Painting Background
+      - 85% Opacity Warm Beige Card
+      - Blue/Orange accent colors from painting
+      - All buttons (Agenda, Survey, Group Data) included
+      - Type="text" fix for employee ID
+      - Success-state reminder box
+      - Whitespace handling for multi-line messages
+    */
     body {
-      /* !!! 這裡是您圖片的網址 !!! */
+      /* !!! 請務必將 'your_image_hash.jpg' 替換成您圖片的實際網址 !!! */
       background-image: url('images/許文龍.jpg'); 
       background-size: cover; 
       background-position: center; 
@@ -18,14 +25,14 @@
       justify-content: center;
       min-height: 100vh;
       font-family: 'Noto Sans TC', sans-serif; 
-      color: #333; 
+      color: #333; /* 預設深灰色文字 */
     }
 
     /* 卡片設計 - 擷取畫作文字區的 "淺米色" (85%不透明) */
     .glass-card {
       background-color: rgba(248, 247, 245, 0.85); /* 溫暖的淺米色 (85% Opacity) */
       border: 1px solid rgba(255, 255, 255, 0.3); 
-      border-radius: 1.5rem; 
+      border-radius: 1.5rem; /* 圓角加大 */
       box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1), 0 5px 10px rgba(0, 0, 0, 0.05); 
       max-width: 28rem; 
       width: 100%;
@@ -34,25 +41,25 @@
 
     /* 輸入框 */
     .input-field {
-      background-color: #F3F4F6; 
-      border: 1px solid #D1D5DB; 
-      color: #1F2937; 
+      background-color: #F3F4F6; /* 淺灰底 */
+      border: 1px solid #D1D5DB; /* 灰邊框 */
+      color: #1F2937; /* 深灰字 */
       padding: 0.75rem 1rem;
       border-radius: 0.5rem;
       transition: all 0.3s ease;
     }
     .input-field::placeholder {
-      color: #9CA3AF; 
+      color: #9CA3AF; /* 提示文字顏色 */
     }
     .input-field:focus {
-      border-color: #2563EB; /* (藍色) */
+      border-color: #2563EB; /* (主題藍色) */
       outline: none;
       box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
     }
 
     /* 按鈕 (送出 / 返回) - 使用畫作 "藍色" */
     .submit-button, .reset-button {
-      background-color: #2563EB; /* (藍色) */
+      background-color: #2563EB; /* (主題藍色) */
       border: 1px solid #2563EB;
       color: #FFFFFF; /* 白色文字 */
       font-weight: bold;
@@ -66,26 +73,27 @@
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     }
     
-    /* 議程按鈕 (次要按鈕) */
+    /* 議程/問卷按鈕 (次要按鈕) - 白色 */
     .agenda-button {
-      background-color: #FFFFFF; 
+      background-color: #FFFFFF; /* 純白 */
       color: #374151; /* 深灰色文字 */
-      border: 1px solid #D1D5DB; 
+      border: 1px solid #D1D5DB; /* 灰邊框 */
       display: block; 
       text-decoration: none;
+      font-weight: 500;
     }
     .agenda-button:hover {
-      background-color: #F9FAFB; 
+      background-color: #F9FAFB; /* Hover 淺灰 */
     }
 
-    /* Spinner */
+    /* 載入中 Spinner */
     .spinner {
       display: inline-block;
       width: 2rem;
       height: 2rem;
       vertical-align: text-bottom;
       border: 4px solid rgba(0, 0, 0, 0.1);
-      border-left-color: #2563EB; /* (藍色) */
+      border-left-color: #2563EB; /* (主題藍色) */
       border-radius: 50%;
       animation: spin 1s linear infinite;
     }
@@ -95,10 +103,10 @@
     }
 
     /* 訊息文字顏色調整 */
-    .text-success { color: #1D4ED8; } /* (藍色) */
+    .text-success { color: #1D4ED8; } /* (主題藍色) */
     .text-error { color: #D97706; }   /* 溫和的暖橘色 (來自桌面) */
     
-    /* (!!! NEW: 提醒區塊樣式 !!!) */
+    /* 提醒區塊樣式 */
     .reminder-box {
       background-color: #FFFBEB; /* 淺黃 (擷取自畫作文字區) */
       border: 1px solid #FDE68A; /* 淺黃邊框 */
@@ -114,7 +122,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
 </head>
-<body class="bg-warm-gray-50">
+<body class="bg-gray-100">
   
   <div class="glass-card p-8 md:p-12 text-center">
     
@@ -138,7 +146,7 @@
       </label>
       <input type="text" id="employeeId" name="employeeId" 
              class="w-full input-field text-xl text-center" 
-             placeholder="範例：A12345"> <!-- (!!! UPDATED placeholder !!!) -->
+             placeholder="範例：A12345"> <!-- (修正為 type="text" 可輸入英文) -->
       
       <button id="submitButton" 
               onclick="handleCheckIn()"
@@ -155,16 +163,16 @@
 
     <!-- 結果訊息 -->
     <div id="resultMessage" class="hidden mt-6 text-center">
-      <p id="messageText" class="text-2xl font-semibold"></p>
+      <!-- (!!! NEW: 加入 whitespace-pre-line 以支援 \n 換行 !!!) -->
+      <p id="messageText" class="text-2xl font-semibold whitespace-pre-line"></p>
       <p id="groupText" class="text-2xl font-semibold text-gray-700 mt-4"></p>
       <p id="locationText" class="text-2xl font-semibold text-gray-700 mt-2"></p>
       
-      <!-- (!!! NEW: 提醒文字區塊 !!!) -->
+      <!-- 提醒文字區塊 -->
       <p id="reminderText" class="hidden text-base mt-6 reminder-box">
         <strong>重要提醒：</strong><br>
         請保留此頁面！議程、講義及滿意度調查將會顯示於此。
       </p>
-      <!-- (!!! END NEW !!!) -->
 
       <!-- 議程按鈕 -->
       <a id="agendaLink" 
@@ -174,23 +182,21 @@
         查看共識營議程
       </a>
       
-      <!-- (!!! NEW: 新增按鈕 !!!) -->
-      <!-- 暫時使用 # 作為連結，您可以之後替換成您
-      的真實問卷網址 -->
+      <!-- 分組資料按鈕 -->
       <a id="groupDataLink" 
-         href="https://ling3567.github.io/ChiMeiMonth1123/camp-planning.html" 
+         href="#" 
          target="_blank"
          class="hidden w-full reset-button agenda-button text-lg mt-2">
         分組共識資料填寫
       </a>
       
+      <!-- 問卷按鈕 -->
       <a id="surveyLink" 
          href="#" 
          target="_blank"
          class="hidden w-full reset-button agenda-button text-lg mt-2">
         滿意度問卷填寫
       </a>
-      <!-- (!!! END NEW !!!) -->
       
       <!-- 返回按鈕 -->
       <button onclick="resetForm()" 
@@ -204,7 +210,7 @@
   <script>
     // -----------------------------------------------------------------
     // !!! 關鍵設定：您專屬的 Google Apps Script 網址 !!!
-    // (這個不需要變動)
+    // (這是您提供的網址)
     // -----------------------------------------------------------------
     const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbweDq70D9T01XvspyieBBLVFmXOY3WsP0ZaWR0k68XM5IRtgmKmtODfoT43h0JCMrIbwg/exec";
     // -----------------------------------------------------------------
@@ -218,12 +224,9 @@
     const locationText = document.getElementById('locationText');
     const agendaLink = document.getElementById('agendaLink');
     const input = document.getElementById('employeeId');
-    const reminderText = document.getElementById('reminderText'); // (!!! NEW !!!)
-    
-    // (!!! NEW: 取得新按鈕 !!!)
+    const reminderText = document.getElementById('reminderText');
     const groupDataLink = document.getElementById('groupDataLink');
     const surveyLink = document.getElementById('surveyLink');
-    // (!!! END NEW !!!)
 
     /**
      * 處理報到按鈕點擊
@@ -267,6 +270,7 @@
 
     /**
      * 成功回呼函式
+     * (!!! 包含已報到者也能看到按鈕的邏輯 !!!)
      * @param {object} result - 從後端傳回的結果物件
      */
     function showResult(result) {
@@ -274,28 +278,28 @@
       messageText.textContent = result.message;
 
       if (result.success) {
-        messageText.className = "text-2xl font-semibold text-success";
+        // (!!! 無論是首次或重複報到, 都會是 success: true !!!)
+        messageText.className = "text-2xl font-semibold text-success whitespace-pre-line";
         groupText.textContent = result.group;
         locationText.textContent = result.location;
-        agendaLink.classList.remove('hidden'); // 顯示議程按鈕
-        reminderText.classList.remove('hidden'); // (!!! NEW: 顯示提醒 !!!)
         
-        // (!!! NEW: 顯示新按鈕 !!!)
+        // 顯示所有按鈕
+        agendaLink.classList.remove('hidden'); 
+        reminderText.classList.remove('hidden'); 
         groupDataLink.classList.remove('hidden');
         surveyLink.classList.remove('hidden');
-        // (!!! END NEW !!!)
         
       } else {
-        messageText.className = "text-2xl font-semibold text-error";
+        // 只有 "查無此人" 會進入這裡
+        messageText.className = "text-2xl font-semibold text-error whitespace-pre-line";
         groupText.textContent = result.group || '';
-        locationText.textContent = result.location || ''; // (用於顯示"已報到"時的地點)
-        agendaLink.classList.add('hidden'); // 隱藏議程按鈕
-        reminderText.classList.add('hidden'); // (!!! NEW: 隱藏提醒 !!!)
+        locationText.textContent = result.location || '';
         
-        // (!!! NEW: 隱藏新按鈕 !!!)
+        // 隱藏所有按鈕
+        agendaLink.classList.add('hidden'); 
+        reminderText.classList.add('hidden');
         groupDataLink.classList.add('hidden');
         surveyLink.classList.add('hidden');
-        // (!!! END NEW !!!)
       }
       
       resultDiv.classList.remove('hidden');
@@ -308,16 +312,15 @@
     function showError(error) {
       loading.classList.add('hidden');
       messageText.textContent = "發生錯誤：" + error.message;
-      messageText.className = "text-2xl font-semibold text-error";
+      messageText.className = "text-2xl font-semibold text-error whitespace-pre-line";
       groupText.textContent = "請洽詢工作人員。";
       locationText.textContent = '';
-      agendaLink.classList.add('hidden'); // 隱藏議程按鈕
-      reminderText.classList.add('hidden'); // (!!! NEW: 隱藏提醒 !!!)
       
-      // (!!! NEW: 隱藏新按鈕 !!!)
+      // 隱藏所有按鈕
+      agendaLink.classList.add('hidden');
+      reminderText.classList.add('hidden'); 
       groupDataLink.classList.add('hidden');
       surveyLink.classList.add('hidden');
-      // (!!! END NEW !!!)
       
       resultDiv.classList.remove('hidden');
     }
@@ -335,12 +338,9 @@
       groupText.textContent = ''; 
       locationText.textContent = ''; 
       agendaLink.classList.add('hidden'); 
-      reminderText.classList.add('hidden'); // (!!! NEW: 隱藏提醒 !!!)
-      
-      // (!!! NEW: 隱藏新按鈕 !!!)
+      reminderText.classList.add('hidden'); 
       groupDataLink.classList.add('hidden');
       surveyLink.classList.add('hidden');
-      // (!!! END NEW !!!)
     }
 
     // 讓使用者可以在輸入框按 Enter 鍵送出
