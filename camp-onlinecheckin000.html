@@ -6,13 +6,14 @@
   <title>醫學教育共識營 即時報到儀表板</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    /* THEME v7: Founder's Painting + Mobile Scroll Fixes */
+    /* THEME v10: Final Refinement + Debugged Layout + Mobile Optimized */
     body {
+      /* 請確認圖片網址正確 */
       background-image: url('images/許文龍.jpg'); 
       background-size: cover; background-position: center; background-attachment: fixed; 
       font-family: 'Noto Sans TC', sans-serif; color: #374151;
     }
-    /* 主容器 */
+    /* 主容器：毛玻璃效果，90%不透明度以遮蔽背景干擾 */
     .overlay-content {
       background-color: rgba(248, 247, 245, 0.90); 
       border: 1px solid rgba(255, 255, 255, 0.3); 
@@ -24,14 +25,17 @@
       padding: 1.5rem;
     }
 
-    /* 卡片 */
+    /* 標題 */
+    h1 { line-height: 1.4; }
+
+    /* 卡片樣式 */
     .stat-card, .group-stat-card {
       background-color: #FFFFFF; border: 1px solid #E5E7EB;
       border-radius: 0.75rem; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
     }
     .group-stat-card { padding: 1rem 1.25rem; }
 
-    /* 按鈕 */
+    /* 按鈕樣式 */
     .action-button {
       background-color: #2563EB; border: 1px solid #2563EB; color: #FFFFFF; 
       font-weight: bold; padding: 0.5rem 1.2rem; border-radius: 0.5rem; 
@@ -53,7 +57,7 @@
     }
     .tab-inactive:hover { background-color: #EFF6FF; }
 
-    /* 表格容器 */
+    /* 表格樣式 - 固定欄寬與捲動 */
     .table-container {
       background-color: #FFFFFF; border-radius: 0.75rem; border: 1px solid #E5E7EB;
       overflow: hidden; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
@@ -67,7 +71,7 @@
     table { 
       width: 100%; 
       border-collapse: collapse; 
-      /* !!! FIX: 設定最小寬度，確保在手機上撐開寬度，觸發左右滑動 !!! */
+      /* 設定最小寬度，確保在手機上撐開寬度，觸發左右滑動 */
       min-width: 700px; 
       table-layout: fixed; 
     }
@@ -80,8 +84,8 @@
     td {
       padding: 1rem; border-bottom: 1px solid #E5E7EB;
       font-size: 1rem; color: #374151; 
-      white-space: nowrap; /* 不換行 */
-      /* !!! FIX: 移除 overflow: hidden 和 ellipsis，確保姓名完整顯示 !!! */
+      white-space: nowrap; /* 不換行，強制寬度生效 */
+      overflow: hidden; text-overflow: ellipsis; /* 過長省略 */
     }
 
     /* 狀態樣式 */
@@ -89,6 +93,7 @@
     .row-checked-in:hover { background-color: #DBEAFE; }
     .row-pending:hover { background-color: #F9FAFB; }
     
+    /* 強制狀態欄位顏色 */
     .text-success { color: #1D4ED8 !important; font-weight: bold; } /* 藍色字 */
     .text-error-light { color: #D97706; font-weight: bold; }
 
@@ -114,7 +119,7 @@
       <div class="text-center md:text-left">
         <h1 class="text-3xl font-bold text-gray-800 leading-tight">
           醫學教育共識營 
-          <!-- (!!! FIX: 強制換行 span !!!) -->
+          <!-- 強制換行 span -->
           <span class="block mt-1 sm:inline sm:mt-0 text-blue-700">即時報到儀表板</span> 
         </h1>
       </div>
@@ -173,28 +178,38 @@
       </div>
       
       <div class="grid grid-cols-1 gap-10"> 
+        <!-- 已報到名單 (移除地點欄位) -->
         <div>
           <h2 class="text-2xl font-bold text-gray-800 border-b-2 border-gray-200 pb-2 mb-4">已報到名單 (<span id="checkedInListCount">0</span>)</h2>
           <div class="table-container"><div class="table-scroll-wrapper">
             <table class="min-w-full divide-y divide-gray-200 table-fixed">
               <thead>
                 <tr>
-                  <th style="width:20%">姓名</th><th style="width:35%">單位</th><th style="width:20%">職稱</th><th style="width:25%">分組組別</th>
+                  <th class="px-6 py-4 text-left font-medium uppercase tracking-wider" style="width: 25%">姓名</th> 
+                  <th class="px-6 py-4 text-left font-medium uppercase tracking-wider" style="width: 35%">單位</th> 
+                  <th class="px-6 py-4 text-left font-medium uppercase tracking-wider" style="width: 20%">職稱</th> 
+                  <th class="px-6 py-4 text-left font-medium uppercase tracking-wider" style="width: 20%">分組組別</th> 
                 </tr>
               </thead>
-              <tbody id="checkedInTableBody"></tbody>
+              <tbody id="checkedInTableBody" class="divide-y divide-gray-200"></tbody>
             </table>
           </div></div>
         </div>
 
+        <!-- 未報到名單 (移除地點欄位) -->
         <div>
           <h2 class="text-2xl font-bold text-gray-800 border-b-2 border-gray-200 pb-2 mb-4">未報到名單 (<span id="pendingListCount">0</span>)</h2>
           <div class="table-container"><div class="table-scroll-wrapper">
-            <table>
-              <thead><tr>
-                <th style="width:20%">姓名</th><th style="width:35%">單位</th><th style="width:20%">職稱</th><th style="width:25%">分組組別</th>
-              </tr></thead>
-              <tbody id="pendingTableBody"></tbody>
+            <table class="min-w-full divide-y divide-gray-200 table-fixed">
+              <thead>
+                <tr>
+                  <th class="px-6 py-4 text-left font-medium uppercase tracking-wider" style="width: 25%">姓名</th>
+                  <th class="px-6 py-4 text-left font-medium uppercase tracking-wider" style="width: 35%">單位</th>
+                  <th class="px-6 py-4 text-left font-medium uppercase tracking-wider" style="width: 20%">職稱</th>
+                  <th class="px-6 py-4 text-left font-medium uppercase tracking-wider" style="width: 20%">分組組別</th>
+                </tr>
+              </thead>
+              <tbody id="pendingTableBody" class="divide-y divide-gray-200"></tbody>
             </table>
           </div></div>
         </div>
@@ -356,7 +371,7 @@
                     ${locationHtml}
                     <span class="text-lg font-normal text-gray-500 ml-2">(已報到: ${checkedCount} / ${members.length})</span>
                   </h3>
-                  <!-- !!! FIX: 在 JS 注入的表格也加上 min-w-[700px] !!! -->
+                  <!-- Table Scroll Wrapper with fixed width to force scroll on mobile -->
                   <div class="table-container"><div class="table-scroll-wrapper"><table class="table-fixed min-w-full divide-y divide-gray-200" style="min-width: 700px;">
                     <thead><tr>
                       <th class="w-1/4 px-6 py-4 text-left font-medium uppercase tracking-wider">姓名</th>
