@@ -6,394 +6,219 @@
   <title>醫學教育共識營 即時報到儀表板</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    /* NEW THEME (v6): Founder's Painting + Mobile Fixes
-      - Add background image
-      - Use warm beige main card (rgba(248, 247, 245, 0.85))
-      - Use "Blue" from painting as primary color
-      - Use "Orange" from painting as alert color
-      - Enhance shadows for more depth
-      - Refine tab and header styles
-      - Add horizontal scroll for all tables on mobile
-      - Add highlight row for "Checked In" status
-      - Fix header wrap on mobile
-      - (!!! NEW !!!) Use table-fixed and explicit widths for all tables.
-      - (!!! NEW !!!) Fix text-success color specificity.
-    */
+    /* THEME: Founder's Painting + Mobile Fixes + Blue/Orange Accents */
     body {
-      /* !!! 這裡是您圖片的網址 (請確認已填上) !!! */
-      /* 例如: background-image: url('images/許文龍.jpg'); */
-      background-image: url('https://i.imgur.com/your_image_hash.jpg'); 
-      background-size: cover; 
-      background-position: center; 
-      background-attachment: fixed; 
-      font-family: 'Noto Sans TC', sans-serif;
-      color: #374151; /* 預設文字顏色 (深灰) */
+      /* 請確認圖片網址正確 */
+      background-image: url('images/許文龍.jpg'); 
+      background-size: cover; background-position: center; background-attachment: fixed; 
+      font-family: 'Noto Sans TC', sans-serif; color: #374151;
     }
-    /* 主要內容容器 */
+    /* 主容器：毛玻璃效果 */
     .overlay-content {
-      background-color: rgba(248, 247, 245, 0.85); /* 溫暖的淺米色 (85% Opacity) */
+      background-color: rgba(248, 247, 245, 0.90); /* 提高不透明度確保文字清晰 */
       border: 1px solid rgba(255, 255, 255, 0.3); 
       border-radius: 1.5rem; 
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1), 0 5px 10px rgba(0, 0, 0, 0.05); 
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); 
       margin: 1rem auto; 
       max-width: 90rem; 
       width: calc(100% - 2rem); 
+      padding: 1.5rem;
     }
 
-    /* 統計卡片設計 */
-    .stat-card {
-      background-color: #FFFFFF; /* 純白 */
-      border: 1px solid #E5E7EB;
-      border-radius: 0.75rem;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.07); /* (柔和陰影) */
+    /* 統計卡片 */
+    .stat-card, .group-stat-card {
+      background-color: #FFFFFF; border: 1px solid #E5E7EB;
+      border-radius: 0.75rem; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
     }
-    
-    /* 組別統計卡片 */
-    .group-stat-card {
-      background-color: #FFFFFF; /* 純白 */
-      border: 1px solid #E5E7EB;
-      border-radius: 0.75rem;
-      padding: 1rem 1.25rem; 
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.07); /* (柔和陰影) */
-    }
+    .group-stat-card { padding: 1rem 1.25rem; }
 
-    /* 按鈕樣式 (立即更新) - 使用畫作 "藍色" */
+    /* 按鈕樣式 */
     .action-button {
-      background-color: #2563EB; /* (藍色) */
-      border: 1px solid #2563EB;
-      color: #FFFFFF; 
-      font-weight: bold;
-      padding: 0.5rem 1.25rem;
-      border-radius: 0.5rem;
-      transition: all 0.3s ease;
-      font-size: 0.875rem; /* text-sm */
+      background-color: #2563EB; border: 1px solid #2563EB; color: #FFFFFF; 
+      font-weight: bold; padding: 0.5rem 1.25rem; border-radius: 0.5rem; 
+      transition: all 0.3s; font-size: 0.875rem; cursor: pointer;
     }
-    .action-button:hover {
-      background-color: #1D4ED8; /* Hover 加深 */
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    }
+    .action-button:hover { background-color: #1D4ED8; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
 
     /* 分頁按鈕 */
-    .tab-button-active {
-      background-color: #2563EB; /* (藍色) */
-      color: #FFFFFF; 
-      font-weight: bold;
-      padding: 0.5rem 1.5rem; 
-      border-radius: 0.5rem;
-      transition: all 0.3s ease;
-      font-size: 1.125rem; /* text-lg (放大) */
-      border: 1px solid #2563EB;
+    .tab-btn {
+      padding: 0.6rem 1.5rem; border-radius: 0.5rem; font-weight: bold;
+      cursor: pointer; border: 1px solid; font-size: 1.1rem; margin-right: 0.5rem;
+      transition: all 0.2s;
     }
-    .tab-button-inactive {
-      background-color: #FFFFFF; /* (白色) */
-      color: #1D4ED8; /* (深藍字) */
-      font-weight: 500;
-      padding: 0.5rem 1.5rem;
-      border-radius: 0.5rem;
-      border: 1px solid #93C5FD; /* (淺藍邊框) */
-      transition: all 0.3s ease;
-      font-size: 1.125rem; /* text-lg (放大) */
+    .tab-active {
+      background-color: #2563EB; color: #FFFFFF; border-color: #2563EB;
     }
-    .tab-button-inactive:hover {
-      background-color: #EFF6FF; /* Hover 淺藍 */
+    .tab-inactive {
+      background-color: #FFFFFF; color: #2563EB; border-color: #93C5FD;
     }
+    .tab-inactive:hover { background-color: #EFF6FF; }
 
-
-    /* 表格容器 - 可左右捲動 */
+    /* 表格樣式 - 固定欄寬與捲動 */
     .table-container {
-      background-color: #FFFFFF; /* 白色背景 */
-      border-radius: 0.75rem;
-      border: 1px solid #E5E7EB;
-      overflow: hidden; 
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.07); /* (柔和陰影) */
+      background-color: #FFFFFF; border-radius: 0.75rem; border: 1px solid #E5E7EB;
+      overflow: hidden; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
     }
-    .table-scroll-wrapper {
-      overflow-x: auto; /* 關鍵！允許水平捲動 */
-      -webkit-overflow-scrolling: touch; /* iOS 滾動優化 */
+    .table-scroll-wrapper { 
+      overflow-x: auto; -webkit-overflow-scrolling: touch; 
     }
-    .table-scroll-wrapper thead th {
-      background-color: #F9FAFB; /* 淺灰色表頭 */
-      color: #4B5563; /* 暖灰色文字 */
+    table { 
+      width: 100%; border-collapse: collapse; min-width: 800px; /* 確保手機上表格有足夠寬度可捲動 */
+      table-layout: fixed; /* 固定欄寬關鍵 */
+    }
+    
+    th {
+      background-color: #F9FAFB; color: #4B5563; font-size: 0.9rem;
+      padding: 1rem; text-align: left; white-space: nowrap;
       border-bottom: 1px solid #E5E7EB;
-      font-size: 0.875rem; /* text-sm (放大) */
-      white-space: nowrap; /* 標題不換行 */
     }
-    .table-scroll-wrapper tbody td {
-      border-bottom: 1px solid #E5E7EB; 
-      color: #374151; /* 預設文字顏色 (深灰) */
-      font-size: 1rem; /* text-base (放大) */
-      white-space: nowrap; /* 內容不換行 */
-      /* (!!! NEW !!!) 修正 CSS 權重問題 */
-      /* 預設是深灰色, 但 .text-success 或 .text-error-light 會覆蓋它 */
-    }
-    
-    /* (!!! NEW: 已報到底色 !!!) */
-    .row-checked-in {
-      background-color: #EFF6FF; /* 柔和淺藍底色 */
-    }
-    /* (!!! NEW !!!) 修正 CSS 權重問題: 確保底色中的 .text-success 依然是藍色 */
-    .row-checked-in td.text-success {
-       color: #1D4ED8 !important; /* (藍色) */
-    }
-    .row-checked-in:hover {
-      background-color: #DBEAFE; /* Hover 加深 */
-    }
-    .row-pending:hover {
-      background-color: #F9FAFB; /* Hover 淺灰 */
-    }
-    
-    
-    /* 報到狀態文字顏色 */
-    .text-success {
-      color: #1D4ED8; /* (藍色) */
-      font-weight: bold;
-    }
-    .text-error-light {
-      color: #D97706; /* 溫和的暖橘色 (來自桌面) */
+    td {
+      padding: 1rem; border-bottom: 1px solid #E5E7EB;
+      font-size: 1rem; color: #374151; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
     }
 
-    /* 錯誤訊息 */
+    /* 狀態樣式 - 強制藍色 */
+    .row-checked-in { background-color: #EFF6FF; }
+    .row-checked-in:hover { background-color: #DBEAFE; }
+    .row-pending:hover { background-color: #F9FAFB; }
+    
+    .text-success { color: #1D4ED8 !important; font-weight: bold; } /* 強制藍色 */
+    .text-error-light { color: #D97706; font-weight: bold; }
+
+    /* 載入與錯誤 */
+    .hidden { display: none; }
     .error-box {
-      background-color: #FFFBEB; /* 淺黃 (擷取自畫作文字區) */
-      border: 1px solid #FDE68A; /* 淺黃邊框 */
-      color: #92400E; /* 深橘/棕色文字 */
+      background-color: #FEF2F2; border: 1px solid #FCA5A5; 
+      color: #991B1B; padding: 1rem; border-radius: 0.5rem; margin-bottom: 1.5rem;
     }
     
-    /* Spinner */
     .spinner-small {
-      display: inline-block;
-      width: 1rem;
-      height: 1rem;
-      vertical-align: text-bottom;
-      border: 2px solid rgba(255, 255, 255, 0.6);
-      border-left-color: #FFFFFF;
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
+      display: inline-block; width: 1rem; height: 1rem; border: 2px solid rgba(255, 255, 255, 0.6);
+      border-left-color: #FFFFFF; border-radius: 50%; animation: spin 1s linear infinite;
     }
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-
-    /* 引入 Google Fonts (思源黑體) */
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap');
   </style>
 </head>
 <body class="bg-gray-100"> 
-  <div class="max-w-7xl mx-auto p-4 md:p-8 overlay-content">
+  <div class="overlay-content">
     
-    <!-- 標題 -->
-    <div class="flex flex-col md:flex-row justify-between items-center mb-6">
-      <h1 class="text-3xl font-bold text-gray-800 mb-4 md:mb-0 text-center md:text-left">
-        醫學教育共識營
-        <!-- (手機版換行) -->
-        <span class="block sm:inline">即時報到儀表板</span> 
-      </h1>
-      <!-- Container for button and metadata -->
-      <div class="flex flex-col items-center md:items-end">
-        <button id="refreshButton" onclick="fetchData()" class="action-button">
-          <span id="refreshSpinner" class="hidden spinner-small"></span>
-          <span id="refreshText">立即更新</span>
-        </button>
+    <!-- Header -->
+    <div class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
+      <div class="text-center md:text-left">
+        <h1 class="text-3xl font-bold text-gray-800 leading-tight">
+          醫學教育共識營 <span class="block sm:inline">即時報到儀表板</span> 
+        </h1>
       </div>
+      <button id="refreshButton" onclick="fetchData()" class="action-button flex items-center justify-center">
+        <span id="refreshSpinner" class="hidden spinner-small mr-2"></span>
+        <span id="refreshText">立即更新</span>
+      </button>
     </div>
 
-    <!-- 分頁按鈕 + Metadata -->
-    <div class="flex flex-col md:flex-row justify-between items-baseline mb-6 border-b-2 border-gray-200 pb-2">
-      
-      <!-- Left side: Tabs + Total Count -->
-      <div class="flex flex-col md:flex-row md:items-baseline space-y-4 md:space-y-0 md:space-x-4">
-        <div class="flex space-x-2">
-          <button id="tabButtonOverview" onclick="showTab('Overview')" class="tab-button-active">
-            總覽儀表板
-          </button>
-          <button id="tabButtonGroupRosters" onclick="showTab('GroupRosters')" class="tab-button-inactive">
-            各組詳細名單
-          </button>
+    <!-- Tabs & Metadata -->
+    <div class="flex flex-col md:flex-row justify-between items-end border-b-2 border-gray-200 pb-4 mb-6 gap-4">
+      <div class="flex flex-col sm:flex-row items-center gap-4 w-full md:w-auto">
+        <div class="flex">
+          <button id="tabButtonOverview" onclick="showTab('Overview')" class="tab-btn tab-active">總覽儀表板</button>
+          <button id="tabButtonGroupRosters" onclick="showTab('GroupRosters')" class="tab-btn tab-inactive">各組詳細名單</button>
         </div>
-        <!-- Total Count -->
-        <p id="totalCountMetadata" class="hidden text-gray-600 text-lg"> 
-          總報名人數：<span id="statTotal" class="font-bold text-gray-800">0</span> 人
+        <p id="totalCountMetadata" class="hidden text-lg text-gray-600">
+          總報名人數：<span id="statTotal" class="font-bold text-gray-900">0</span> 人
         </p>
       </div>
-
-      <!-- Right side: Last Updated Time -->
-      <div id="lastUpdatedMetadata" class="hidden text-base text-gray-500 mt-4 md:mt-0"> 
-        最後更新時間：<span id="lastUpdated" class="font-semibold text-gray-700">N/A</span>
-        (每 30 秒更新)
+      <div id="lastUpdatedMetadata" class="hidden text-sm text-gray-500">
+        最後更新：<span id="lastUpdated" class="font-semibold text-gray-700">N/A</span> (每 30 秒更新)
       </div>
-
     </div>
 
-
-    <!-- 載入中... (僅限第一次) -->
-    <div id="fullLoading" class="text-center py-20">
-      <p class="text-2xl text-gray-600">載入報到資料中，請稍候...</p>
+    <!-- Messages -->
+    <div id="fullLoading" class="text-center py-20 text-xl text-gray-500">載入報到資料中，請稍候...</div>
+    <div id="errorMessage" class="hidden error-box">
+      <strong class="font-bold">發生錯誤：</strong><span class="block sm:inline" id="errorText"></span>
+      <p id="errorHint" class="hidden mt-2 text-sm">提示：請確認您已將 `Code.gs` 重新部署為新版本。</p>
     </div>
 
-    <!-- 錯誤訊息 -->
-    <div id="errorMessage" class="hidden error-box px-4 py-3 rounded-lg relative mb-6">
-      <strong class="font-bold">發生錯誤：</strong>
-      <span class="block sm:inline" id="errorText"></span>
-      <p id="errorHint" class="hidden mt-2 text-sm">提示：如果看到 `Cannot read properties of undefined` 錯誤，通常表示您需要**重新部署** Google Apps Script (`Code.gs`)。</p>
-    </div>
-
-
-    <!-- ========================================================== -->
-    <!-- 分頁一：總覽儀表板 -->
-    <!-- ========================================================== -->
-    <div id="tabOverview">
-
-      <!-- 1. 總覽統計卡 -->
+    <!-- Tab 1: Overview -->
+    <div id="tabOverview" class="hidden">
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        <!-- 報到率 -->
-        <div class="stat-card p-6 rounded-lg text-center">
+        <div class="stat-card p-6 text-center">
           <h2 class="text-lg font-semibold text-gray-600">報到率</h2>
-          <p class="text-5xl font-extrabold text-blue-600 mt-2"> <!-- (藍色) -->
-            <span id="statRate">0</span><span class="text-3xl">%</span>
-          </p>
+          <p class="text-5xl font-extrabold text-blue-600 mt-2"><span id="statRate">0</span><span class="text-3xl">%</span></p>
         </div>
-        <!-- 已報到總人數 -->
-        <div class="stat-card p-6 rounded-lg text-center">
+        <div class="stat-card p-6 text-center">
           <h2 class="text-lg font-semibold text-gray-600">已報到總人數</h2>
-          <p class="text-5xl font-extrabold text-blue-600 mt-2" id="statCheckedIn">0</p> <!-- (藍色) -->
+          <p class="text-5xl font-extrabold text-blue-600 mt-2" id="statCheckedIn">0</p>
         </div>
-        <!-- 未報到人數 -->
-        <div class="stat-card p-6 rounded-lg text-center">
+        <div class="stat-card p-6 text-center">
           <h2 class="text-lg font-semibold text-gray-600">未報到人數</h2>
-          <p class="text-5xl font-extrabold text-orange-500 mt-2" id="statPending">0</p> <!-- (橘色) -->
+          <p class="text-5xl font-extrabold text-orange-500 mt-2" id="statPending">0</p>
         </div>
       </div>
 
-      <!-- 2. 各組報到狀況 -->
       <div id="groupStatsSection" class="mb-10">
-        <div class="flex items-baseline space-x-3 mb-4 border-b-2 border-gray-200 pb-2"> <!-- (精緻化標題) -->
+        <div class="flex items-baseline space-x-3 mb-4 border-b-2 border-gray-200 pb-2">
           <h2 class="text-2xl font-bold text-gray-800">各組報到狀況</h2>
           <span class="text-sm text-gray-500">(15:50–16:30各功能小組分組討論)</span>
         </div>
-        <div id="groupStatsContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-          <!-- JS 會在這裡填入卡片 -->
-        </div>
+        <div id="groupStatsContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"></div>
       </div>
       
-      <!-- 3. 詳細名單 (上下排列) -->
       <div class="grid grid-cols-1 gap-10"> 
-        
-        <!-- 3a. 已報到名單 -->
         <div>
-          <h2 class="text-2xl font-bold text-gray-800 border-b-2 border-gray-200 pb-2 mb-4"> <!-- (精緻化標題) -->
-            已報到名單 (<span id="checkedInListCount">0</span>)
-          </h2>
-          <!-- (Table Scroll Wrapper) -->
-          <div class="table-container">
-            <div class="table-scroll-wrapper">
-              <!-- (!!! NEW: 加入 table-fixed 強制等寬 !!!) -->
-              <table class="min-w-full divide-y divide-gray-200 table-fixed">
-                <thead>
-                  <tr>
-                    <!-- (!!! NEW: 設定欄位寬度 !!!) -->
-                    <th class="px-6 py-4 text-left text-sm font-medium uppercase tracking-wider" style="width: 20%">姓名</th> 
-                    <th class="px-6 py-4 text-left text-sm font-medium uppercase tracking-wider" style="width: 30%">單位</th> 
-                    <th class="px-6 py-4 text-left text-sm font-medium uppercase tracking-wider" style="width: 20%">職稱</th> 
-                    <th class="px-6 py-4 text-left text-sm font-medium uppercase tracking-wider" style="width: 15%">組別</th> 
-                    <th class="px-6 py-4 text-left text-sm font-medium uppercase tracking-wider" style="width: 15%">上課地點</th>
-                  </tr>
-                </thead>
-                <tbody id="checkedInTableBody" class="divide-y divide-gray-200">
-                  <!-- JS 會在這裡填入資料 -->
-                </tbody>
-              </table>
-            </div>
-          </div>
+          <h2 class="text-2xl font-bold text-gray-800 border-b-2 border-gray-200 pb-2 mb-4">已報到名單 (<span id="checkedInListCount">0</span>)</h2>
+          <div class="table-container"><div class="table-scroll-wrapper">
+            <table>
+              <thead><tr>
+                <th style="width:20%">姓名</th><th style="width:30%">單位</th><th style="width:20%">職稱</th><th style="width:15%">組別</th><th style="width:15%">地點</th>
+              </tr></thead>
+              <tbody id="checkedInTableBody"></tbody>
+            </table>
+          </div></div>
         </div>
 
-        <!-- 3b. 未報到名單 -->
         <div>
-          <h2 class="text-2xl font-bold text-gray-800 border-b-2 border-gray-200 pb-2 mb-4"> <!-- (精緻化標題) -->
-            未報到名單 (<span id="pendingListCount">0</span>)
-          </h2>
-          <!-- (Table Scroll Wrapper) -->
-          <div class="table-container">
-            <div class="table-scroll-wrapper">
-              <!-- (!!! NEW: 加入 table-fixed 強制等寬 !!!) -->
-              <table class="min-w-full divide-y divide-gray-200 table-fixed">
-                <thead>
-                  <tr>
-                    <!-- (!!! NEW: 設定欄V寬度 !!!) -->
-                    <th class="px-6 py-4 text-left text-sm font-medium uppercase tracking-wider" style="width: 20%">姓名</th>
-                    <th class="px-6 py-4 text-left text-sm font-medium uppercase tracking-wider" style="width: 30%">單位</th>
-                    <th class="px-6 py-4 text-left text-sm font-medium uppercase tracking-wider" style="width: 20%">職稱</th>
-                    <th class="px-6 py-4 text-left text-sm font-medium uppercase tracking-wider" style="width: 15%">組別</th>
-                    <th class="px-6 py-4 text-left text-sm font-medium uppercase tracking-wider" style="width: 15%">上課地點</th>
-                  </tr>
-                </thead>
-                <tbody id="pendingTableBody" class="divide-y divide-gray-200">
-                  <!-- JS 會在這裡填V資料 -->
-                </tbody>
-              </table>
-            </div>
-          </div>
+          <h2 class="text-2xl font-bold text-gray-800 border-b-2 border-gray-200 pb-2 mb-4">未報到名單 (<span id="pendingListCount">0</span>)</h2>
+          <div class="table-container"><div class="table-scroll-wrapper">
+            <table>
+              <thead><tr>
+                <th style="width:20%">姓名</th><th style="width:30%">單位</th><th style="width:20%">職稱</th><th style="width:15%">組別</th><th style="width:15%">地點</th>
+              </tr></thead>
+              <tbody id="pendingTableBody"></tbody>
+            </table>
+          </div></div>
         </div>
-
       </div>
     </div>
-    <!-- ========================================================== -->
-    <!-- 分頁二：各組詳細名單 -->
-    <!-- ========================================================== -->
+
+    <!-- Tab 2: Rosters -->
     <div id="tabGroupRosters" class="hidden">
-      <p class="text-base text-gray-600 mb-6"> 
-        此處顯示所有組別的完整名單及個人的即時報到狀態。
-      </p>
-      
-      <!-- 防呆提示 (如果 Code.gs 未部署) -->
+      <p class="text-base text-gray-600 mb-6">此處顯示所有組別的完整名單及個人的即時報到狀態。</p>
       <div id="rosterErrorHint" class="hidden text-center p-8 bg-amber-50 rounded-lg border border-amber-200">
-        <p class="text-xl font-semibold text-amber-700">
-          未偵測到「各組詳細名單」資料
-        </p>
-        <p class="text-lg text-amber-600 mt-2">
-          請確認您已經將最新的 `Code.gs` 檔案**重新部署**。
-        </p>
+        <p class="text-xl font-semibold text-amber-700">未偵測到「各組詳細名單」資料</p>
+        <p class="text-lg text-amber-600 mt-2">請確認您已經將最新的 `Code.gs` 檔案**重新部署**。</p>
       </div>
-
-      <!-- 組別列表容器 -->
-      <div id="groupRosterContainer" class="space-y-10">
-        <!-- JS 會在這裡填入每個組別的區塊 -->
-      </div>
-
+      <div id="groupRosterContainer" class="space-y-10"></div>
     </div>
-
   </div>
 
   <script>
-    // -----------------------------------------------------------------
-    // !!! 關鍵設定：您專屬的 Google Apps Script 網址 !!!
-    // (這個不需要變動)
-    // -----------------------------------------------------------------
+    // !!! 務必確認此網址是您最新部署的網址 !!!
     const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbweDq70D9T01XvspyieBBLVFmXOY3WsP0ZaWR0k68XM5IRtgmKmtODfoT43h0JCMrIbwg/exec";
-    // -----------------------------------------------------------------
-    
-    // 組別順序定義
     const GROUP_ORDER = ["指導長官", "教育輔導組", "數位賦能組", "醫學人文組", "核心能力組", "教學品質組", "其他"];
 
-    // 取得頁面元件
     const fullLoading = document.getElementById('fullLoading');
     const errorMessage = document.getElementById('errorMessage');
     const errorText = document.getElementById('errorText');
     const errorHint = document.getElementById('errorHint'); 
-    
     const refreshButton = document.getElementById('refreshButton');
     const refreshText = document.getElementById('refreshText');
     const refreshSpinner = document.getElementById('refreshSpinner');
-    
     const totalCountMetadata = document.getElementById('totalCountMetadata'); 
     const lastUpdatedMetadata = document.getElementById('lastUpdatedMetadata'); 
     const statTotal = document.getElementById('statTotal');
     const lastUpdated = document.getElementById('lastUpdated');
-    
-    const groupStatsSection = document.getElementById('groupStatsSection');
     const groupStatsContainer = document.getElementById('groupStatsContainer');
-
-    // 分頁元件
     const tabOverview = document.getElementById('tabOverview');
     const tabGroupRosters = document.getElementById('tabGroupRosters');
     const tabButtonOverview = document.getElementById('tabButtonOverview');
@@ -401,256 +226,155 @@
     const rosterErrorHint = document.getElementById('rosterErrorHint');
     const groupRosterContainer = document.getElementById('groupRosterContainer');
 
-    /**
-     * 切換分頁
-     */
     function showTab(tabName) {
       if (tabName === 'Overview') {
-        tabOverview.classList.remove('hidden');
-        tabGroupRosters.classList.add('hidden');
-        tabButtonOverview.className = 'tab-button-active';
-        tabButtonGroupRosters.className = 'tab-button-inactive';
+        tabOverview.classList.remove('hidden'); tabGroupRosters.classList.add('hidden');
+        tabButtonOverview.className = 'tab-btn tab-active'; tabButtonGroupRosters.className = 'tab-btn tab-inactive';
       } else {
-        tabOverview.classList.add('hidden');
-        tabGroupRosters.classList.remove('hidden');
-        tabButtonOverview.className = 'tab-button-inactive';
-        tabButtonGroupRosters.className = 'tab-button-active';
+        tabOverview.classList.add('hidden'); tabGroupRosters.classList.remove('hidden');
+        tabButtonOverview.className = 'tab-btn tab-inactive'; tabButtonGroupRosters.className = 'tab-btn tab-active';
       }
     }
 
-
-    /**
-     * 獲取後端資料
-     */
     async function fetchData() {
       console.log("Fetching data...");
       refreshText.textContent = "更新中...";
       refreshSpinner.classList.remove('hidden');
       refreshButton.disabled = true;
-
       try {
         const response = await fetch(WEB_APP_URL, {
-          method: 'POST',
-          mode: 'cors',
-          headers: {
-            'Content-Type': 'text/plain;charset=utf-8',
-          },
-          body: JSON.stringify({
-            action: "getDashboardData"
-          })
+          method: 'POST', mode: 'cors',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify({ action: "getDashboardData" })
         });
-
-        if (!response.ok) {
-          throw new Error(`HTTP 錯誤! 狀態: ${response.status}`);
-        }
-
+        if (!response.ok) throw new Error(`HTTP 錯誤! 狀態: ${response.status}`);
         const data = await response.json();
         updateDashboard(data);
-
       } catch (error) {
-        console.error("Fetch 錯誤:", error);
+        console.error("Fetch error:", error);
         showError(error);
       }
     }
 
-    /**
-     * 更新儀表板 (成功回呼)
-     * (!!! UPDATED: 加入 rowClass !!!)
-     * @param {object} data - 從後端傳回的資料物件
-     */
     function updateDashboard(data) {
-      console.log("Data received:", data);
       fullLoading.classList.add('hidden');
-      
       if (data.success) {
         totalCountMetadata.classList.remove('hidden');
         lastUpdatedMetadata.classList.remove('hidden');
         errorMessage.classList.add('hidden');
+        
+        if (tabButtonOverview.classList.contains('tab-active')) {
+            tabOverview.classList.remove('hidden');
+        }
 
-        // 1. 更新全局統計 (標頭)
         statTotal.textContent = data.stats.total;
-        const now = new Date();
-        lastUpdated.textContent = now.toLocaleTimeString('zh-TW');
+        lastUpdated.textContent = new Date().toLocaleTimeString('zh-TW');
 
-        // 2. 更新 [總覽分頁] - 統計卡
         document.getElementById('statRate').textContent = data.stats.rate;
         document.getElementById('statCheckedIn').textContent = data.stats.checkedIn;
         document.getElementById('statPending').textContent = data.stats.pending;
 
-
-        // 3. 更新 [總覽分頁] - 各組報到狀況卡片
         groupStatsContainer.innerHTML = '';
         if (data.groupStats) {
-          const sortedGroupStats = data.groupStats.sort((a, b) => {
-            const indexA = GROUP_ORDER.indexOf(a.name);
-            const indexB = GROUP_ORDER.indexOf(b.name);
-            return (indexA === -1 ? 99 : indexA) - (indexB === -1 ? 99 : indexB);
+          const sorted = data.groupStats.sort((a, b) => {
+            const iA = GROUP_ORDER.indexOf(a.name), iB = GROUP_ORDER.indexOf(b.name);
+            return (iA === -1 ? 99 : iA) - (iB === -1 ? 99 : iB);
           });
-
-          sortedGroupStats.forEach(group => {
-            const cardHtml = `
+          sorted.forEach(g => {
+            groupStatsContainer.innerHTML += `
               <div class="group-stat-card">
                 <div class="flex justify-between items-center">
-                  <h3 class="text-lg font-semibold text-gray-700 truncate" title="${group.name}">${group.name}</h3>
-                  <span class="text-base font-bold text-gray-800">${group.checkedIn} <span class="text-sm font-normal text-gray-500">/ ${group.total}</span></span>
+                  <h3 class="text-lg font-semibold text-gray-700 truncate" title="${g.name}">${g.name}</h3>
+                  <span class="text-base font-bold text-gray-800">${g.checkedIn} <span class="text-sm font-normal text-gray-500">/ ${g.total}</span></span>
                 </div>
                 <div class="w-full bg-gray-200 rounded-full h-2.5 mt-3">
-                  <div class_x_="bg-gradient-to-r from-blue-400 to-blue-500 h-2.5 rounded-full" style="width: ${group.rate}%"></div> <!-- (藍色) -->
+                  <div class="bg-gradient-to-r from-blue-400 to-blue-500 h-2.5 rounded-full" style="width: ${g.rate}%"></div>
                 </div>
-              </div>
-            `;
-            groupStatsContainer.innerHTML += cardHtml;
+              </div>`;
           });
         }
 
-
-        // 4. 更新 [總覽分頁] - 已報到 / 未報到總名單
-        
-        // 4a. 產生已報到列表 (!!! NEW: 加入 rowClass !!!)
-        const checkedInBody = document.getElementById('checkedInTableBody');
-        checkedInBody.innerHTML = '';
+        const fillTable = (id, list, emptyMsg, colCount) => {
+          const tbody = document.getElementById(id);
+          tbody.innerHTML = '';
+          if (list.length === 0) tbody.innerHTML = `<tr><td colspan="${colCount}" class="px-6 py-4 text-center text-gray-500 text-base">${emptyMsg}</td></tr>`;
+          else list.forEach(p => {
+            let rowClass = id === 'checkedInTableBody' ? 'row-checked-in' : 'row-pending';
+            tbody.innerHTML += `
+              <tr class="${rowClass} hover:bg-gray-50">
+                <td class="px-6 py-4 font-medium text-gray-900">${p.name}</td>
+                <td class="px-6 py-4 text-gray-600">${p.unit}</td>
+                <td class="px-6 py-4 text-gray-600">${p.title}</td>
+                <td class="px-6 py-4 text-gray-600">${p.group}</td>
+                <td class="px-6 py-4 text-gray-600">${p.location}</td>
+              </tr>`;
+          });
+        };
         document.getElementById('checkedInListCount').textContent = data.lists.checkedIn.length;
-        if (data.lists.checkedIn.length === 0) {
-          checkedInBody.innerHTML = `<tr><td colspan="5" class="px-6 py-4 text-center text-gray-500 text-base">目前無人報到</td></tr>`;
-        } else {
-          data.lists.checkedIn.forEach(p => {
-            checkedInBody.innerHTML += `
-              <tr class="row-checked-in"> <!-- (!!! NEW: 已報到底色 !!!) -->
-                <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">${p.name}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-gray-600">${p.unit}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-gray-600">${p.title}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-gray-600">${p.group}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-gray-600">${p.location}</td>
-              </tr>
-            `;
-          });
-        }
+        fillTable('checkedInTableBody', data.lists.checkedIn, '目前無人報到', 5);
         
-        // 4b. 產生未報到列表
-        const pendingBody = document.getElementById('pendingTableBody');
-        pendingBody.innerHTML = '';
         document.getElementById('pendingListCount').textContent = data.lists.pending.length;
-        if (data.lists.pending.length === 0) {
-          pendingBody.innerHTML = `<tr><td colspan="5" class="px-6 py-4 text-center text-gray-500 text-base">全員到齊！</td></tr>`;
-        } else {
-          data.lists.pending.forEach(p => {
-            pendingBody.innerHTML += `
-              <tr class="row-pending"> <!-- (!!! NEW: 未報到 hover !!!) -->
-                <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">${p.name}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-gray-600">${p.unit}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-gray-600">${p.title}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-gray-600">${p.group}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-gray-600">${p.location}</td>
-              </tr>
-            `;
-          });
-        }
-        
-        // 5. 更新 [各組詳細名單] 分頁 (!!! NEW: 加入 rowClass, 固定寬度 !!!)
-        const rosters = data.groupedRosters;
-        groupRosterContainer.innerHTML = '';
-        
-        if (!rosters) {
-          rosterErrorHint.classList.remove('hidden');
-        } else {
-          rosterErrorHint.classList.add('hidden');
-          
-          GROUP_ORDER.forEach(groupName => {
-            const members = rosters[groupName];
-            if (members && members.length > 0) {
-              
-              const checkedInCount = members.filter(m => m.status === '已報到').length;
-              
-              let tableBody = '';
-              members.forEach(member => {
-                const isCheckedIn = (member.status === '已報到');
-                const statusClass = isCheckedIn ? 'text-success' : 'text-error-light';
-                const statusText = isCheckedIn ? '已報到' : '未報到'; // (移除了 ˇ)
-                const rowClass = isCheckedIn ? 'row-checked-in' : 'row-pending'; // (!!! NEW !!!)
-                
-                tableBody += `
-                  <tr class="${rowClass}">
-                    <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">${member.name}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-gray-600">${member.unit}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-gray-600">${member.title}</td>
-                    <td class="px-6 py-4 whitespace-nowrap ${statusClass}">${statusText}</td>
-                  </tr>
-                `;
-              });
+        fillTable('pendingTableBody', data.lists.pending, '全員到齊！', 5);
 
-              const groupBlockHtml = `
+        groupRosterContainer.innerHTML = '';
+        if (!data.groupedRosters) rosterErrorHint.classList.remove('hidden');
+        else {
+          rosterErrorHint.classList.add('hidden');
+          GROUP_ORDER.forEach(gName => {
+            const members = data.groupedRosters[gName];
+            if (members && members.length > 0) {
+              const checkedCount = members.filter(m => m.status === '已報到').length;
+              let rows = '';
+              members.forEach(m => {
+                const isChk = m.status === '已報到';
+                rows += `
+                  <tr class="${isChk ? 'row-checked-in' : 'row-pending'}">
+                    <td class="w-1/4 px-6 py-4 font-medium text-gray-900">${m.name}</td>
+                    <td class="w-1/4 px-6 py-4 text-gray-600">${m.unit}</td>
+                    <td class="w-1/4 px-6 py-4 text-gray-600">${m.title}</td>
+                    <td class="w-1/4 px-6 py-4 ${isChk ? 'text-success' : 'text-error-light'}">${m.status}</td>
+                  </tr>`;
+              });
+              groupRosterContainer.innerHTML += `
                 <div>
-                  <h3 class="text-2xl font-bold text-gray-800 border-b-2 border-gray-200 pb-2 mb-4"> <!-- (精緻化標題) -->
-                    ${groupName} (已報到: ${checkedInCount} / ${members.length})
-                  </h3>
-                  <!-- (Table Scroll Wrapper) -->
-                  <div class="table-container">
-                    <div class="table-scroll-wrapper">
-                      <!-- (!!! NEW: 加入 table-fixed 強制等寬 !!!) -->
-                      <table class="min-w-full divide-y divide-gray-200 table-fixed"> 
-                        <thead>
-                          <tr>
-                            <!-- (!!! NEW: 設定欄位寬度 !!!) -->
-                            <th class="px-6 py-4 text-left text-sm font-medium uppercase tracking-wider" style="width: 25%">姓名</th>
-                            <th class="px-6 py-4 text-left text-sm font-medium uppercase tracking-wider" style="width: 35%">單位</th>
-                            <th class="px-6 py-4 text-left text-sm font-medium uppercase tracking-wider" style="width: 25%">職稱</th>
-                            <th class="px-6 py-4 text-left text-sm font-medium uppercase tracking-wider" style="width: 15%">報到狀態</th>
-                          </tr>
-                        </thead>
-                        <tbody class="divide-y divide-gray-200">
-                          ${tableBody}
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-                </div>
-              `;
-              groupRosterContainer.innerHTML += groupBlockHtml;
+                  <h3 class="text-2xl font-bold text-gray-800 border-b-2 border-gray-200 pb-2 mb-4">${gName} (已報到: ${checkedCount} / ${members.length})</h3>
+                  <div class="table-container"><div class="table-scroll-wrapper"><table class="table-fixed min-w-full divide-y divide-gray-200">
+                    <thead><tr>
+                      <th class="w-1/4 px-6 py-4 text-left font-medium uppercase tracking-wider" style="width:25%">姓名</th>
+                      <th class="w-1/4 px-6 py-4 text-left font-medium uppercase tracking-wider" style="width:35%">單位</th>
+                      <th class="w-1/4 px-6 py-4 text-left font-medium uppercase tracking-wider" style="width:25%">職稱</th>
+                      <th class="w-1/4 px-6 py-4 text-left font-medium uppercase tracking-wider" style="width:15%">狀態</th>
+                    </tr></thead>
+                    <tbody class="divide-y divide-gray-200">${rows}</tbody>
+                  </table></div></div>
+                </div>`;
             }
           });
         }
-
       } else {
-        showError({ message: data.message || "從後端回傳的資料格式不正確" });
+        showError({ message: data.message || "資料格式錯誤" });
       }
-
       refreshText.textContent = "立即更新";
       refreshSpinner.classList.add('hidden');
       refreshButton.disabled = false;
     }
 
-    /**
-     * 顯示錯誤 (失敗回呼)
-     * @param {Error} error - 錯誤物件
-     */
     function showError(error) {
-      console.error("Failed to fetch data:", error);
+      console.error("Fetch error:", error);
       fullLoading.classList.add('hidden');
-      
       totalCountMetadata.classList.add('hidden');
       lastUpdatedMetadata.classList.add('hidden');
-      
       errorText.textContent = error.message;
       errorMessage.classList.remove('hidden');
-
-      if (error.message && error.message.includes("Cannot read properties of undefined")) {
-        errorHint.classList.remove('hidden');
-      } else {
-        errorHint.classList.add('hidden');
-      }
-
+      if (error.message && error.message.includes("undefined")) errorHint.classList.remove('hidden');
+      else errorHint.classList.add('hidden');
       refreshText.textContent = "立即更新";
       refreshSpinner.classList.add('hidden');
       refreshButton.disabled = false;
     }
 
-    // --------------------------------------------------
-    // 頁面初始化
-    // --------------------------------------------------
-    
     document.addEventListener('DOMContentLoaded', fetchData);
     setInterval(fetchData, 30000); 
-    
   </script>
 </body>
 </html>
