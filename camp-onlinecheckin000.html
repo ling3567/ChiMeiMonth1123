@@ -6,14 +6,14 @@
   <title>醫學教育共識營 即時報到儀表板</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    /* THEME v10: Final Refinement + Debugged Layout + Mobile Optimized */
+    /* THEME v11: Founder's Painting + Mobile Scroll Fixes + No Truncation */
     body {
       /* 請確認圖片網址正確 */
       background-image: url('images/許文龍.jpg'); 
       background-size: cover; background-position: center; background-attachment: fixed; 
       font-family: 'Noto Sans TC', sans-serif; color: #374151;
     }
-    /* 主容器：毛玻璃效果，90%不透明度以遮蔽背景干擾 */
+    /* 主容器 */
     .overlay-content {
       background-color: rgba(248, 247, 245, 0.90); 
       border: 1px solid rgba(255, 255, 255, 0.3); 
@@ -84,8 +84,8 @@
     td {
       padding: 1rem; border-bottom: 1px solid #E5E7EB;
       font-size: 1rem; color: #374151; 
-      white-space: nowrap; /* 不換行，強制寬度生效 */
-      overflow: hidden; text-overflow: ellipsis; /* 過長省略 */
+      white-space: nowrap; /* 不換行 */
+      /* (!!! FIX: 移除 overflow: hidden 和 text-overflow: ellipsis，確保文字完整顯示 !!!) */
     }
 
     /* 狀態樣式 */
@@ -185,10 +185,10 @@
             <table class="min-w-full divide-y divide-gray-200 table-fixed">
               <thead>
                 <tr>
-                  <th class="px-6 py-4 text-left font-medium uppercase tracking-wider" style="width: 25%">姓名</th> 
-                  <th class="px-6 py-4 text-left font-medium uppercase tracking-wider" style="width: 35%">單位</th> 
+                  <th class="px-6 py-4 text-left font-medium uppercase tracking-wider" style="width: 20%">姓名</th> 
+                  <th class="px-6 py-4 text-left font-medium uppercase tracking-wider" style="width: 30%">單位</th> 
                   <th class="px-6 py-4 text-left font-medium uppercase tracking-wider" style="width: 20%">職稱</th> 
-                  <th class="px-6 py-4 text-left font-medium uppercase tracking-wider" style="width: 20%">分組組別</th> 
+                  <th class="px-6 py-4 text-left font-medium uppercase tracking-wider" style="width: 30%">分組組別</th> <!-- (!!! FIX: 寬度調整 !!!) -->
                 </tr>
               </thead>
               <tbody id="checkedInTableBody" class="divide-y divide-gray-200"></tbody>
@@ -203,10 +203,10 @@
             <table class="min-w-full divide-y divide-gray-200 table-fixed">
               <thead>
                 <tr>
-                  <th class="px-6 py-4 text-left font-medium uppercase tracking-wider" style="width: 25%">姓名</th>
-                  <th class="px-6 py-4 text-left font-medium uppercase tracking-wider" style="width: 35%">單位</th>
+                  <th class="px-6 py-4 text-left font-medium uppercase tracking-wider" style="width: 20%">姓名</th>
+                  <th class="px-6 py-4 text-left font-medium uppercase tracking-wider" style="width: 30%">單位</th>
                   <th class="px-6 py-4 text-left font-medium uppercase tracking-wider" style="width: 20%">職稱</th>
-                  <th class="px-6 py-4 text-left font-medium uppercase tracking-wider" style="width: 20%">分組組別</th>
+                  <th class="px-6 py-4 text-left font-medium uppercase tracking-wider" style="width: 30%">分組組別</th> <!-- (!!! FIX: 寬度調整 !!!) -->
                 </tr>
               </thead>
               <tbody id="pendingTableBody" class="divide-y divide-gray-200"></tbody>
@@ -335,10 +335,10 @@
           });
         };
         document.getElementById('checkedInListCount').textContent = data.lists.checkedIn.length;
-        fillTable('checkedInTableBody', data.lists.checkedIn, '目前無人報到', 4);
+        fillTable('checkedInTableBody', data.lists.checkedIn, '目前無人報到', 4); // (!!! FIX: colspan 4 !!!)
         
         document.getElementById('pendingListCount').textContent = data.lists.pending.length;
-        fillTable('pendingTableBody', data.lists.pending, '全員到齊！', 4);
+        fillTable('pendingTableBody', data.lists.pending, '全員到齊！', 4); // (!!! FIX: colspan 4 !!!)
 
         groupRosterContainer.innerHTML = '';
         if (!data.groupedRosters) rosterErrorHint.classList.remove('hidden');
@@ -371,7 +371,7 @@
                     ${locationHtml}
                     <span class="text-lg font-normal text-gray-500 ml-2">(已報到: ${checkedCount} / ${members.length})</span>
                   </h3>
-                  <!-- Table Scroll Wrapper with fixed width to force scroll on mobile -->
+                  <!-- Table Scroll Wrapper -->
                   <div class="table-container"><div class="table-scroll-wrapper"><table class="table-fixed min-w-full divide-y divide-gray-200" style="min-width: 700px;">
                     <thead><tr>
                       <th class="w-1/4 px-6 py-4 text-left font-medium uppercase tracking-wider">姓名</th>
