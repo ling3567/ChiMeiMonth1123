@@ -6,14 +6,13 @@
   <title>醫學教育共識營 即時報到儀表板</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    /* THEME v12: Founder's Painting + Mobile Horizontal Scroll + No Truncation */
+    /* THEME v13: Mobile Scroll FINAL FIX */
     body {
       /* 請確認圖片網址正確 */
-      background-image: url(images/許文龍.jpg'); 
+      background-image: url('images/許文龍.jpg'); 
       background-size: cover; background-position: center; background-attachment: fixed; 
       font-family: 'Noto Sans TC', sans-serif; color: #374151;
     }
-    /* 主容器 */
     .overlay-content {
       background-color: rgba(248, 247, 245, 0.90); 
       border: 1px solid rgba(255, 255, 255, 0.3); 
@@ -28,14 +27,14 @@
     /* 標題 */
     h1 { line-height: 1.4; }
 
-    /* 卡片樣式 */
+    /* 卡片 */
     .stat-card, .group-stat-card {
       background-color: #FFFFFF; border: 1px solid #E5E7EB;
       border-radius: 0.75rem; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
     }
     .group-stat-card { padding: 1rem 1.25rem; }
 
-    /* 按鈕樣式 */
+    /* 按鈕 */
     .action-button {
       background-color: #2563EB; border: 1px solid #2563EB; color: #FFFFFF; 
       font-weight: bold; padding: 0.5rem 1.2rem; border-radius: 0.5rem; 
@@ -57,24 +56,26 @@
     }
     .tab-inactive:hover { background-color: #EFF6FF; }
 
-    /* 表格樣式 - 固定欄寬與捲動 */
+    /* 表格容器 (重要修正：確保 overflow 運作) */
     .table-container {
       background-color: #FFFFFF; border-radius: 0.75rem; border: 1px solid #E5E7EB;
       overflow: hidden; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-    }
-    /* 關鍵：允許水平捲動容器 */
-    .table-scroll-wrapper { 
-      overflow-x: auto; 
-      -webkit-overflow-scrolling: touch; /* iOS 滾動優化 */
-      width: 100%;
+      width: 100%; /* 確保容器佔滿寬度 */
     }
     
-    /* 表格設定 */
+    /* 捲動層 (重要修正：強制啟用捲軸) */
+    .table-scroll-wrapper { 
+      overflow-x: auto !important; /* 強制開啟水平捲動 */
+      -webkit-overflow-scrolling: touch; /* iOS 平滑捲動 */
+      width: 100%;
+      display: block; /* 確保它是區塊元素 */
+    }
+    
+    /* 表格本身 (重要修正：設定最小寬度撐開容器) */
     table { 
       width: 100%; 
       border-collapse: collapse; 
-      /* !!! FIX: 設定最小寬度 (700px)，確保在手機上撐開寬度，觸發左右滑動 !!! */
-      min-width: 700px; 
+      min-width: 800px !important; /* 強制最小寬度，確保手機上一定會超出螢幕 */
       table-layout: fixed; 
     }
     
@@ -87,8 +88,6 @@
       padding: 1rem; border-bottom: 1px solid #E5E7EB;
       font-size: 1rem; color: #374151; 
       white-space: nowrap; /* 不換行 */
-      /* !!! FIX: 移除 overflow: hidden，確保文字完整顯示 !!! */
-      /* overflow: hidden; text-overflow: ellipsis; */ 
     }
 
     /* 狀態樣式 */
@@ -96,7 +95,6 @@
     .row-checked-in:hover { background-color: #DBEAFE; }
     .row-pending:hover { background-color: #F9FAFB; }
     
-    /* 強制狀態欄位顏色 */
     .text-success { color: #1D4ED8 !important; font-weight: bold; } /* 藍色字 */
     .text-error-light { color: #D97706; font-weight: bold; }
 
@@ -181,40 +179,48 @@
       </div>
       
       <div class="grid grid-cols-1 gap-10"> 
-        <!-- 已報到名單 (!!! FIX: 移除地點欄位 !!!) -->
+        <!-- 已報到名單 (移除地點欄位) -->
         <div>
           <h2 class="text-2xl font-bold text-gray-800 border-b-2 border-gray-200 pb-2 mb-4">已報到名單 (<span id="checkedInListCount">0</span>)</h2>
-          <div class="table-container"><div class="table-scroll-wrapper">
-            <table class="min-w-full divide-y divide-gray-200 table-fixed">
-              <thead>
-                <tr>
-                  <th class="px-6 py-4 text-left font-medium uppercase tracking-wider" style="width: 20%">姓名</th> 
-                  <th class="px-6 py-4 text-left font-medium uppercase tracking-wider" style="width: 30%">單位</th> 
-                  <th class="px-6 py-4 text-left font-medium uppercase tracking-wider" style="width: 20%">職稱</th> 
-                  <th class="px-6 py-4 text-left font-medium uppercase tracking-wider" style="width: 30%">分組組別</th> 
-                </tr>
-              </thead>
-              <tbody id="checkedInTableBody" class="divide-y divide-gray-200"></tbody>
-            </table>
-          </div></div>
+          <!-- 表格容器 -->
+          <div class="table-container">
+            <!-- 捲動層 -->
+            <div class="table-scroll-wrapper">
+              <table class="min-w-full divide-y divide-gray-200 table-fixed">
+                <thead>
+                  <tr>
+                    <th class="px-6 py-4 text-left font-medium uppercase tracking-wider" style="width: 20%">姓名</th> 
+                    <th class="px-6 py-4 text-left font-medium uppercase tracking-wider" style="width: 30%">單位</th> 
+                    <th class="px-6 py-4 text-left font-medium uppercase tracking-wider" style="width: 20%">職稱</th> 
+                    <th class="px-6 py-4 text-left font-medium uppercase tracking-wider" style="width: 30%">分組組別</th> 
+                  </tr>
+                </thead>
+                <tbody id="checkedInTableBody" class="divide-y divide-gray-200"></tbody>
+              </table>
+            </div>
+          </div>
         </div>
 
-        <!-- 未報到名單 (!!! FIX: 移除地點欄位 !!!) -->
+        <!-- 未報到名單 (移除地點欄位) -->
         <div>
           <h2 class="text-2xl font-bold text-gray-800 border-b-2 border-gray-200 pb-2 mb-4">未報到名單 (<span id="pendingListCount">0</span>)</h2>
-          <div class="table-container"><div class="table-scroll-wrapper">
-            <table class="min-w-full divide-y divide-gray-200 table-fixed">
-              <thead>
-                <tr>
-                  <th class="px-6 py-4 text-left font-medium uppercase tracking-wider" style="width: 20%">姓名</th>
-                  <th class="px-6 py-4 text-left font-medium uppercase tracking-wider" style="width: 30%">單位</th>
-                  <th class="px-6 py-4 text-left font-medium uppercase tracking-wider" style="width: 20%">職稱</th>
-                  <th class="px-6 py-4 text-left font-medium uppercase tracking-wider" style="width: 30%">分組組別</th> 
-                </tr>
-              </thead>
-              <tbody id="pendingTableBody" class="divide-y divide-gray-200"></tbody>
-            </table>
-          </div></div>
+          <!-- 表格容器 -->
+          <div class="table-container">
+            <!-- 捲動層 -->
+            <div class="table-scroll-wrapper">
+              <table class="min-w-full divide-y divide-gray-200 table-fixed">
+                <thead>
+                  <tr>
+                    <th class="px-6 py-4 text-left font-medium uppercase tracking-wider" style="width: 20%">姓名</th>
+                    <th class="px-6 py-4 text-left font-medium uppercase tracking-wider" style="width: 30%">單位</th>
+                    <th class="px-6 py-4 text-left font-medium uppercase tracking-wider" style="width: 20%">職稱</th>
+                    <th class="px-6 py-4 text-left font-medium uppercase tracking-wider" style="width: 30%">分組組別</th> 
+                  </tr>
+                </thead>
+                <tbody id="pendingTableBody" class="divide-y divide-gray-200"></tbody>
+              </table>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -338,10 +344,10 @@
           });
         };
         document.getElementById('checkedInListCount').textContent = data.lists.checkedIn.length;
-        fillTable('checkedInTableBody', data.lists.checkedIn, '目前無人報到', 4); // (!!! FIX: colspan 4, 移除地點欄 !!!)
+        fillTable('checkedInTableBody', data.lists.checkedIn, '目前無人報到', 4);
         
         document.getElementById('pendingListCount').textContent = data.lists.pending.length;
-        fillTable('pendingTableBody', data.lists.pending, '全員到齊！', 4); // (!!! FIX: colspan 4, 移除地點欄 !!!)
+        fillTable('pendingTableBody', data.lists.pending, '全員到齊！', 4);
 
         groupRosterContainer.innerHTML = '';
         if (!data.groupedRosters) rosterErrorHint.classList.remove('hidden');
