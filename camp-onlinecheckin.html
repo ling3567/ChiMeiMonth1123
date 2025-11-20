@@ -6,12 +6,11 @@
   <title>「創造360°人生」 醫學教育共識營 報到系統</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    /* v13 FINAL THEME: 
+    /* v14 FINAL THEME: 
        - Founder's Painting Background
        - 85% Opacity Warm Beige Card
-       - Refined Success Message Layout (Title Updated)
-       - Distinct Info (White) and Alert (Yellow) boxes
-       - Updated text content and links
+       - Refined Success Message Layout (Flex Wrap for Mobile)
+       - All buttons included
     */
     body {
       /* !!! 請務必將此網址替換為您的圖片網址 !!! */
@@ -172,7 +171,6 @@
           </h3>
           <div class="text-base pl-1">
             <div class="info-list-item">
-              <!-- (!!! 1. 更新文字內容 !!!) -->
               <span class="mr-2 text-gray-400">●</span><span>預計於「豐收廳」共同上課，如有異動請依現場指示。</span>
             </div>
             <div class="info-list-item">
@@ -189,12 +187,14 @@
             📍 分組資訊
           </h3>
           <div class="group-info-inner space-y-3">
-            <p class="text-lg flex flex-col sm:flex-row sm:items-baseline">
-              <span class="text-gray-500 text-base sm:w-24">您的組別：</span>
+            <!-- (!!! UPDATED: 手機版優化 - 預設同一行，空間不足才換行 !!!) -->
+            <!-- 移除 flex-col, 改用 flex-wrap, 加入 gap-2 -->
+            <p class="text-lg flex flex-wrap items-baseline gap-2">
+              <span class="text-gray-500 text-base whitespace-nowrap">您的組別：</span>
               <span id="displayGroup" class="font-bold text-gray-900 text-xl"></span>
             </p>
-            <p class="text-lg flex flex-col sm:flex-row sm:items-baseline">
-              <span class="text-gray-500 text-base sm:w-24">分組地點：</span>
+            <p class="text-lg flex flex-wrap items-baseline gap-2">
+              <span class="text-gray-500 text-base whitespace-nowrap">分組地點：</span>
               <span id="displayLocation" class="font-bold text-blue-600 text-xl"></span>
             </p>
           </div>
@@ -225,7 +225,6 @@
           分組共識資料填寫
         </a>
         
-        <!-- (!!! 2. 更新問卷連結 !!!) -->
         <a href="https://luyun1224.github.io/Teaching-Consensus-Camp-Questionnaire" 
            target="_blank" id="surveyLink" class="w-full reset-button agenda-button text-lg py-3">
           滿意度問卷填寫
