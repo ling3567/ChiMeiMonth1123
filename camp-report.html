@@ -116,7 +116,8 @@
     <!-- 【★★ 功能新增：顏色將由 JS 動態切換 ★★】 -->
     <footer class="w-full bg-cmh-blue text-white mt-auto relative pt-20 transition-colors duration-500"> <!-- 增加 pt -->
         <!-- 【★★ 視覺修正：(gen_56) 直接裁切 Footer，消除白線 ★★】 -->
-        <div class="absolute top-0 left-0 w-full h-20 bg-gray-100" style="clip-path: polygon(0 100%, 100% 0, 0 0);"></div>
+        <!-- 使用 calc() 確保高度足夠覆蓋細線，且角度正確 -->
+        <div class="absolute top-0 left-0 w-full h-24 bg-gray-100" style="clip-path: polygon(0 100%, 100% 0, 0 0);"></div>
         
         <!-- Footer 內容 -->
         <div class="relative container mx-auto max-w-6xl px-4 py-6 text-center text-gray-300">
@@ -370,12 +371,14 @@
             }
 
             if (data && data.length > 0) {
-                allData = data.filter(row => row.groupName && row.reporterName); // 過濾掉空行
+                // 【★★ 重要修正：過濾資料時更寬容 ★★】
+                // 有時候第一欄是空的但後面有資料，我們只要確保有 groupName 就好
+                allData = data.filter(row => row.groupName);
                 
                 if (allData.length > 0) {
                     // 填入下拉選單
                     groupSelectEl.innerHTML = allData.map((item, index) => {
-                        return `<option value="${index}">${item.groupName} - ${item.reporterName}</option>`;
+                        return `<option value="${index}">${item.groupName} - ${item.reporterName || '未填寫'}</option>`;
                     }).join('');
                     
                     // 綁定下拉選單事件
