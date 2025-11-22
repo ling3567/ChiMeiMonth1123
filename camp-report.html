@@ -13,7 +13,6 @@
     
     <!-- 
       客製化 Tailwind 顏色
-      採用高對比、適合投影的深海軍藍
     -->
     <script>
         tailwind.config = {
@@ -70,16 +69,18 @@
 <body class="bg-gray-100 min-h-screen text-gray-900 flex flex-col">
 
     <!-- Header 區塊 (高對比) -->
-    <!-- 【★★ 功能新增：顏色將由 JS 動態切換 ★★】 -->
-    <header class="relative bg-cmh-blue pb-24 pt-12 text-white transition-colors duration-500">
-        <!-- 【★★ 視覺修正：(gen_38) 調整標題層級 ★★】 -->
+    <!-- 【★★ 視覺修正：(gen_56) 直接裁切 Header，消除白線 ★★】 -->
+    <!-- polygon(TL, TR, BR, BL) -->
+    <!-- BR 使用 calc(100% - 6rem) 來模擬原本 h-24 的斜度 -->
+    <header class="relative bg-cmh-blue pb-24 pt-12 text-white transition-colors duration-500"
+            style="clip-path: polygon(0 0, 100% 0, 100% calc(100% - 6rem), 0 100%);">
+        
         <div class="container mx-auto max-w-6xl px-4 text-center">
             <p class="text-2xl md:text-3xl opacity-90 font-medium">「創造360°人生」醫學教育共識營</p>
             <h1 class="text-4xl md:text-5xl font-black mt-2 tracking-wide">功能小組年度策略報告</h1>
         </div>
-        <!-- 斜角設計 -->
-        <!-- 【★★ 視覺修正：加高高度至 h-24 以消除細線 ★★】 -->
-        <div class="absolute bottom-0 left-0 w-full h-24 bg-gray-100" style="clip-path: polygon(0 100%, 100% 0, 100% 100%);"></div>
+        
+        <!-- (已移除內部的灰色 div) -->
     </header>
 
     <!-- 報告主容器 -->
@@ -98,11 +99,10 @@
                 <!-- 內容將由 JS 動態填入 -->
             </div>
             
-            <!-- 【★★ 視覺修正：導覽列移至右下方 ★★】 -->
+            <!-- 導覽列 -->
             <nav class="mt-8 flex justify-end">
                 <div class="w-full md:w-96">
                     <label for="groupSelect" class="sr-only">請選擇要報告的組別</label>
-                    <!-- 【★★ 功能新增：顏色將由 JS 動態切換 ★★】 -->
                     <select id="groupSelect"
                         class="w-full text-center text-lg md:text-xl px-4 py-3 bg-white rounded-lg border-2 border-cmh-blue focus:outline-none focus:ring-2 focus:ring-cmh-blue focus:border-transparent transition-colors duration-500 shadow-md font-semibold">
                         <!-- 組別選項將由 JS 動態填入 -->
@@ -113,10 +113,13 @@
 
     </main>
 
-    <!-- 【★★ 功能新增：顏色將由 JS 動態切換 ★★】 -->
-    <footer class="w-full bg-cmh-blue text-white mt-auto relative pt-20 transition-colors duration-500"> <!-- 增加 pt -->
-        <!-- 【★★ 視覺修正：反向斜角 (使用頁面背景色) ★★】 -->
-        <div class="absolute top-0 left-0 w-full h-20 bg-gray-100" style="clip-path: polygon(0 100%, 100% 0, 0 0);"></div>
+    <!-- 【★★ 視覺修正：(gen_56) 直接裁切 Footer，消除白線 ★★】 -->
+    <!-- polygon(TL, TR, BR, BL) -->
+    <!-- TL 使用 5rem 來模擬原本 h-20 的斜度 -->
+    <footer class="w-full bg-cmh-blue text-white mt-auto relative pt-20 transition-colors duration-500"
+            style="clip-path: polygon(0 5rem, 100% 0, 100% 100%, 0 100%);">
+        
+        <!-- (已移除內部的灰色 div) -->
         
         <!-- Footer 內容 -->
         <div class="relative container mx-auto max-w-6xl px-4 py-6 text-center text-gray-300">
@@ -138,7 +141,6 @@
         const slideContainerEl = document.getElementById('slideContainer');
         const groupSelectEl = document.getElementById('groupSelect');
 
-        // 【★★ 功能新增：(gen_53) 取得 Header 和 Footer ★★】
         const headerEl = document.querySelector('header');
         const footerEl = document.querySelector('footer');
 
@@ -191,7 +193,7 @@
         };
 
         /**
-         * 【★★ 功能新增：(gen_53) 動態套用主題色 ★★】
+         * 動態套用主題色
          * @param {object} theme - 來自 groupThemes 的主題物件
          */
         const applyTheme = (theme) => {
@@ -209,17 +211,15 @@
 
         /**
          * 輔助函數：處理空值和保留換行 (移除清單符號)
-         * @param {string|number} text - 原始資料
+         * @param {string} text - 原始文字
          * @returns {string} - 格式化後的 HTML
          */
         const formatReportText = (text) => {
-            // 【★★ 關鍵修正：先強制轉為字串 ★★】
-            // 避免傳入數字 (如 123) 時造成 .trim() 錯誤
-            const str = (text === null || text === undefined) ? '' : String(text);
-
-            if (str.trim() === '') {
+            if (!text || text.trim() === '') {
                 return '<span class="text-gray-400">無</span>';
             }
+            // 【★★ 關鍵修正：轉字串防止數字錯誤 ★★】
+            const str = String(text);
             // 1. 編碼 (防止 XSS)
             const encodedText = str.replace(/</g, "&lt;").replace(/>/g, "&gt;");
             // 2. 轉換換行符
@@ -229,16 +229,14 @@
         /**
          * 輔助函數：產生單一計畫項目的 HTML
          * @param {string} label - 標籤 (例如 "行動名稱 1:")
-         * @param {string|number} content - 填寫的內容
+         * @param {string} content - 填寫的內容
          * @returns {string} - 格式化後的 HTML
          */
         const createPlanItemHTML = (label, content) => {
-            // 【★★ 關鍵修正：先強制轉為字串 ★★】
-            const str = (content === null || content === undefined) ? '' : String(content);
-            
-            if (str.trim() === '') {
+            if (!content || String(content).trim() === '') {
                 return ''; // 如果內容為空，不顯示
             }
+            const str = String(content);
             const encodedContent = str.replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\n/g, '<br>');
             return `
                 <div class="flex flex-col md:flex-row md:items-start mt-4">
@@ -250,7 +248,7 @@
         /**
          * 產生幻燈片 HTML 內容
          * @param {object} data - 單一小組的資料
-         * @param {object} theme - 【★★ 功能新增：(gen_53) 傳入主題物件 ★★】
+         * @param {object} theme - 傳入主題物件
          * @returns {string} - 完整的 HTML
          */
         const createSlideHTML = (data, theme) => {
@@ -260,9 +258,7 @@
                 const content = data[`actionContent${i}`];
                 const kpi = data[`kpi${i}`];
 
-                // 檢查是否有內容 (轉字串後判斷)
                 if (String(name || '').trim() || String(content || '').trim() || String(kpi || '').trim()) {
-                    // 【★★ 視覺修正：(gen_39) 劃分區塊 ★★】
                     plansHtml += `
                         <div class="mt-6 p-6 bg-gray-50 rounded-lg shadow-inner space-y-4">
                             ${createPlanItemHTML(`行動名稱 ${i}`, name)}
@@ -272,12 +268,9 @@
                 }
             }
             if (plansHtml === '') {
-                // 【★★ 文字修正：(gen_46) "未填寫" 改為 "無" ★★】
                 plansHtml = `<div class="mt-4 text-xl md:text-2xl text-gray-500">無</div>`;
             }
 
-            // 【★★ 功能新增：(gen_53) 動態替換顏色 ★★】
-            // 【★★ 視覺修正：(gen_36) 顏色對調 ★★】
             return `
                 <div class="slide-content space-y-10">
                     <!-- 基本資料 -->
@@ -289,7 +282,6 @@
                     <!-- 一、願景 -->
                     <section>
                         <h3 class="text-3xl md:text-4xl font-bold ${theme.text}">一、功能小組的願景</h3>
-                        <!-- 【★★ 視覺修正：(gen_38) 統一內容字體 ★★】 -->
                         <div class="mt-4 text-xl md:text-2xl text-gray-700 space-y-2 leading-relaxed">
                             ${formatReportText(data.vision)}
                         </div>
@@ -338,28 +330,19 @@
             currentIndex = index;
             const data = allData[index];
             
-            // 【★★ 功能新增：(gen_53) 根據組別名稱決定主題 ★★】
-            const groupName = data.groupName || '教育輔導組'; // 預設為奇美藍
-            // 【★★ 色彩修正：(gen_54) / (gen_55) ★★】
+            const groupName = data.groupName || '教育輔導組';
             const theme = groupThemes[groupName] || groupThemes['教育輔導組'];
             
-            // 【★★ 功能新增：(gen_53) 套用主題色 ★★】
             applyTheme(theme);
-            
-            // 【★★ 功能新增：(gen_53) 將主題色傳入 ★★】
             slideContainerEl.innerHTML = createSlideHTML(data, theme);
-            
-            // 更新下拉選單的選中狀態
             groupSelectEl.value = index;
         };
 
         /**
          * 處理 JSONP 抓到的資料
-         * @param {object | object[]} data - 從 Apps Script 回傳的資料
          */
         window.handleData = (data) => {
             if (data && data.result === 'error') {
-                // 處理 Code.gs 內部的錯誤
                 console.error('Apps Script 錯誤:', data.message);
                 loadingEl.innerHTML = `
                     <p class="text-3xl font-bold text-red-600">抓取資料失敗！</p>
@@ -370,34 +353,25 @@
             }
 
             if (data && data.length > 0) {
-                allData = data.filter(row => row.groupName && row.reporterName); // 過濾掉空行
+                allData = data.filter(row => row.groupName && row.reporterName);
                 
                 if (allData.length > 0) {
-                    // 填入下拉選單
                     groupSelectEl.innerHTML = allData.map((item, index) => {
                         return `<option value="${index}">${item.groupName} - ${item.reporterName}</option>`;
                     }).join('');
                     
-                    // 綁定下拉選單事件
                     groupSelectEl.addEventListener('change', (e) => {
                         updateSlide(parseInt(e.target.value, 10));
                     });
                     
-                    // 顯示第一筆資料
                     updateSlide(0);
-                    
-                    // 顯示報告容器，隱藏載入中
                     loadingEl.classList.add('hidden');
                     reportContainerEl.classList.remove('hidden');
 
                 } else {
-                     // 【★★ 文字修正：(gen_46) "未填寫" 改為 "無" ★★】
                      loadingEl.innerHTML = '<p class="text-3xl font-bold text-cmh-blue">目前 Google Sheet 中沒有可顯示的資料。</p>';
                 }
-
             } else {
-                // 沒有資料
-                // 【★★ 文字修正：(gen_46) "未填寫" 改為 "無" ★★】
                 loadingEl.innerHTML = '<p class="text-3xl font-bold text-cmh-blue">目前 Google Sheet 中沒有可顯示的資料。</p>';
             }
         };
@@ -407,11 +381,9 @@
          */
         const fetchData = () => {
             const script = document.createElement('script');
-            // 加上 callback=handleData 和一個隨機數 (防止快取)
             script.src = `${GOOGLE_APPS_SCRIPT_URL}?callback=handleData&_=${new Date().getTime()}`;
             
             script.onerror = () => {
-                // 處理網路層級的錯誤 (例如 CORS 錯誤或網址錯誤)
                 console.error('抓取資料失敗: 網路或 JSONP 錯誤。');
                 loadingEl.innerHTML = `
                     <p class="text-3xl font-bold text-red-600">抓取資料失敗！ (Fetch Error)</p>
@@ -421,7 +393,6 @@
             document.body.appendChild(script);
         };
 
-        // 頁面載入時自動執行
         document.addEventListener('DOMContentLoaded', fetchData);
         
     </script>
