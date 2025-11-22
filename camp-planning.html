@@ -56,7 +56,7 @@
             flex-grow: 1;
         }
         
-        /* 【★★ 功能：紅色星號 ★★】 */
+        /* 紅色星號 */
         label sup {
             color: #EF4444; /* text-red-500 */
             font-weight: 600;
@@ -105,8 +105,7 @@
         
         /* 預覽視窗 Modal 樣式 */
         .modal {
-            /* 【★★ Bug 修正：(gen_45) 預設 *必須* 隱藏 ★★】 */
-            display: none; 
+            display: none; /* 預設隱藏 */
             animation: fadeIn 0.3s ease-out;
         }
         .modal-content {
@@ -128,7 +127,6 @@
             color: #003D74; /* text-cmh-blue */
             margin-top: 1.5rem; /* mt-6 */
         }
-        /* 【★★ 視覺修正：(gen_44) 移除 white-space ★★】 */
         .preview-content p, .preview-content div {
             font-size: 1.125rem; /* text-lg */
             color: #374151; /* text-gray-700 */
@@ -142,7 +140,6 @@
             border-radius: 0.5rem; /* rounded-lg */
         }
         
-        /* 【★★ 視覺修正：(gen_43) Flexbox 對齊 ★★】 */
         .preview-content .plan-item {
             display: flex;
             align-items: flex-start; /* 頂部對齊 */
@@ -162,23 +159,20 @@
 </head>
 <body class="bg-gray-100 text-gray-900">
 
-    <!-- Header 區塊 (高對比) -->
+    <!-- Header 區塊 -->
     <header class="relative bg-cmh-blue pb-24 pt-12 text-white">
         <div class="container mx-auto max-w-4xl px-4 text-center">
             <h1 class="text-4xl md:text-5xl font-bold mb-2">醫學教育共識營</h1>
             <p class="text-2xl md:text-3xl opacity-90">功能小組年度策略填報</p>
         </div>
-        <!-- 斜角設計 -->
         <div class="absolute bottom-0 left-0 w-full h-16 bg-gray-100" style="clip-path: polygon(0 100%, 100% 0, 100% 100%);"></div>
     </header>
 
-    <!-- 表單容器 (主要內容) -->
+    <!-- 表單容器 -->
     <div class="main-content container mx-auto max-w-4xl px-4 pb-24">
         
-        <!-- 表單卡片 (疊在 Header 上方) -->
         <form id="dataForm" class="relative -mt-16 bg-white rounded-xl shadow-2xl overflow-hidden">
             
-            <!-- 表單主體 -->
             <div class="p-6 md:p-10 space-y-8">
                 
                 <!-- 一、功能小組基本資料 -->
@@ -186,7 +180,6 @@
                     <h2 class="text-2xl md:text-3xl font-bold text-cmh-blue pb-2">
                         一、功能小組基本資料
                     </h2>
-                    
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                             <label for="groupName" class="block text-lg font-semibold mb-2 text-gray-700">功能小組名稱 <sup>*</sup></label>
@@ -398,7 +391,7 @@
 
             </div>
 
-            <!-- 【★★ 視覺修正：卡片 Footer (淺色) ★★】 -->
+            <!-- 卡片 Footer (淺色) -->
             <footer class="bg-gray-50 px-6 md:px-10 py-6 border-t border-gray-200 sticky bottom-0">
                 <div class="flex justify-between items-center">
                     
@@ -407,7 +400,7 @@
                         <!-- 狀態將顯示於此 -->
                     </div>
 
-                    <!-- 【★★ 視覺修正：提交按鈕 (藍底白字) ★★】 -->
+                    <!-- 提交按鈕 (藍底白字) -->
                     <button type="submit" id="submitButton"
                         class="px-8 py-3 bg-cmh-blue text-white text-lg md:text-xl font-bold rounded-lg shadow-md hover:bg-opacity-90 transition duration-300 focus:outline-none focus:ring-2 focus:ring-cmh-blue focus:ring-opacity-75 disabled:opacity-50 disabled:cursor-not-allowed">
                         <span id="submitButtonText">預覽並提交</span>
@@ -418,21 +411,19 @@
 
     </div> <!-- .main-content 結束 -->
 
-    <!-- 【★★ 視覺修正：全頁 Footer (深藍色) ★★】 -->
+    <!-- 全頁 Footer (深藍色) -->
     <footer class="w-full bg-cmh-blue text-white mt-auto relative pt-20"> <!-- 增加 pt -->
-        <!-- 【★★ 視覺修正：反向斜角 (使用頁面背景色) ★★】 -->
+        <!-- 反向斜角 (使用頁面背景色) -->
         <div class="absolute top-0 left-0 w-full h-20 bg-gray-100" style="clip-path: polygon(0 100%, 100% 0, 0 0);"></div>
         
         <!-- Footer 內容 -->
         <div class="relative container mx-auto max-w-4xl px-4 py-6 text-center text-gray-300">
-            <!-- 【★★ 文字修正 ★★】 -->
             © 2025 Chi Mei Medical Center. All rights reserved.
         </div>
     </footer>
 
 
-    <!-- 【★★ 功能新增：預覽 Modal ★★】 -->
-    <!-- 【★★ Bug 修正：(gen_45) 移除 'flex'，讓 Modal 預設隱藏 ★★】 -->
+    <!-- 預覽 Modal -->
     <div id="previewModal" class="modal fixed inset-0 bg-gray-800 bg-opacity-75 items-center justify-center p-4 z-50">
         <div class="modal-content bg-white rounded-xl shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col">
             <!-- Modal Header -->
@@ -466,7 +457,6 @@
     <script>
         // -------------------------------------------------------------------------
         // ！！！Google Apps Script 網路應用程式 URL！！！
-        // 【★★ 最終修正 (gen_52)：*所有* 檔案都使用 *全新* 的部署網址 ★★】
         // -------------------------------------------------------------------------
         const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby6HlqKxbzbAdlyNksypmA6krSOSxHZTnTIamFWnSxgc3C6m7Zxb6ANMAkZ0M8ddgw/exec';
         // -------------------------------------------------------------------------
@@ -510,13 +500,19 @@
             // 4. 產生預覽 HTML
             previewContent.innerHTML = generatePreviewHTML(formDataObject);
             
-            // 5. 重置 Modal 按鈕狀態
+            // 5. 重置 Modal 按鈕狀態 - 重要：確保移除舊的 onclick
             confirmButton.disabled = false;
             confirmButtonText.textContent = '確認送出';
             modalStatus.innerHTML = '';
             
+            // 【★★ 關鍵修正：每次開啟 Modal 都重新綁定正確的事件 ★★】
+            confirmButton.onclick = () => submitData(formDataObject);
+            
+            // 恢復 "返回修改" 按鈕
+            cancelButton.style.display = 'inline-flex';
+
             // 6. 顯示 Modal
-            previewModal.style.display = 'flex'; // 【★★ Bug 修正 (gen_45)：JS 在此處才顯示 Modal ★★】
+            previewModal.style.display = 'flex';
         });
 
         // Modal - "返回修改" 按鈕
@@ -524,45 +520,29 @@
             previewModal.style.display = 'none';
         });
 
-        // Modal - "確認送出" 按鈕
-        confirmButton.addEventListener('click', () => {
-            submitData(formDataObject);
-        });
+        // 注意：移除了靜態的 confirmButton.addEventListener('click', ...) 
+        // 改為在 form submit 時動態綁定 onclick
         
         /**
-         * 【★★ Bug 修正：(gen_41) ★★】
          * 輔助函數：處理空值和保留換行
          * @param {string} text - 原始文字
          * @returns {string} - 格式化後的 HTML
          */
         const formatText = (text) => {
-            // 1. 檢查是否為空
             if (!text || text.trim() === '') {
-                // 【★★ 文字修正：(gen_46) "未填寫" 改為 "無" ★★】
                 return '<span class="text-gray-400">無</span>';
             }
-            
-            // 2. 只對 *有內容* 的文字進行編碼
             const encodedText = text.replace(/</g, "&lt;").replace(/>/g, "&gt;");
-            
-            // 3. 轉換換行符
             return encodedText.replace(/\n/g, '<br>');
         };
 
         /**
-         * 【★★ 視覺修正：(gen_43) Flexbox 對齊 ★★】
          * 輔助函數：產生單一計畫項目的 HTML (使用 Flexbox 對齊)
-         * @param {string} label - 標籤 (例如 "行動名稱 1:")
-         * @param {string} content - 填寫的內容
-         * @returns {string} - 格式化後的 HTML
          */
         const createPlanItem = (label, content) => {
-            // 【★★ 視覺修正：(gen_42) 只顯示有填寫的欄位 ★★】
             if (!content || content.trim() === '') {
                 return ''; // 如果內容為空，不顯示這一行
             }
-            // 【★★ 視覺修正：(gen_43) ★★】
-            // 內容也需要編碼和換行
             const encodedContent = content.replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\n/g, '<br>');
             return `
                 <div class="plan-item">
@@ -581,7 +561,6 @@
                 const content = data[`actionContent${i}`];
                 const kpi = data[`kpi${i}`];
                 
-                // 【★★ 視覺修正：(gen_42) 只顯示有填寫的欄位 ★★】
                 const nameHtml = createPlanItem(`行動名稱 ${i}`, name);
                 const contentHtml = createPlanItem(`行動內容 ${i}`, content);
                 const kpiHtml = createPlanItem(`KPI ${i}`, kpi);
@@ -597,13 +576,9 @@
                 }
             }
             if (plansHtml === '') {
-                // 如果五項都為空，顯示「無」
-                // 【★★ 文字修正：(gen_46) "未填寫" 改為 "無" ★★】
                 plansHtml = `<div><span class="text-gray-400">無</span></div>`;
             }
 
-            // 【★★ 視覺修正：(gen_40) ★★】
-            // 將 <p> 改為 <div> 以搭配 formatText 的 <br>
             return `
                 <h3>一、功能小組基本資料</h3>
                 <p><strong>功能小組名稱:</strong> ${formatText(data.groupName)}</p>
@@ -644,7 +619,7 @@
                 body: new URLSearchParams(data), // 使用 URLSearchParams 格式
             })
             .then(() => {
-                // 4. 'no-cors' 模式下，我們假設請求已成功
+                // 4. 假設請求已成功
                 modalStatus.innerHTML = '<div class="checkmark">✓</div><span class="text-cmh-blue font-semibold"> 提交成功！</span>';
                 confirmButtonText.textContent = '已提交';
                 
@@ -652,16 +627,18 @@
                 
                 confirmButton.disabled = false;
                 confirmButtonText.textContent = '關閉';
-                confirmButton.onclick = () => { // 重新綁定事件
+                
+                // 【★★ 關鍵修正：成功後，將 onclick 替換為 "關閉" 行為 ★★】
+                // 這樣按鈕再次被點擊時，只會執行關閉，不會再次執行 submitData
+                confirmButton.onclick = () => { 
                     previewModal.style.display = 'none';
                     form.reset(); // 清空表單
                     
                     statusMessage.innerHTML = '<span class="text-green-600 font-semibold">✓ 資料已成功提交。</span>';
                     window.scrollTo(0, 0); // 滾動到最上方
                     
-                    // 恢復按鈕原始狀態
-                    cancelButton.style.display = 'inline-flex';
-                    confirmButton.onclick = () => submitData(formDataObject); // 綁回原事件
+                    // 注意：這裡不需要再綁回 submitData，因為下次開啟 Modal 時 (form submit 事件)，
+                    // 會重新執行 `confirmButton.onclick = () => submitData(formDataObject);`
                 };
 
             })
@@ -672,6 +649,7 @@
                 modalStatus.innerHTML = `<span class="text-red-600">提交失敗 (網路錯誤): ${error.message}</span>`;
                 confirmButton.disabled = false;
                 confirmButtonText.textContent = '重新提交';
+                // 失敗時不需要改變 onclick，讓使用者可以再次嘗試
             });
         }
     </script>
