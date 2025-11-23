@@ -215,12 +215,15 @@
          * @returns {string} - 格式化後的 HTML
          */
         const formatReportText = (text) => {
-            if (!text || text.trim() === '') {
+            // 【★★ 關鍵修正：(gen_62) 強制轉字串，防止數字類型出錯 ★★】
+            const str = (text === null || text === undefined) ? '' : String(text);
+
+            if (str.trim() === '') {
                 // 【★★ 文字修正：(gen_46) "未填寫" 改為 "無" ★★】
                 return '<span class="text-gray-400">無</span>';
             }
             // 1. 編碼 (防止 XSS)
-            const encodedText = text.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+            const encodedText = str.replace(/</g, "&lt;").replace(/>/g, "&gt;");
             
             // 2. 轉換換行符為段落，並增加間距 (mb-6)
             return encodedText.split('\n')
@@ -237,11 +240,14 @@
          * @returns {string} - 格式化後的 HTML
          */
         const createPlanItemHTML = (label, content) => {
-            if (!content || content.trim() === '') {
+            // 【★★ 關鍵修正：(gen_62) 強制轉字串，防止數字類型出錯 ★★】
+            const str = (content === null || content === undefined) ? '' : String(content);
+
+            if (str.trim() === '') {
                 return ''; // 如果內容為空，不顯示
             }
             // 計畫內容較短，通常不需要分段，維持 <br> 即可，但使用 leading-relaxed
-            const encodedContent = content.replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\n/g, '<br>');
+            const encodedContent = str.replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\n/g, '<br>');
             return `
                 <div class="flex flex-col md:flex-row md:items-start mt-4">
                     <strong class="text-xl md:text-2xl font-semibold text-gray-800 flex-shrink-0 w-full md:w-56">${label}:</strong>
@@ -262,7 +268,7 @@
                 const content = data[`actionContent${i}`];
                 const kpi = data[`kpi${i}`];
 
-                // 檢查是否有內容 (轉字串後判斷)
+                // 【★★ 關鍵修正：(gen_62) 強制轉字串，避免判斷出錯 ★★】
                 if (String(name || '').trim() || String(content || '').trim() || String(kpi || '').trim()) {
                     // 【★★ 視覺修正：(gen_39) 劃分區塊 ★★】
                     plansHtml += `
