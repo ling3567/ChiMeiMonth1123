@@ -6,15 +6,15 @@
   <title>「創造360°人生」 醫學教育共識營 報到系統</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    /* v14 FINAL THEME: 
+    /* v15 FINAL THEME: 
        - Founder's Painting Background
        - 85% Opacity Warm Beige Card
        - Refined Success Message Layout (Flex Wrap for Mobile)
-       - All buttons included
+       - All buttons included (Agenda, Handouts, Survey, Group Data)
     */
     body {
       /* !!! 請務必將此網址替換為您的圖片網址 !!! */
-      background-image: url('images/許文龍.jpg'); 
+      background-image: url('https://i.imgur.com/your_image_hash.jpg'); 
       background-size: cover; 
       background-position: center; 
       background-attachment: fixed; 
@@ -171,7 +171,7 @@
           </h3>
           <div class="text-base pl-1">
             <div class="info-list-item">
-              <span class="mr-2 text-gray-400">●</span><span>全程於「豐收廳」共同上課，如有異動請依現場指示。</span>
+              <span class="mr-2 text-gray-400">●</span><span>預計於「豐收廳」共同上課，如有異動請依現場指示。</span>
             </div>
             <div class="info-list-item">
               <span class="mr-2 text-gray-400">●</span><span>僅 15:50–16:30 為分組討論，請依組別前往分組地點</span>
@@ -187,8 +187,6 @@
             📍 分組資訊
           </h3>
           <div class="group-info-inner space-y-3">
-            <!-- (!!! UPDATED: 手機版優化 - 預設同一行，空間不足才換行 !!!) -->
-            <!-- 移除 flex-col, 改用 flex-wrap, 加入 gap-2 -->
             <p class="text-lg flex flex-wrap items-baseline gap-2">
               <span class="text-gray-500 text-base whitespace-nowrap">您的組別：</span>
               <span id="displayGroup" class="font-bold text-gray-900 text-xl"></span>
@@ -219,6 +217,15 @@
            target="_blank" class="w-full reset-button agenda-button text-lg py-3">
           查看共識營議程
         </a>
+
+        <!-- (!!! NEW: 新增講義按鈕 !!!) -->
+        <a id="handoutLink" 
+           href="https://drive.google.com/drive/folders/1Gykwz7lIRyVJS-Nsf-HZ6NBN2S5lMuFB?usp=drive_link" 
+           target="_blank"
+           class="hidden w-full reset-button agenda-button text-lg py-3">
+          查看共識營相關講義
+        </a>
+        <!-- (!!! END NEW !!!) -->
         
         <a href="https://ling3567.github.io/ChiMeiMonth1123/camp-planning.html" 
            target="_blank" class="w-full reset-button agenda-button text-lg py-3">
@@ -263,6 +270,9 @@
     const reminderText = document.getElementById('reminderText');
     const actionButtons = document.getElementById('actionButtons');
     const input = document.getElementById('employeeId');
+
+    // (!!! NEW: 取得講義按鈕 !!!)
+    const handoutLink = document.getElementById('handoutLink'); 
 
     async function handleCheckIn() {
       const employeeId = input.value;
@@ -311,6 +321,9 @@
         actionButtons.classList.remove('hidden');
         reminderText.classList.remove('hidden');
 
+        // (!!! NEW: 顯示講義按鈕 !!!)
+        handoutLink.classList.remove('hidden');
+
       } else {
         // === 查無此人/錯誤 ===
         messageText.className = "text-2xl font-semibold text-error whitespace-pre-line";
@@ -327,6 +340,9 @@
         
         actionButtons.classList.add('hidden');
         reminderText.classList.add('hidden');
+
+        // (!!! NEW: 隱藏講義按鈕 !!!)
+        handoutLink.classList.add('hidden');
       }
       
       resultDiv.classList.remove('hidden');
@@ -341,6 +357,8 @@
       errorInfo.classList.add('hidden');
       actionButtons.classList.add('hidden');
       reminderText.classList.add('hidden');
+      // (!!! NEW: 隱藏講義按鈕 !!!)
+      handoutLink.classList.add('hidden');
       
       resultDiv.classList.remove('hidden');
     }
@@ -360,6 +378,8 @@
       errorInfo.classList.add('hidden');
       actionButtons.classList.add('hidden');
       reminderText.classList.add('hidden');
+      // (!!! NEW: 隱藏講義按鈕 !!!)
+      handoutLink.classList.add('hidden');
     }
 
     input.addEventListener('keypress', function(event) {
