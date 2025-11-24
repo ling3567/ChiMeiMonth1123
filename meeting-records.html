@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>會議紀錄查詢頁面</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root {
+      --cmh-blue: #003D74;
+      --cmh-accent: #00B9E9;
+      --cmh-soft: #F1F5F9;
+    }
+    body {
+      font-family: 'Noto Sans TC', 'Inter', 'Microsoft JhengHei', sans-serif;
+      background: linear-gradient(180deg, #f8fafc 0%, #e2e8f0 100%);
+      color: #0f172a;
+    }
+    .card {
+      border-radius: 16px;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+      border: 1px solid #e2e8f0;
+      background-color: white;
+    }
+    .section-header {
+      background: linear-gradient(90deg, var(--cmh-blue) 0%, #115e8c 100%);
+      color: white;
+      border-radius: 12px;
+    }
+  </style>
+</head>
+<body class="min-h-screen">
+  <header class="bg-white shadow-sm border-b border-slate-200 sticky top-0 z-20">
+    <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+      <h1 class="text-2xl font-bold text-slate-900">會議紀錄查詢頁面</h1>
+      <div class="flex items-center gap-3 text-sm text-slate-600">
+        <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-slate-100 text-slate-800">
+          <span class="w-2 h-2 rounded-full bg-emerald-500"></span> 全部會議紀錄</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 py-10 space-y-8">
+    <section class="card p-6">
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <div>
+          <p class="text-sm text-slate-600">統一檢視各日期的會議紀錄，所有大項僅一個區塊，並在同一層呈現小項與子項。</p>
+        </div>
+        <div class="flex gap-2">
+          <input id="keyword" type="search" placeholder="搜尋議題或單位..." class="w-64 border border-slate-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[var(--cmh-accent)]">
+          <button id="searchBtn" class="px-4 py-2 rounded-lg bg-[var(--cmh-blue)] text-white font-semibold hover:bg-[#0a4f82]">搜尋</button>
+        </div>
+      </div>
+    </section>
+
+    <div id="meetingList" class="space-y-6"></div>
+  </main>
+
+  <template id="meetingTemplate">
+    <article class="card overflow-hidden">
+      <div class="bg-slate-50 border-b border-slate-200 px-6 py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+        <div>
+          <p class="text-xs font-semibold text-slate-500 tracking-wide">會議日期</p>
+          <h2 class="text-xl font-bold text-slate-900" data-field="date"></h2>
+          <p class="text-sm text-slate-600" data-field="title"></p>
+        </div>
+        <div class="flex flex-wrap gap-2" data-field="tags"></div>
+      </div>
+      <div class="p-6 space-y-4" data-field="sections"></div>
+    </article>
+  </template>
+
+  <template id="sectionTemplate">
+    <div class="border border-slate-200 rounded-xl overflow-hidden">
+      <button class="w-full section-header px-5 py-3 flex items-center justify-between text-left font-bold text-lg focus:outline-none" data-toggle>
+        <span data-field="sectionTitle"></span>
+        <svg class="w-5 h-5 transform transition-transform duration-200" data-field="chevron" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+      </button>
+      <div class="px-6 py-4 bg-white" data-field="sectionBody">
+      </div>
+    </div>
+  </template>
+
+  <script>
+    const meetings = [
+      {
+        date: '2024/10/05',
+        title: '醫學教育委員會例會',
+        tags: ['醫學教育', '例會'],
+        sections: [
+          {
+            title: '三、臨床技能中心業務報告：',
+            items: [
+              { text: '1.本院模擬病人培訓完成 20 位，新增 OSCE 教案 3 則。' },
+              { text: '2.第二季技能測驗完成 6 場次，通過率 92%。', subitems: [
+                '（1）低通過率項目集中於縫合技術。',
+                '（2）已規劃 11 月加強訓練班。'
+              ]},
+              { text: '3.設備汰換計畫已完成招標，12 月導入新超音波模組。' }
+            ]
+          },
+          {
+            title: '四、教學部業務報告：',
+            items: [
+              { text: '1.住院醫師教學門診排班完成，12 月起導入新場次。' },
+              { text: '2.教師發展工作坊將於 11/15 辦理，預計 80 人。', subitems: [
+                '（1）課程主題：臨床教學回饋技巧。',
+                '（2）講者：林○○主任、王○○醫師。'
+              ]},
+              { text: '3.明年度教學經費預算書已送審。' }
+            ]
+          }
+        ]
+      },
+      {
+        date: '2024/11/12',
+        title: '教學中心工作會議',
+        tags: ['教學中心', '專案'],
+        sections: [
+          {
+            title: '六、教學中心：',
+            items: [
+              { text: '1.完成通識課程需求調查，共 256 份回覆。' },
+              { text: '2.跨專業教育（IPE）將與護理部合辦案例研討。', subitems: [
+                '（1）擬選案例：急性胸痛、跌倒處置。',
+                '（2）預計參與：醫學、護理、藥學學生共 120 人。',
+                '（3）時間：2025/01/08。'
+              ]},
+              { text: '3.教學輔具借用系統更新，新增 QR Code 取件流程。' }
+            ]
+          },
+          {
+            title: '七、臨床實習協調：',
+            items: [
+              { text: '1.明年度實習醫學生分配完成，共 12 組輪調。' },
+              { text: '2.與合作醫院簽訂 MOU 續約，新增 1 家地區醫院。' }
+            ]
+          }
+        ]
+      }
+    ];
+
+    const meetingList = document.getElementById('meetingList');
+    const meetingTemplate = document.getElementById('meetingTemplate');
+    const sectionTemplate = document.getElementById('sectionTemplate');
+
+    const buildList = (keyword = '') => {
+      meetingList.innerHTML = '';
+      const normalized = keyword.trim();
+
+      meetings
+        .filter(meeting => {
+          if (!normalized) return true;
+          const haystack = [meeting.date, meeting.title, ...(meeting.tags || [])].join(' ');
+          return haystack.includes(normalized);
+        })
+        .forEach(meeting => {
+          const clone = meetingTemplate.content.cloneNode(true);
+          clone.querySelector('[data-field="date"]').textContent = meeting.date;
+          clone.querySelector('[data-field="title"]').textContent = meeting.title;
+
+          const tagBox = clone.querySelector('[data-field="tags"]');
+          meeting.tags?.forEach(tag => {
+            const pill = document.createElement('span');
+            pill.className = 'px-3 py-1 rounded-full bg-[var(--cmh-soft)] text-sm font-semibold text-slate-700 border border-slate-200';
+            pill.textContent = tag;
+            tagBox.appendChild(pill);
+          });
+
+          const sectionBox = clone.querySelector('[data-field="sections"]');
+          meeting.sections.forEach((section, index) => {
+            const sectionClone = sectionTemplate.content.cloneNode(true);
+            sectionClone.querySelector('[data-field="sectionTitle"]').textContent = section.title;
+            const body = sectionClone.querySelector('[data-field="sectionBody"]');
+            const list = document.createElement('ol');
+            list.className = 'space-y-3 list-none';
+
+            section.items.forEach(item => {
+              const li = document.createElement('li');
+              li.className = 'text-base leading-relaxed text-slate-800';
+              const itemText = document.createElement('p');
+              itemText.textContent = item.text;
+              itemText.className = 'font-medium';
+              li.appendChild(itemText);
+
+              if (item.subitems && item.subitems.length) {
+                const nested = document.createElement('ol');
+                nested.className = 'mt-2 space-y-2 pl-5 list-none';
+                item.subitems.forEach(sub => {
+                  const subLi = document.createElement('li');
+                  subLi.textContent = sub;
+                  subLi.className = 'text-slate-700';
+                  nested.appendChild(subLi);
+                });
+                li.appendChild(nested);
+              }
+
+              list.appendChild(li);
+            });
+
+            body.appendChild(list);
+
+            const wrapper = sectionClone.querySelector('[data-toggle]');
+            const chevron = sectionClone.querySelector('[data-field="chevron"]');
+            const content = sectionClone.querySelector('[data-field="sectionBody"]');
+            if (index === 0) {
+              content.classList.remove('hidden');
+              chevron.classList.add('rotate-180');
+            } else {
+              content.classList.add('hidden');
+            }
+
+            wrapper.addEventListener('click', () => {
+              const isHidden = content.classList.contains('hidden');
+              content.classList.toggle('hidden');
+              chevron.classList.toggle('rotate-180', !isHidden);
+            });
+
+            sectionBox.appendChild(sectionClone);
+          });
+
+          meetingList.appendChild(clone);
+        });
+    };
+
+    buildList();
+
+    document.getElementById('searchBtn').addEventListener('click', () => {
+      const keyword = document.getElementById('keyword').value;
+      buildList(keyword);
+    });
+
+    document.getElementById('keyword').addEventListener('keyup', (evt) => {
+      if (evt.key === 'Enter') {
+        buildList(evt.target.value);
+      }
+    });
+  </script>
+</body>
+</html>
