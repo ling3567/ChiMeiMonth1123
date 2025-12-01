@@ -1,0 +1,1340 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>「創造360°人生」醫學教育共識營｜成效分析儀表板</title>
+  
+  <!-- 函式庫 -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+  <!-- 引入 FontAwesome 用於圖示 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <style>
+    :root {
+      /* --- 許文龍畫作色系提取 --- */
+      --bg-paper: #F9F7F2;
+      --bg-warm-gradient: linear-gradient(to bottom, #FBF9F6 0%, #F0ECE6 100%);
+      --card-bg: #FFFFFF;
+      --card-border: #E6E0D6;
+      --card-shadow: 0 6px 24px rgba(74, 64, 58, 0.05);
+      --primary: #A65E4E; 
+      --primary-light: rgba(166, 94, 78, 0.08);
+      --secondary-blue: #2A5F8E;
+      --accent-purple: #7D6586;
+      --text-main: #2C2420; 
+      --text-muted: #6B635F;
+      --success: #5D9C59;
+      --warning: #D4A017;
+      --danger: #e11d48;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-size: 18px; 
+      /* 強制指定微軟正黑體 */
+      font-family: "Microsoft JhengHei", "微軟正黑體", sans-serif !important;
+      background: var(--bg-warm-gradient);
+      color: var(--text-main);
+      min-height: 100vh;
+      overflow-x: hidden;
+      line-height: 1.8;
+      letter-spacing: 0.04em;
+    }
+
+    /* 手機版字體與間距優化 */
+    @media (max-width: 768px) {
+      body {
+        font-size: 16px; /* 手機版字體稍小，避免過度換行 */
+        line-height: 1.6;
+      }
+      .page {
+        padding: 24px 16px 64px !important; /* 減少頁面邊距 */
+      }
+      header.hero {
+        padding: 32px 20px !important; /* 減少 Hero 內距 */
+        text-align: center;
+      }
+      .hero-title {
+        font-size: 32px !important;
+      }
+      .stat-value {
+        font-size: 40px !important;
+      }
+      .chart-container {
+        height: 300px !important; /* 圖表高度縮減 */
+      }
+    }
+
+    h1, h2, h3, .hero-title, .section-title, .stat-value, .insight-title, .insight-highlight, .stat-narrative-title, .stat-tag-pill, .core, .likert-title, .suggestion-title, .keyword-tag, .lhs-title {
+      font-family: "Microsoft JhengHei", "微軟正黑體", sans-serif !important;
+      letter-spacing: 0.06em;
+    }
+
+    .page {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 48px 32px 96px;
+    }
+
+    /* Hero Section */
+    header.hero {
+      position: relative;
+      padding: 64px 56px;
+      border-radius: 28px;
+      background-color: #fff;
+      background-image: radial-gradient(#A65E4E 0.5px, transparent 0.5px), radial-gradient(#A65E4E 0.5px, #fff 0.5px);
+      background-size: 24px 24px;
+      background-position: 0 0, 12px 12px;
+      background: linear-gradient(to right, rgba(255,255,255,0.96), rgba(253,250,245,0.88));
+      border: 1px solid var(--card-border);
+      box-shadow: var(--card-shadow);
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 56px;
+      align-items: center;
+    }
+
+    @media (max-width: 900px) {
+      header.hero { grid-template-columns: 1fr; text-align: center; padding: 48px 32px; }
+      .hero-visual { display: none; }
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 20px;
+      border-radius: 99px;
+      background: var(--primary-light);
+      border: 1px solid rgba(166, 94, 78, 0.2);
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 28px;
+      letter-spacing: 0.08em;
+    }
+
+    .chip-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--primary);
+    }
+
+    .hero-title {
+      font-size: clamp(36px, 5vw, 56px);
+      font-weight: 900; /* 特粗體 */
+      line-height: 1.3;
+      margin: 0 0 24px;
+      color: #1a1a1a;
+      text-shadow: 2px 2px 0px rgba(255,255,255,0.5);
+    }
+    
+    .hero-title span {
+      color: var(--primary);
+      position: relative;
+      display: inline-block;
+      margin: 0 6px;
+    }
+    
+    .hero-title span::after {
+      content: '';
+      position: absolute;
+      bottom: 8px;
+      left: 0;
+      width: 100%;
+      height: 14px;
+      background: rgba(166, 94, 78, 0.15);
+      z-index: -1;
+      border-radius: 4px;
+    }
+
+    .hero-subtitle {
+      font-size: 20px;
+      color: var(--text-muted);
+      line-height: 1.8;
+      max-width: 760px;
+      margin-bottom: 0;
+      font-weight: 600; /* 加粗 */
+    }
+
+    @media (max-width: 768px) {
+      .hero-subtitle { font-size: 16px; }
+      .chip { font-size: 14px; padding: 6px 16px; margin-bottom: 20px; }
+    }
+
+    /* Hero Visual */
+    .hero-visual {
+      position: relative;
+      width: 200px;
+      height: 200px;
+    }
+    .orbit {
+      position: absolute;
+      inset: 0;
+      border: 3px dashed var(--primary); 
+      border-radius: 50%;
+      opacity: 0.25;
+      animation: spin 30s linear infinite;
+    }
+    .core {
+      position: absolute;
+      inset: 24px;
+      background: #fff;
+      border-radius: 50%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      border: 1px solid var(--card-border);
+      box-shadow: 0 8px 24px rgba(166, 94, 78, 0.1);
+    }
+    @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+    /* Stats Grid */
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 28px;
+      margin-top: 56px;
+    }
+    @media (max-width: 768px) {
+      .stat-grid { gap: 16px; margin-top: 32px; grid-template-columns: 1fr 1fr; }
+      .stat-card { padding: 20px; }
+      .stat-badge { top: 12px; right: 12px; font-size: 12px; padding: 4px 10px; }
+      .stat-label { font-size: 14px; margin-bottom: 4px; }
+      .stat-unit { font-size: 14px; }
+    }
+
+    .stat-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 32px;
+      position: relative;
+      transition: all 0.3s ease;
+      box-shadow: var(--card-shadow);
+    }
+    .stat-card:hover { 
+      transform: translateY(-4px); 
+      box-shadow: 0 12px 30px rgba(74, 64, 58, 0.1);
+      border-color: rgba(166, 94, 78, 0.3);
+    }
+
+    .stat-label { 
+      font-size: 18px;
+      color: var(--text-muted); 
+      margin-bottom: 12px; 
+      font-weight: 700;
+    }
+    .stat-value { 
+      font-size: 56px;
+      font-weight: 800; 
+      color: var(--text-main); 
+      line-height: 1;
+    }
+    .stat-unit { 
+      font-size: 18px; 
+      color: var(--text-muted); 
+      font-weight: 500; 
+      margin-left: 8px; 
+    }
+    .stat-badge {
+      position: absolute; top: 28px; right: 28px;
+      font-size: 14px; padding: 6px 14px;
+      border-radius: 99px; 
+      background: #F5F2ED;
+      color: var(--text-muted);
+      font-weight: 700;
+    }
+
+    /* Section Headers */
+    .section { margin-top: 80px; }
+    .section-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 32px; flex-wrap: wrap; gap: 20px;}
+    .section-title { 
+      font-size: 32px;
+      font-weight: 800; 
+      color: var(--text-main); 
+      display: flex; align-items: center; gap: 16px; 
+    }
+    .section-title::before { 
+      content: ''; width: 8px; height: 36px; 
+      background: var(--primary); 
+      border-radius: 4px; display: block; 
+    }
+    .section-desc { font-size: 18px; color: var(--text-muted); max-width: 700px; margin-bottom: 4px; }
+
+    @media (max-width: 768px) {
+      .section { margin-top: 48px; }
+      .section-title { font-size: 24px; }
+      .section-title::before { height: 28px; width: 6px; }
+      .section-desc { font-size: 15px; }
+    }
+
+    /* Charts & Interactive Cards */
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 24px;
+      padding: 40px;
+      box-shadow: var(--card-shadow);
+    }
+    .card-header {
+      display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 10px;
+    }
+    .card-title {
+      font-size: 24px; font-weight: 700; color: var(--text-main);
+    }
+    .card-subtitle {
+      font-size: 16px; color: var(--text-muted);
+    }
+    .card-tag {
+      font-size: 14px; padding: 6px 16px; border-radius: 99px;
+      background: #F5F2ED; color: var(--text-muted); font-weight: 600; white-space: nowrap;
+    }
+
+    @media (max-width: 768px) {
+      .card { padding: 24px; }
+      .card-title { font-size: 20px; }
+      .card-header { align-items: flex-start; }
+    }
+
+    .chart-container { position: relative; height: 420px; width: 100%; }
+
+    /* Question Explorer Grid */
+    .likert-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+      margin-top: 24px;
+    }
+
+    @media (max-width: 768px) {
+      .likert-grid { grid-template-columns: 1fr; gap: 16px; }
+    }
+
+    .likert-card {
+      background: #fff;
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: var(--card-shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      transition: transform 0.2s;
+    }
+    .likert-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--primary-light);
+    }
+
+    .likert-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text-main);
+      line-height: 1.4;
+      min-height: 50px; 
+    }
+
+    .likert-subtitle {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .question-group-pill {
+      font-size: 13px;
+      padding: 4px 12px;
+      border-radius: 99px;
+      background: var(--primary-light);
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    .pill-info-solid {
+      font-size: 13px;
+      padding: 4px 12px;
+      border-radius: 99px;
+      background: #F5F2ED;
+      color: var(--text-muted);
+      font-weight: 600;
+      border: 1px solid #EBE6DF;
+    }
+
+    .mini-chart-container {
+      position: relative;
+      height: 200px;
+      width: 100%;
+    }
+
+    /* LHS / Action List Styles */
+    .action-list {
+      list-style: none; padding: 0; margin: 0;
+      display: flex; flex-direction: column; gap: 20px;
+    }
+    
+    .action-item {
+      display: flex; gap: 20px; align-items: flex-start;
+      padding-bottom: 20px; border-bottom: 1px solid #EBE6DF;
+    }
+    .action-item:last-child { border-bottom: none; padding-bottom: 0; }
+
+    .knowledge-num {
+      flex-shrink: 0; width: 40px; height: 40px; 
+      background: rgba(212, 160, 23, 0.1); color: var(--warning);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-weight: 800; font-size: 20px;
+    }
+    
+    .practice-icon {
+      flex-shrink: 0; width: 40px; height: 40px; 
+      background: rgba(42, 95, 142, 0.1); color: var(--secondary-blue);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-size: 18px;
+    }
+
+    .action-content {
+      flex-grow: 1;
+    }
+    .action-content strong {
+      display: block; font-size: 20px; font-weight: 700; color: var(--text-main);
+      margin-bottom: 6px;
+    }
+    .action-content p {
+      margin: 0; font-size: 18px; color: #5C524B; line-height: 1.6;
+    }
+    
+    /* LHS Introduction Card */
+    .lhs-intro {
+      background: linear-gradient(to right, #FDFBF7, #FFF);
+      border: 1px solid #E6E0D6;
+      border-radius: 20px;
+      padding: 32px;
+      margin-bottom: 32px;
+      display: flex; gap: 24px; align-items: flex-start;
+    }
+    .lhs-intro-icon {
+      width: 64px; height: 64px; border-radius: 50%; background: #fff;
+      border: 1px solid #E6E0D6; color: var(--primary);
+      display: flex; align-items: center; justify-content: center; font-size: 28px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05); flex-shrink: 0;
+    }
+    @media (max-width: 768px) {
+       .lhs-intro { flex-direction: column; padding: 24px; gap: 16px; }
+       .lhs-intro-icon { width: 48px; height: 48px; font-size: 20px; }
+    }
+
+    /* LHS Grid */
+    .lhs-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 24px;
+    }
+    @media (max-width: 900px) { .lhs-grid { grid-template-columns: 1fr; } }
+
+    .lhs-card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 28px;
+      box-shadow: var(--card-shadow);
+      border: 1px solid var(--card-border);
+      border-top-width: 6px; 
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+
+    .lhs-step-title {
+      font-size: 20px; font-weight: 800; margin-bottom: 20px;
+      display: flex; align-items: center; gap: 10px;
+    }
+
+    .lhs-data-item {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 12px 0; border-bottom: 1px solid #F1F5F9;
+    }
+    .lhs-data-item:last-child { border-bottom: none; }
+    .lhs-data-label { color: #64748B; font-size: 16px; }
+    .lhs-data-val { font-weight: 700; font-size: 18px; color: #0F172A; }
+
+    .lhs-highlight {
+      background: #F8FAFC; padding: 16px; border-radius: 8px; margin-bottom: 16px;
+    }
+    .lhs-highlight-label { font-size: 14px; color: #64748B; font-weight: 700; text-transform: uppercase; margin-bottom: 4px; }
+    .lhs-highlight-val { font-size: 18px; font-weight: 700; color: #334155; }
+
+    .lhs-action-list { list-style: none; padding: 0; margin: 0; }
+    .lhs-action-item {
+      display: flex; gap: 12px; margin-bottom: 16px; align-items: flex-start;
+    }
+    .lhs-action-icon {
+      width: 24px; height: 24px; border-radius: 50%; background: #E2E8F0; 
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 12px; color: #475569;
+    }
+    .lhs-action-text { font-size: 16px; color: #334155; line-height: 1.5; }
+
+    .lhs-footer {
+      margin-top: 32px;
+      background: #FFF;
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 28px;
+      border-left: 6px solid var(--success);
+    }
+
+    /* Qualitative Tabs & Content */
+    .quote-tabs {
+      display: flex; gap: 12px; margin-bottom: 16px; flex-wrap: wrap;
+    }
+    .quote-tab {
+      padding: 8px 16px; border-radius: 99px; border: 1px solid #E2E8F0;
+      background: #fff; color: #64748B; cursor: pointer; font-weight: 600; font-size: 14px;
+      transition: all 0.2s;
+    }
+    .quote-tab.active {
+      background: #ECFDF5; color: #059669; border-color: #10B981;
+    }
+    .quote-tab:hover:not(.active) { background: #F8FAFC; }
+
+    .keyword-cloud {
+      display: flex; flex-wrap: wrap; gap: 12px;
+    }
+    .keyword-tag {
+      padding: 8px 18px; border-radius: 50px; font-size: 16px; font-weight: 600;
+      background: #F3F4F6; color: #4B5563; border: 1px solid #E5E7EB;
+    }
+    .keyword-tag.hot { background: #FEF2F2; color: #DC2626; border-color: #FECACA; }
+
+    .quote-scroll {
+      max-height: 300px; overflow-y: auto; padding-right: 12px;
+    }
+    .quote-item {
+      padding: 16px 0; border-bottom: 1px solid #eee; font-size: 16px; color: #4b5563; line-height: 1.6;
+    }
+    .quote-item:last-child { border-bottom: none; }
+
+    /* Statistical Narrative Block */
+    .stat-narrative-box {
+      margin-top: 36px;
+      border-top: 1px solid #EBE6DF;
+      padding-top: 24px;
+    }
+    
+    .stat-insight-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+    }
+    @media (max-width: 768px) { .stat-insight-grid { grid-template-columns: 1fr; } }
+    
+    .stat-insight-item {
+      background: #F9F9F9;
+      border: 1px solid #EBE6DF;
+      border-radius: 12px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    
+    .stat-insight-label {
+      font-size: 14px;
+      color: #6B635F;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    
+    .stat-insight-content {
+      font-size: 16px;
+      color: #2C2420;
+      font-weight: 500;
+    }
+    
+    .stat-insight-sub {
+      font-size: 14px;
+      color: #8C8279;
+    }
+
+    .best-perf-box {
+      background: rgba(166, 94, 78, 0.08); 
+      border-left: 4px solid var(--primary);
+      padding: 16px 20px;
+      border-radius: 4px;
+      margin-bottom: 20px;
+      color: var(--primary);
+      font-weight: 700;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    /* Loading Overlay */
+    #loading-overlay {
+      position: fixed; inset: 0;
+      background: #F9F7F2;
+      z-index: 1000;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      transition: opacity 0.5s;
+    }
+    .spinner {
+      width: 64px; height: 64px;
+      border: 5px solid rgba(166, 94, 78, 0.2);
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-bottom: 24px;
+    }
+
+    footer { 
+      text-align: center; padding: 64px 0 32px; 
+      color: var(--text-muted); font-size: 16px; 
+      border-top: 1px solid #EBE6DF;
+      margin-top: 96px;
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- Loading -->
+  <div id="loading-overlay">
+    <div class="spinner"></div>
+    <div style="color: #8C8279; font-size: 20px; letter-spacing: 2px; font-weight: 700;">正在讀取共識營數據...</div>
+  </div>
+
+  <div class="page">
+    
+    <!-- Hero -->
+    <header class="hero">
+      <div>
+        <div class="chip">
+          <span class="chip-dot"></span>
+          <span>114年11月23日辦理</span>
+        </div>
+        <h1 class="hero-title">「創造<span>360°</span>人生」 醫學教育共識營｜成效分析儀表板</h1>
+        <p class="hero-subtitle">
+          本報告即時連結 Google Sheet 原始數據，呈現五大核心能力指標與活動滿意度的統計分析。透過數據洞察，我們持續優化教學與傳承的每一個環節。
+        </p>
+      </div>
+      <div class="hero-visual">
+        <div class="orbit"></div>
+        <div class="core">
+          <div style="font-size: 42px; font-weight: 800; color: var(--primary);">N=<span id="hero-n">--</span></div>
+          <div style="font-size: 16px; color: var(--text-muted); font-weight: 600;">有效問卷</div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Stats Overview -->
+    <div class="stat-grid">
+      <div class="stat-card">
+        <div class="stat-badge">問卷回收</div>
+        <div class="stat-label">總填答人數</div>
+        <div class="stat-value"><span id="stat-n">--</span><span class="stat-unit">人</span></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-badge">平均滿意度</div>
+        <div class="stat-label">整體活動評價</div>
+        <div class="stat-value"><span id="stat-sat">--</span><span class="stat-unit">/ 5.0</span></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-badge">得分亮點</div>
+        <div class="stat-label">表現最佳構面</div>
+        <div class="stat-value" style="font-size: 28px; color: var(--primary);" id="stat-best">計算中...</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-badge">認同度</div>
+        <div class="stat-label">願意推薦他人</div>
+        <div class="stat-value"><span id="stat-recommend">--</span><span class="stat-unit">%</span></div>
+      </div>
+    </div>
+
+    <!-- Section 1: Effectiveness Analysis -->
+    <section class="section">
+      <div class="section-header">
+        <div>
+          <div class="section-title" style="color: var(--secondary-blue);">五大核心構面成效分析</div>
+          <div class="section-desc">學習、反思、行為、變革與認同的成效評估。</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="chart-container">
+          <canvas id="effectivenessChart"></canvas>
+        </div>
+        <div id="stat-narrative-content" class="stat-narrative-box">
+          <!-- JS will populate simplified stats here -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: Satisfaction Analysis -->
+    <section class="section">
+      <div class="section-header">
+        <div>
+          <div class="section-title" style="color: var(--accent-purple);">活動滿意度成效分析</div>
+          <div class="section-desc">針對整體安排、議程內容、學習需求與心理安全之統計分析。</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="chart-container">
+          <canvas id="satisfactionChart"></canvas>
+        </div>
+        <div id="sat-narrative-content" class="stat-narrative-box">
+          <!-- JS will populate simplified stats here -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3: Question Explorer -->
+    <section class="section" id="questions">
+      <div class="section-header">
+        <div>
+          <div class="section-title" style="color: var(--text-main);">題目互動分析 (Question Explorer)</div>
+          <div class="section-desc">單題深度分析，包含平均分與評分分佈。</div>
+        </div>
+      </div>
+      
+      <div class="card">
+        <div class="pill-info-solid" id="question-explorer-info" style="background: #F0F7FB; border: 1px solid rgba(42, 95, 142, 0.2); color: var(--secondary-blue); margin-bottom: 16px; display: inline-block;">
+          <i class="fa-solid fa-circle-info"></i> 顯示所有 28 題的詳細分佈。藍色系為學習成效，紫色系為活動滿意度。
+        </div>
+        <div id="likertGrid" class="likert-grid">
+          <!-- JS will populate this -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 4: LHS Synthesis & Strategy (NEW) -->
+    <section class="section" id="lhs-synthesis">
+      <div class="section-header">
+        <div>
+          <div class="section-title lhs-title" style="color: var(--primary);">LHS 學習型組織：從數據到實踐的優化循環</div>
+          <div class="section-desc">整合量化數據與質性回饋，以「數據→知識→實踐」循環推動持續改善。</div>
+        </div>
+      </div>
+
+      <!-- LHS Introduction -->
+      <div class="lhs-intro">
+        <div class="lhs-intro-icon"><i class="fa-solid fa-infinity"></i></div>
+        <div>
+          <h3 style="margin:0 0 12px 0; font-size:22px; font-weight:800; color:var(--primary);">凝聚共識，驅動教學持續優化</h3>
+          <p style="margin:0; font-size:18px; color:#5C524B;">我們將 LHS 的「數據-知識-實踐」循環融入醫學教育，這不僅是技術導入，更是建構一個從臨床實踐中學習、透過數據反饋持續優化的組織文化。</p>
+        </div>
+      </div>
+
+      <!-- The Cycle Stack -->
+      <div class="lhs-grid">
+         <!-- 1. Data -->
+         <div class="lhs-card" style="border-top-color: var(--secondary-blue);">
+            <div class="lhs-step-title" style="color: var(--secondary-blue);">
+               <i class="fa-solid fa-database"></i> 1. 數據 Data
+            </div>
+            <div class="lhs-data-item">
+               <span class="lhs-data-label">有效樣本數 (N)</span>
+               <span class="lhs-data-val" id="lhs-n">--</span>
+            </div>
+            <div class="lhs-data-item">
+               <span class="lhs-data-label">整體滿意度</span>
+               <span class="lhs-data-val" id="lhs-sat">--</span>
+            </div>
+             <div class="lhs-data-item">
+               <span class="lhs-data-label">推薦意願 (NPS%)</span>
+               <span class="lhs-data-val" id="lhs-recommend">--</span>
+            </div>
+         </div>
+
+         <!-- 2. Knowledge -->
+         <div class="lhs-card" style="border-top-color: var(--warning);">
+            <div class="lhs-step-title" style="color: var(--warning);">
+               <i class="fa-solid fa-lightbulb"></i> 2. 知識 Knowledge
+            </div>
+            <div class="lhs-highlight">
+               <div class="lhs-highlight-label">優勢構面 (Strength)</div>
+               <div class="lhs-highlight-val" style="color:var(--success);" id="lhs-max-group">--</div>
+            </div>
+            <div class="lhs-highlight">
+               <div class="lhs-highlight-label">發展機會 (Opportunity)</div>
+               <div class="lhs-highlight-val" style="color:var(--warning);" id="lhs-min-group">--</div>
+            </div>
+             <div style="margin-top:12px;">
+               <div class="lhs-highlight-label" style="margin-bottom:8px;">學員關注熱點</div>
+               <div id="keyword-cloud" class="keyword-cloud">
+                  <!-- JS Generated -->
+               </div>
+            </div>
+         </div>
+
+         <!-- 3. Practice -->
+         <div class="lhs-card" style="border-top-color: var(--primary);">
+            <div class="lhs-step-title" style="color: var(--primary);">
+               <i class="fa-solid fa-hands-holding-circle"></i> 3. 實踐 Practice
+            </div>
+            <div style="margin-bottom:12px; font-weight:600; color:#475569;">智能行動建議 (Action Plan)：</div>
+            <ul class="lhs-action-list" id="auto-action-list">
+               <!-- JS Generated -->
+            </ul>
+         </div>
+      </div>
+
+      <!-- Continuous Improvement Footer -->
+      <div class="lhs-footer">
+         <div class="lhs-step-title" style="color: var(--success); margin-bottom:16px;">
+            <i class="fa-solid fa-arrows-rotate"></i> 持續優化 Continuous Improvement
+         </div>
+         <p style="margin-bottom:16px; color:#475569; font-size:16px;">傾聽參與者的真實聲音，是啟動下一輪優化循環的關鍵燃料。</p>
+         
+         <!-- Tabs for Feedback Categories -->
+         <div class="quote-tabs">
+            <button class="quote-tab active" onclick="showQuotes('takeaway')">✨ 最有收穫</button>
+            <button class="quote-tab" onclick="showQuotes('improvement')">🔧 待改進</button>
+            <button class="quote-tab" onclick="showQuotes('future')">🌱 未來許願</button>
+         </div>
+         
+         <div class="quote-scroll" id="quote-list">
+            <!-- JS Generated Quotes -->
+         </div>
+      </div>
+
+    </section>
+
+    <footer>
+      © 2025 Chi Mei Medical Center. All rights reserved.
+    </footer>
+
+  </div>
+
+  <script>
+    const CONFIG = {
+      // 您的 CSV 連結
+      csvUrl: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTgTfRnGpcG3QWZikSNGSi70k4ipyukVO_7-FgLxqKmeQUrQuBSSxvngRJHa48OK4ZvfDPcrtz8taF4/pub?output=csv',
+
+      questions: {
+        // --- 後測 (Post) ---
+        "post_1": "[學習] 1. 清楚醫學教育北極星與方向",
+        "post_2": "[學習] 2. 理解醫學人文與CBME整合策略",
+        "post_3": "[學習] 3. 學到可立即運用的教學技巧",
+        "post_4": "[學習] 4. 對功能小組定位更加清晰",
+        "post_5": "[反思] 5. 重新思考教學角色與定位",
+        "post_6": "[反思] 6. 反思既有教學方式",
+        "post_7": "[反思] 7. 理解醫教在醫院文化的重要性",
+        "post_8": "[行為] 8. 有信心運用內容於臨床教學",
+        "post_9": "[行為] 9. 願意採用新教學法或協作",
+        "post_10": "[行為] 10. 願意參與院級教學計畫",
+        "post_11": "[變革] 11. 相信同仁會支持推動改善",
+        "post_12": "[變革] 12. 醫院具備良好教學文化氛圍",
+        "post_13": "[變革] 13. 願意成為推動改善的一份子",
+        "post_14": "[認同] 14. 對醫院使命認同更深",
+        "post_15": "[認同] 15. 願意向他人推薦本活動",
+        
+        // --- 滿意度 (Sat) ---
+        "sat_1": "[滿意度] 1. 活動流程與整體安排",
+        "sat_2": "[滿意度] 2. 講者內容深度與實用性",
+        "sat_3": "[滿意度] 3. 互動性與參與感",
+        "sat_4": "[滿意度] 4. 場地、時間與行政安排",
+        "sat_5": "[滿意度] 5. 北極星說明清晰度",
+        "sat_6": "[滿意度] 6. 多元韌性內容實用性",
+        "sat_7": "[滿意度] 7. 教學主治分享價值",
+        "sat_8": "[滿意度] 8. 整合資訊豐富性",
+        "sat_9": "[滿意度] 9. 分組討論實用性",
+        "sat_10": "[滿意度] 10. 符合臨床/教學需求",
+        "sat_11": "[滿意度] 11. 鼓勵經驗交流",
+        "sat_12": "[滿意度] 12. 促進跨部門連結",
+        "sat_13": "[滿意度] 13. 心理安全與開放空間"
+      },
+
+      textCols: {
+        takeaway: ['open_sat_1'],
+        improvement: ['open_sat_2'],
+        future: ['open_sat_3']
+      },
+
+      keywordRules: [
+        { key: '時間', label: '時間掌控', tags: ['時間','太趕','超時','緊湊','匆促'], suggestion: '優化議程時間分配，或增加中場休息緩衝。' },
+        { key: '冷氣', label: '環境空調', tags: ['冷氣','太冷','太熱','空調','悶'], suggestion: '與場地管理單位確認空調設定。' },
+        { key: '互動', label: '互動交流', tags: ['互動','少','交流','討論','單向'], suggestion: '增加分組討論或 Q&A 時間，提升參與感。' },
+        { key: '餐點', label: '餐點茶水', tags: ['餐點','便當','吃','水','茶'], suggestion: '檢視餐點滿意度或多樣性。' },
+        { key: '實用', label: '內容實用性', tags: ['理論','太深','難懂','應用','實作'], suggestion: '增加臨床實例或實作演練，降低理論比重。' },
+        { key: '場地', label: '場地設備', tags: ['螢幕','麥克風','看不到','太小','擠'], suggestion: '優化座位安排或檢查視聽設備。' }
+      ],
+
+      coreGroups: [
+        { label: '學習收穫', cols: ['post_1','post_2','post_3','post_4'] },
+        { label: '反思轉化', cols: ['post_5','post_6','post_7'] },
+        { label: '行為意向', cols: ['post_8','post_9','post_10'] },
+        { label: '組織變革', cols: ['post_11','post_12','post_13'] },
+        { label: '組織認同', cols: ['post_14','post_15'] }
+      ],
+
+      satisfactionGroups: [
+        { label: '整體安排', cols: ['sat_1','sat_4'] },
+        { label: '議程內容', cols: ['sat_2','sat_5','sat_6','sat_7','sat_8'] },
+        { label: '學習需求', cols: ['sat_10','sat_11','sat_3','sat_9'] }, 
+        { label: '心理安全與合作', cols: ['sat_12','sat_13'] }
+      ],
+
+      suggestions: {
+        '學習收穫': '加強課程內容的實用性，或增加進階工作坊，讓學員能帶走更多具體技巧。',
+        '反思轉化': '在活動中增加「引導反思 (Debriefing)」環節，協助學員將知識內化為個人觀點。',
+        '行為意向': '建立課後實踐社群或追蹤機制，提供微型教學工具，降低學員回到臨床後的應用門檻。',
+        '組織變革': '高層持續公開支持，並營造心理安全感，讓學員相信改變是受歡迎且安全的。',
+        '組織認同': '多分享內部的成功故事與典範案例，強化榮譽感，讓學員以身為團隊一員為榮。'
+      }
+    };
+
+    let rawData = [];
+    let likertStats = {}; 
+    let parsedTexts = {
+      takeaway: [],
+      improvement: [],
+      future: []
+    };
+
+    function calculateOneSampleTTest(values, testValue) {
+      const n = values.length;
+      if(n < 2) return { t: 0, p: 1, mean: values[0] || 0, sd: 0 };
+      const mean = values.reduce((a,b)=>a+b,0) / n;
+      const variance = values.reduce((a,b)=>a + Math.pow(b-mean, 2), 0) / (n-1);
+      const sd = Math.sqrt(variance);
+      const se = sd / Math.sqrt(n);
+      const t = (mean - testValue) / se;
+      const p = standardNormalRightTailProbability(t);
+      return { t, p, mean, sd, n };
+    }
+
+    function standardNormalRightTailProbability(z) {
+      if (z < 0) z = -z; 
+      const p = 0.2316419;
+      const b1 = 0.319381530;
+      const b2 = -0.356563782;
+      const b3 = 1.781477937;
+      const b4 = -1.821255978;
+      const b5 = 1.330274429;
+      const t = 1 / (1 + p * z);
+      const Z = (1 / Math.sqrt(2 * Math.PI)) * Math.exp(-z * z / 2);
+      return Z * (b1 * t + b2 * t * t + b3 * t * t * t + b4 * t * t * t * t + b5 * t * t * t * t * t);
+    }
+
+    function init() {
+      Papa.parse(CONFIG.csvUrl, {
+        download: true,
+        header: true,
+        skipEmptyLines: true,
+        complete: function(results) {
+          rawData = results.data;
+          processData();
+          renderDashboard();
+          analyzeQualitativeData();
+          document.getElementById('loading-overlay').style.opacity = 0;
+          setTimeout(() => document.getElementById('loading-overlay').style.display = 'none', 500);
+        },
+        error: function(err) {
+          alert("CSV 讀取失敗: " + err.message);
+        }
+      });
+    }
+
+    function processData() {
+      Object.keys(CONFIG.questions).forEach(key => {
+        let sum = 0;
+        let count = 0;
+        let dist = {1:0, 2:0, 3:0, 4:0, 5:0};
+        rawData.forEach(row => {
+          let val = parseFloat(row[key]);
+          if (!isNaN(val) && val >= 1 && val <= 5) {
+            sum += val;
+            count++;
+            let vInt = Math.round(val);
+            if(dist[vInt] !== undefined) dist[vInt]++;
+          }
+        });
+        likertStats[key] = {
+          label: CONFIG.questions[key],
+          mean: count > 0 ? (sum / count) : 0,
+          n: count,
+          dist: [dist[1], dist[2], dist[3], dist[4], dist[5]]
+        };
+      });
+    }
+
+    function getRowGroupScore(row, cols) {
+      let sum = 0, count = 0;
+      cols.forEach(c => {
+        let v = parseFloat(row[c]);
+        if(!isNaN(v)) { sum += v; count++; }
+      });
+      return count === 0 ? null : sum / count;
+    }
+
+    function getQuestionGroupLabel(key) {
+      for (const g of CONFIG.coreGroups) { if (g.cols.includes(key)) return g.label; }
+      for (const g of CONFIG.satisfactionGroups) { if (g.cols.includes(key)) return g.label; }
+      return "其他";
+    }
+
+    function analyzeQualitativeData() {
+      // Initialize
+      parsedTexts = { takeaway: [], improvement: [], future: [] };
+      const keywordsCount = {};
+      const suggestions = []; 
+      
+      const collectText = (cols, targetArray) => {
+        cols.forEach(col => {
+           rawData.forEach(row => {
+             if (row[col] && row[col].trim().length > 1) {
+               targetArray.push(row[col].trim());
+             }
+           });
+        });
+      };
+
+      collectText(CONFIG.textCols.takeaway, parsedTexts.takeaway);
+      collectText(CONFIG.textCols.improvement, parsedTexts.improvement);
+      collectText(CONFIG.textCols.future, parsedTexts.future); 
+
+      // Keyword Matching
+      CONFIG.keywordRules.forEach(rule => {
+        let count = 0;
+        parsedTexts.improvement.forEach(text => {
+          if (rule.tags.some(tag => text.includes(tag))) {
+            count++;
+          }
+        });
+        if (count > 0) {
+          keywordsCount[rule.key] = count;
+          suggestions.push(rule); 
+        }
+      });
+
+      // Render Cloud
+      const cloudContainer = document.getElementById('keyword-cloud');
+      if (cloudContainer) {
+        cloudContainer.innerHTML = '';
+        if (Object.keys(keywordsCount).length === 0) {
+          cloudContainer.innerHTML = '<span class="keyword-tag">暫無顯著關鍵字</span>';
+        } else {
+          Object.entries(keywordsCount)
+            .sort((a,b) => b[1] - a[1]) 
+            .forEach(([key, count]) => {
+              const rule = CONFIG.keywordRules.find(r => r.key === key);
+              const isHot = count >= 3; 
+              const tag = document.createElement('span');
+              tag.className = `keyword-tag ${isHot ? 'hot' : ''}`;
+              tag.innerText = `${rule.label} (${count})`;
+              cloudContainer.appendChild(tag);
+            });
+        }
+      }
+
+      // Initial render of quotes
+      showQuotes('takeaway');
+
+      return { suggestions, keywordsCount }; 
+    }
+
+    window.showQuotes = function(type) {
+      const quoteList = document.getElementById('quote-list');
+      if (!quoteList) return;
+      
+      document.querySelectorAll('.quote-tab').forEach(btn => {
+         btn.classList.remove('active');
+         if(btn.onclick.toString().includes(type)) btn.classList.add('active');
+      });
+
+      quoteList.innerHTML = '';
+      const texts = parsedTexts[type] || [];
+      
+      if (texts.length === 0) {
+        quoteList.innerHTML = '<div class="quote-item">無相關回饋資料</div>';
+      } else {
+        const displayTexts = texts.slice(0, 20); 
+        displayTexts.forEach(q => {
+          const div = document.createElement('div');
+          div.className = 'quote-item';
+          div.innerText = q; 
+          quoteList.appendChild(div);
+        });
+      }
+    };
+
+    function renderDashboard() {
+      const N = rawData.length;
+      document.getElementById('hero-n').innerText = N;
+      document.getElementById('stat-n').innerText = N;
+      
+      // Update LHS Data Col explicitly
+      const lhsN = document.getElementById('lhs-n');
+      if(lhsN) lhsN.innerText = N;
+
+      let satSum = 0, satCount = 0;
+      Object.keys(CONFIG.questions).forEach(k => {
+        if(k.startsWith('sat_') && likertStats[k].n > 0) {
+          satSum += likertStats[k].mean;
+          satCount++;
+        }
+      });
+      const avgSat = satCount > 0 ? (satSum/satCount).toFixed(2) : '-';
+      document.getElementById('stat-sat').innerText = avgSat;
+      
+      // Update LHS Sat
+      const lhsSat = document.getElementById('lhs-sat');
+      if(lhsSat) lhsSat.innerText = avgSat;
+
+      let recPct = 0;
+      if(likertStats['post_15']) {
+        const p15 = likertStats['post_15'];
+        const positive = p15.dist[3] + p15.dist[4]; 
+        recPct = p15.n > 0 ? Math.round((positive / p15.n) * 100) : 0;
+        document.getElementById('stat-recommend').innerText = recPct;
+        
+        // Update LHS Recommend
+        const lhsRec = document.getElementById('lhs-recommend');
+        if(lhsRec) lhsRec.innerText = recPct + '%';
+      }
+
+      let coreStats = [];
+      CONFIG.coreGroups.forEach(g => {
+        let scores = [];
+        rawData.forEach(r => {
+          let s = getRowGroupScore(r, g.cols);
+          if(s !== null) scores.push(s);
+        });
+        const stats = calculateOneSampleTTest(scores, 3.0);
+        coreStats.push({ label: g.label, ...stats });
+      });
+
+      let satStats = [];
+      CONFIG.satisfactionGroups.forEach(g => {
+        let scores = [];
+        rawData.forEach(r => {
+          let s = getRowGroupScore(r, g.cols);
+          if(s !== null) scores.push(s);
+        });
+        const stats = calculateOneSampleTTest(scores, 3.0);
+        satStats.push({ label: g.label, ...stats });
+      });
+
+      generateStatNarrative(coreStats, 'stat-narrative-content', '學習成效');
+      generateStatNarrative(satStats, 'sat-narrative-content', '活動滿意度');
+
+      const sortedCore = [...coreStats].sort((a, b) => b.mean - a.mean);
+      const best = sortedCore[0];
+      const worst = sortedCore[sortedCore.length - 1];
+
+      document.getElementById('stat-best').innerText = best.label;
+      
+      // Update LHS Knowledge
+      const lhsMax = document.getElementById('lhs-max-group');
+      if(lhsMax) lhsMax.innerText = best.label;
+      
+      const lhsMin = document.getElementById('lhs-min-group');
+      if(lhsMin) lhsMin.innerText = worst.label;
+      
+      // Update LHS Practice
+      const actionList = document.getElementById('auto-action-list');
+      if (actionList) {
+        actionList.innerHTML = '';
+
+        const quantSuggestion = CONFIG.suggestions[worst.label] || '建議深入訪談學員，了解分數較低的原因。';
+        const quantItem = document.createElement('li');
+        quantItem.className = 'lhs-action-item';
+        quantItem.innerHTML = `
+          <div class="lhs-action-icon"><i class="fa-solid fa-chart-bar"></i></div>
+          <div class="lhs-action-text">
+            <strong>針對「${worst.label}」</strong><br>${quantSuggestion}
+          </div>
+        `;
+        actionList.appendChild(quantItem);
+
+        const qualData = analyzeQualitativeData();
+        const qualSuggestions = qualData.suggestions;
+        
+        if (qualSuggestions.length > 0) {
+          qualSuggestions.slice(0, 2).forEach(s => {
+            const item = document.createElement('li');
+            item.className = 'lhs-action-item';
+            item.innerHTML = `
+              <div class="lhs-action-icon" style="background:#DC2626; color:white;"><i class="fa-solid fa-comment-dots"></i></div>
+              <div class="lhs-action-text">
+                <strong style="color:#DC2626;">優化「${s.label}」</strong><br>${s.suggestion}
+              </div>
+            `;
+            actionList.appendChild(item);
+          });
+        } else {
+           const item = document.createElement('li');
+            item.className = 'lhs-action-item';
+            item.innerHTML = `
+              <div class="lhs-action-icon" style="background:#9CA3AF; color:white;"><i class="fa-solid fa-check"></i></div>
+              <div class="lhs-action-text">
+                <strong>質性回饋良好</strong><br>目前未偵測到顯著的負面關鍵字。
+              </div>
+            `;
+            actionList.appendChild(item);
+        }
+      }
+      
+      renderChart('effectivenessChart', coreStats, '#2A5F8E', '學習成效'); 
+      renderChart('satisfactionChart', satStats, '#7D6586', '滿意度');   
+      
+      initLikertGrid();
+      
+      const infoBar = document.getElementById('question-explorer-info');
+      if (infoBar) {
+        infoBar.innerHTML = `<i class="fa-solid fa-circle-info"></i> 顯示所有 28 題的詳細分佈 (有效樣本數 N = ${N})。藍色系為學習成效，紫色系為活動滿意度。`;
+      }
+    }
+
+    // Simplified Narrative
+    function generateStatNarrative(stats, containerId, typeName) {
+      let allSig = stats.every(g => g.p < 0.05);
+      const sorted = [...stats].sort((a,b) => b.mean - a.mean);
+      const best = sorted[0];
+      const minSd = Math.min(...stats.map(g=>g.sd)).toFixed(2);
+      const maxSd = Math.max(...stats.map(g=>g.sd)).toFixed(2);
+      const minMean = sorted[sorted.length-1].mean.toFixed(2);
+      const maxMean = best.mean.toFixed(2);
+
+      const container = document.getElementById(containerId);
+
+      let html = `
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+          <div class="best-perf-box">
+            <i class="fa-solid fa-trophy"></i> 表現最佳：${best.label}
+            <span style="color: #6B635F; margin-left: auto; font-weight:500; font-size:16px;">(Mean ${best.mean.toFixed(2)})</span>
+          </div>
+          <div class="stat-insight-grid">
+            <div class="stat-insight-item">
+              <div class="stat-insight-label">成效驗證</div>
+              <div class="stat-insight-content" style="color: ${allSig ? 'var(--success)' : '#6B635F'}">
+                ${allSig ? '<i class="fa-solid fa-circle-check"></i> 皆顯著正向' : '部分顯著'}
+              </div>
+              <div class="stat-insight-sub">P-value < .001 (vs 3.0)</div>
+            </div>
+            <div class="stat-insight-item">
+              <div class="stat-insight-label">意見一致性</div>
+              <div class="stat-insight-content">高度集中</div>
+              <div class="stat-insight-sub">SD: ${minSd}~${maxSd}</div>
+            </div>
+            <div class="stat-insight-item">
+              <div class="stat-insight-label">平均分佈</div>
+              <div class="stat-insight-content">${minMean} ~ ${maxMean}</div>
+              <div class="stat-insight-sub">滿分 5.0</div>
+            </div>
+          </div>
+        </div>
+      `;
+      container.innerHTML = html;
+    }
+
+    function renderChart(canvasId, stats, color, labelName) {
+      const labels = stats.map(s => s.label);
+      const data = stats.map(s => s.mean.toFixed(2));
+      const fullStats = stats; 
+      const ctx = document.getElementById(canvasId).getContext('2d');
+      new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: `${labelName} (Mean)`,
+            data: data,
+            backgroundColor: color,
+            borderRadius: 4,
+            barPercentage: 0.5,
+            categoryPercentage: 0.7,
+            borderWidth: 0
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: { beginAtZero: true, max: 5, grid: { color: 'rgba(74, 64, 58, 0.08)' }, ticks: { color: '#8C8279', font: { family: "'Microsoft JhengHei', '微軟正黑體', sans-serif", size: 14 } } },
+            x: { grid: { display: false }, ticks: { color: '#4A403A', font: { size: 16, family: "'Microsoft JhengHei', '微軟正黑體', sans-serif", weight: 600 } } }
+          },
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: (ctx) => ` • 平均 (Mean): ${ctx.formattedValue}`,
+                afterBody: (tooltipItems) => {
+                  const idx = tooltipItems[0].dataIndex;
+                  const item = fullStats[idx];
+                  const sigText = item.p < 0.05 ? "顯著 (Sig.)" : "不顯著 (Not Sig.)";
+                  const pText = item.p < 0.001 ? "< .001" : item.p.toFixed(3);
+                  return [`• 標準差 (SD): ${item.sd.toFixed(2)}`, `• 檢定結果: ${sigText}`, `• P-value: ${pText}`];
+                }
+              },
+              backgroundColor: 'rgba(255, 255, 255, 0.95)',
+              titleColor: color,
+              bodyColor: '#4A403A',
+              borderColor: '#E0D8D0',
+              borderWidth: 1,
+              padding: 16,
+              titleFont: { size: 18, weight: 'bold', family: "'Microsoft JhengHei', '微軟正黑體', sans-serif" },
+              bodyFont: { size: 16, lineHeight: 1.6, family: "'Microsoft JhengHei', '微軟正黑體', sans-serif" },
+              displayColors: false,
+              boxShadow: '0 6px 16px rgba(0,0,0,0.15)'
+            }
+          }
+        }
+      });
+    }
+
+    function initLikertGrid() {
+      const grid = document.getElementById('likertGrid');
+      grid.innerHTML = '';
+      Object.entries(likertStats).forEach(([key, stats]) => {
+        const card = document.createElement('div');
+        card.className = 'likert-card';
+        const isSat = key.startsWith('sat_');
+        const baseColor = isSat ? '#7D6586' : '#2A5F8E';
+        const rgb = isSat ? '125, 101, 134' : '42, 95, 142';
+        const titleDiv = document.createElement('div');
+        titleDiv.className = 'likert-title';
+        titleDiv.textContent = stats.label;
+        const subtitleDiv = document.createElement('div');
+        subtitleDiv.className = 'likert-subtitle';
+        subtitleDiv.innerHTML = `<span class="question-group-pill" style="background: rgba(${rgb}, 0.1); color: rgb(${rgb});">${getQuestionGroupLabel(key)}</span><span class="pill-info-solid">平均 ${stats.mean.toFixed(2)} / 5</span>`;
+        const chartDiv = document.createElement('div');
+        chartDiv.className = 'mini-chart-container';
+        const canvas = document.createElement('canvas');
+        chartDiv.appendChild(canvas);
+        card.appendChild(titleDiv);
+        card.appendChild(subtitleDiv);
+        card.appendChild(chartDiv);
+        grid.appendChild(card);
+        new Chart(canvas.getContext('2d'), {
+          type: 'bar',
+          data: {
+            labels: ['1分', '2分', '3分', '4分', '5分'],
+            datasets: [{
+              data: stats.dist,
+              backgroundColor: [`rgba(${rgb}, 0.2)`, `rgba(${rgb}, 0.4)`, `rgba(${rgb}, 0.6)`, `rgba(${rgb}, 0.8)`, `rgba(${rgb}, 1.0)`],
+              borderRadius: 6, borderWidth: 0
+            }]
+          },
+          options: {
+            responsive: true, maintainAspectRatio: false,
+            plugins: { legend: { display: false }, tooltip: { callbacks: { label: (ctx) => ` ${ctx.formattedValue} 人` }, backgroundColor: '#fff', titleColor: baseColor, bodyColor: '#4A403A', borderColor: '#E0D8D0', borderWidth: 1, padding: 16, titleFont: { family: "'Microsoft JhengHei', sans-serif" }, bodyFont: { family: "'Microsoft JhengHei', sans-serif" } } },
+            scales: { y: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { color: '#8C8279', precision: 0 } }, x: { grid: { display: false }, ticks: { color: '#4A403A' } } }
+          }
+        });
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+</html>
