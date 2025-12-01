@@ -45,6 +45,30 @@
       letter-spacing: 0.04em;
     }
 
+    /* 手機版優化 */
+    @media (max-width: 768px) {
+      body {
+        font-size: 16px;
+        line-height: 1.6;
+      }
+      .page {
+        padding: 24px 16px 64px !important;
+      }
+      header.hero {
+        padding: 32px 20px !important;
+        text-align: center;
+      }
+      .hero-title {
+        font-size: 30px !important; /* 稍微縮小以適應小螢幕 */
+      }
+      .stat-value {
+        font-size: 40px !important;
+      }
+      .chart-container {
+        height: 300px !important;
+      }
+    }
+
     h1, h2, h3, .hero-title, .section-title, .stat-value, .insight-title, .insight-highlight, .stat-narrative-title, .stat-tag-pill, .core, .likert-title, .suggestion-title, .keyword-tag, .lhs-title {
       font-family: "Microsoft JhengHei", "微軟正黑體", sans-serif !important;
       letter-spacing: 0.06em;
@@ -105,10 +129,15 @@
     .hero-title {
       font-size: clamp(40px, 6vw, 60px);
       font-weight: 900; /* 特粗體 */
-      line-height: 1.3;
+      line-height: 1.4;
       margin: 0 0 24px;
       color: #1a1a1a;
       text-shadow: 2px 2px 0px rgba(255,255,255,0.5);
+    }
+    
+    .hero-title-line {
+      display: inline-block;
+      white-space: nowrap; /* 強制不換行 */
     }
     
     .hero-title span {
@@ -323,24 +352,28 @@
     }
 
     .pill-info-solid {
-      font-size: 13px;
-      padding: 4px 12px;
-      border-radius: 99px;
-      background: #F5F2ED;
+      font-size: 15px; /* 優化手機顯示 */
+      padding: 16px 20px;
+      border-radius: 12px;
+      background: #F0F7FB;
       color: var(--text-muted);
-      font-weight: 600;
-      border: 1px solid #EBE6DF;
+      font-weight: 500;
+      border: 1px solid rgba(42, 95, 142, 0.15);
+      line-height: 1.6;
     }
+    
+    .pill-info-solid i { color: var(--secondary-blue); margin-right: 4px; }
 
     /* Color Legend */
     .color-legend {
-      display: flex; flex-wrap: wrap; gap: 12px; margin-top: 8px;
+      display: flex; flex-wrap: wrap; gap: 12px; margin-top: 12px;
     }
     .legend-item {
-      display: flex; align-items: center; gap: 6px; font-size: 14px; color: #475569; font-weight: 500;
+      display: flex; align-items: center; gap: 6px; font-size: 14px; color: #475569; font-weight: 600;
+      background: #fff; padding: 4px 10px; border-radius: 99px; border: 1px solid #E2E8F0;
     }
     .legend-dot {
-      width: 10px; height: 10px; border-radius: 50%;
+      width: 12px; height: 12px; border-radius: 50%;
     }
 
     .mini-chart-container {
@@ -538,18 +571,27 @@
       color: #8C8279;
     }
 
+    /* 表現最佳區塊優化 */
     .best-perf-box {
       background: rgba(166, 94, 78, 0.08); 
-      border-left: 4px solid var(--primary);
-      padding: 16px 20px;
-      border-radius: 4px;
-      margin-bottom: 20px;
-      color: var(--primary);
-      font-weight: 700;
-      font-size: 18px;
+      border-left: 5px solid var(--primary);
+      padding: 24px;
+      border-radius: 8px;
+      margin-bottom: 24px;
+      color: var(--text-main);
       display: flex;
-      align-items: center;
-      gap: 12px;
+      flex-direction: column; /* 手機版改為垂直排列 */
+      align-items: flex-start;
+      gap: 8px;
+    }
+    .best-perf-title {
+       font-weight: 700; font-size: 18px; color: var(--primary); display: flex; align-items: center; gap: 8px;
+    }
+    .best-perf-value {
+       font-weight: 800; font-size: 26px; color: #2C2420; padding-left: 2px;
+    }
+    .best-perf-stat {
+       font-weight: 500; font-size: 16px; color: #6B635F; margin-top: 4px;
     }
 
     /* Loading Overlay */
@@ -596,8 +638,9 @@
           <span class="chip-dot"></span>
           <span>114年11月23日辦理</span>
         </div>
+        <!-- 優化手機顯示：強制不換行 -->
         <h1 class="hero-title">
-          「創造<span>360°</span>人生」<br>
+          <span class="hero-title-line">「創造<span>360°</span>人生」</span><br>
           醫學教育共識營<br>
           成效分析儀表板
         </h1>
@@ -706,7 +749,7 @@
       </div>
     </section>
 
-    <!-- Section 4: LHS Synthesis & Strategy -->
+    <!-- Section 4: LHS Synthesis & Strategy (NEW) -->
     <section class="section" id="lhs-synthesis">
       <div class="section-header">
         <div>
@@ -806,7 +849,7 @@
   </div>
 
   <script>
-    // Define Palette
+    // Updated Palette with new colors
     const PALETTE = {
       '學習收穫': { hex: '#2A5F8E', rgb: '42, 95, 142' }, 
       '反思轉化': { hex: '#7D6586', rgb: '125, 101, 134' }, 
@@ -859,11 +902,10 @@
         "sat_13": "[滿意度] 13. 心理安全與開放空間"
       },
 
-      // Updated to include future explicitly
       textCols: {
+        improvement: ['open_sat_2', 'open_sat_3'], 
         takeaway: ['open_sat_1'],
-        improvement: ['open_sat_2'], // Only improvement
-        future: ['open_sat_3']         // Future only
+        future: ['open_sat_3']
       },
 
       keywordRules: [
@@ -1220,7 +1262,7 @@
       const infoBar = document.getElementById('question-explorer-info');
       if (infoBar) {
         infoBar.innerHTML = `
-          <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
+          <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px; flex-wrap:wrap;">
             <i class="fa-solid fa-circle-info"></i> 顯示所有 28 題的詳細分佈 (有效樣本數 N = <span id="grid-n">${N}</span>)
           </div>
           <div class="color-legend">
@@ -1251,29 +1293,35 @@
       const container = document.getElementById(containerId);
 
       let html = `
-        <div style="display: flex; flex-direction: column; gap: 12px;">
-          <div class="best-perf-box">
-            <i class="fa-solid fa-trophy"></i> 表現最佳：${best.label}
-            <span style="color: #6B635F; margin-left: auto; font-weight:500; font-size:16px;">(Mean ${best.mean.toFixed(2)})</span>
+        <div class="best-perf-box">
+          <div class="best-perf-title">
+            <i class="fa-solid fa-trophy"></i> 表現最佳：
           </div>
-          <div class="stat-insight-grid">
-            <div class="stat-insight-item">
-              <div class="stat-insight-label">成效驗證</div>
-              <div class="stat-insight-content" style="color: ${allSig ? 'var(--success)' : '#6B635F'}">
-                ${allSig ? '<i class="fa-solid fa-circle-check"></i> 皆顯著正向' : '部分顯著'}
-              </div>
-              <div class="stat-insight-sub">P-value < .001 (vs 3.0)</div>
+          <div class="best-perf-value">
+            ${best.label}
+          </div>
+          <div class="best-perf-stat">
+            (Mean ${best.mean.toFixed(2)})
+          </div>
+        </div>
+        
+        <div class="stat-insight-grid">
+          <div class="stat-insight-item">
+            <div class="stat-insight-label">成效驗證</div>
+            <div class="stat-insight-content" style="color: ${allSig ? 'var(--success)' : '#6B635F'}">
+              ${allSig ? '<i class="fa-solid fa-circle-check"></i> 皆顯著正向' : '部分顯著'}
             </div>
-            <div class="stat-insight-item">
-              <div class="stat-insight-label">意見一致性</div>
-              <div class="stat-insight-content">高度集中</div>
-              <div class="stat-insight-sub">SD: ${minSd}~${maxSd}</div>
-            </div>
-            <div class="stat-insight-item">
-              <div class="stat-insight-label">平均分佈</div>
-              <div class="stat-insight-content">${minMean} ~ ${maxMean}</div>
-              <div class="stat-insight-sub">滿分 5.0</div>
-            </div>
+            <div class="stat-insight-sub">P-value < .001</div>
+          </div>
+          <div class="stat-insight-item">
+            <div class="stat-insight-label">意見一致性</div>
+            <div class="stat-insight-content">高度集中</div>
+            <div class="stat-insight-sub">SD: ${minSd}~${maxSd}</div>
+          </div>
+          <div class="stat-insight-item">
+            <div class="stat-insight-label">平均分佈</div>
+            <div class="stat-insight-content">${minMean} ~ ${maxMean}</div>
+            <div class="stat-insight-sub">滿分 5.0</div>
           </div>
         </div>
       `;
@@ -1282,6 +1330,11 @@
 
     function renderChart(canvasId, stats, colors, labelName) {
       const labels = stats.map(s => s.label);
+      
+      // Auto-wrap logic specifically for mobile
+      // But let's apply generally as the user requested
+      // We can split into max 2 lines if > 2 chars to avoid slant
+      
       const data = stats.map(s => s.mean.toFixed(2));
       const fullStats = stats; 
       
@@ -1305,7 +1358,23 @@
           maintainAspectRatio: false,
           scales: {
             y: { beginAtZero: true, max: 5, grid: { color: 'rgba(74, 64, 58, 0.08)' }, ticks: { color: '#8C8279', font: { family: "'Microsoft JhengHei', '微軟正黑體', sans-serif", size: 14 } } },
-            x: { grid: { display: false }, ticks: { color: '#4A403A', font: { size: 16, family: "'Microsoft JhengHei', '微軟正黑體', sans-serif", weight: 600 } } }
+            x: { 
+               grid: { display: false }, 
+               ticks: { 
+                 color: '#4A403A', 
+                 font: { size: 14, family: "'Microsoft JhengHei', '微軟正黑體', sans-serif", weight: 600 },
+                 maxRotation: 0, // Force horizontal
+                 minRotation: 0,
+                 callback: function(value) {
+                   const label = this.getLabelForValue(value);
+                   // Simple wrapping logic: split every 2 chars if length > 2
+                   if (label.length > 2) {
+                      return label.match(/.{1,2}/g); 
+                   }
+                   return label;
+                 }
+               } 
+            }
           },
           plugins: {
             legend: { display: false },
