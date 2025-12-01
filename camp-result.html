@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>「創造360°人生」醫學教育共識營｜成效分析儀表板</title>
+  <title>「創造360°人生」醫學教育共識營 成效分析儀表板</title>
   
   <!-- 函式庫 -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -43,30 +43,6 @@
       overflow-x: hidden;
       line-height: 1.8;
       letter-spacing: 0.04em;
-    }
-
-    /* 手機版字體與間距優化 */
-    @media (max-width: 768px) {
-      body {
-        font-size: 16px; /* 手機版字體稍小，避免過度換行 */
-        line-height: 1.6;
-      }
-      .page {
-        padding: 24px 16px 64px !important; /* 減少頁面邊距 */
-      }
-      header.hero {
-        padding: 32px 20px !important; /* 減少 Hero 內距 */
-        text-align: center;
-      }
-      .hero-title {
-        font-size: 32px !important;
-      }
-      .stat-value {
-        font-size: 40px !important;
-      }
-      .chart-container {
-        height: 300px !important; /* 圖表高度縮減 */
-      }
     }
 
     h1, h2, h3, .hero-title, .section-title, .stat-value, .insight-title, .insight-highlight, .stat-narrative-title, .stat-tag-pill, .core, .likert-title, .suggestion-title, .keyword-tag, .lhs-title {
@@ -127,7 +103,7 @@
     }
 
     .hero-title {
-      font-size: clamp(36px, 5vw, 56px);
+      font-size: clamp(40px, 6vw, 60px);
       font-weight: 900; /* 特粗體 */
       line-height: 1.3;
       margin: 0 0 24px;
@@ -161,11 +137,6 @@
       max-width: 760px;
       margin-bottom: 0;
       font-weight: 600; /* 加粗 */
-    }
-
-    @media (max-width: 768px) {
-      .hero-subtitle { font-size: 16px; }
-      .chip { font-size: 14px; padding: 6px 16px; margin-bottom: 20px; }
     }
 
     /* Hero Visual */
@@ -203,13 +174,6 @@
       grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
       gap: 28px;
       margin-top: 56px;
-    }
-    @media (max-width: 768px) {
-      .stat-grid { gap: 16px; margin-top: 32px; grid-template-columns: 1fr 1fr; }
-      .stat-card { padding: 20px; }
-      .stat-badge { top: 12px; right: 12px; font-size: 12px; padding: 4px 10px; }
-      .stat-label { font-size: 14px; margin-bottom: 4px; }
-      .stat-unit { font-size: 14px; }
     }
 
     .stat-card {
@@ -314,7 +278,6 @@
       gap: 24px;
       margin-top: 24px;
     }
-
     @media (max-width: 768px) {
       .likert-grid { grid-template-columns: 1fr; gap: 16px; }
     }
@@ -367,6 +330,17 @@
       color: var(--text-muted);
       font-weight: 600;
       border: 1px solid #EBE6DF;
+    }
+
+    /* Color Legend */
+    .color-legend {
+      display: flex; flex-wrap: wrap; gap: 12px; margin-top: 8px;
+    }
+    .legend-item {
+      display: flex; align-items: center; gap: 6px; font-size: 14px; color: #475569; font-weight: 500;
+    }
+    .legend-dot {
+      width: 10px; height: 10px; border-radius: 50%;
     }
 
     .mini-chart-container {
@@ -622,7 +596,11 @@
           <span class="chip-dot"></span>
           <span>114年11月23日辦理</span>
         </div>
-        <h1 class="hero-title">「創造<span>360°</span>人生」 醫學教育共識營｜成效分析儀表板</h1>
+        <h1 class="hero-title">
+          「創造<span>360°</span>人生」<br>
+          醫學教育共識營｜<br>
+          成效分析儀表板
+        </h1>
         <p class="hero-subtitle">
           本報告即時連結 Google Sheet 原始數據，呈現五大核心能力指標與活動滿意度的統計分析。透過數據洞察，我們持續優化教學與傳承的每一個環節。
         </p>
@@ -706,8 +684,21 @@
       </div>
       
       <div class="card">
-        <div class="pill-info-solid" id="question-explorer-info" style="background: #F0F7FB; border: 1px solid rgba(42, 95, 142, 0.2); color: var(--secondary-blue); margin-bottom: 16px; display: inline-block;">
-          <i class="fa-solid fa-circle-info"></i> 顯示所有 28 題的詳細分佈。藍色系為學習成效，紫色系為活動滿意度。
+        <div class="pill-info-solid" id="question-explorer-info" style="background: #F0F7FB; border: 1px solid rgba(42, 95, 142, 0.2); color: var(--secondary-blue); margin-bottom: 16px; display: block;">
+          <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
+            <i class="fa-solid fa-circle-info"></i> 顯示所有 28 題的詳細分佈 (有效樣本數 N = <span id="grid-n">--</span>)
+          </div>
+          <div class="color-legend">
+            <div class="legend-item"><span class="legend-dot" style="background:#2A5F8E"></span>學習收穫</div>
+            <div class="legend-item"><span class="legend-dot" style="background:#7D6586"></span>反思轉化</div>
+            <div class="legend-item"><span class="legend-dot" style="background:#A65E4E"></span>行為意向</div>
+            <div class="legend-item"><span class="legend-dot" style="background:#D4A017"></span>組織變革</div>
+            <div class="legend-item"><span class="legend-dot" style="background:#5D9C59"></span>組織認同</div>
+            <div class="legend-item"><span class="legend-dot" style="background:#546E7A"></span>整體安排</div>
+            <div class="legend-item"><span class="legend-dot" style="background:#8E44AD"></span>議程內容</div>
+            <div class="legend-item"><span class="legend-dot" style="background:#D35400"></span>學習需求</div>
+            <div class="legend-item"><span class="legend-dot" style="background:#27AE60"></span>心理安全與合作</div>
+          </div>
         </div>
         <div id="likertGrid" class="likert-grid">
           <!-- JS will populate this -->
@@ -715,7 +706,7 @@
       </div>
     </section>
 
-    <!-- Section 4: LHS Synthesis & Strategy (NEW) -->
+    <!-- Section 4: LHS Synthesis & Strategy -->
     <section class="section" id="lhs-synthesis">
       <div class="section-header">
         <div>
@@ -815,6 +806,21 @@
   </div>
 
   <script>
+    // Define Palette
+    const PALETTE = {
+      '學習收穫': { hex: '#2A5F8E', rgb: '42, 95, 142' }, 
+      '反思轉化': { hex: '#7D6586', rgb: '125, 101, 134' }, 
+      '行為意向': { hex: '#A65E4E', rgb: '166, 94, 78' }, 
+      '組織變革': { hex: '#D4A017', rgb: '212, 160, 23' }, 
+      '組織認同': { hex: '#5D9C59', rgb: '93, 156, 89' },
+      // New Sat Colors
+      '整體安排': { hex: '#546E7A', rgb: '84, 110, 122' }, 
+      '議程內容': { hex: '#8E44AD', rgb: '142, 68, 173' }, 
+      '學習需求': { hex: '#D35400', rgb: '211, 84, 0' }, 
+      '心理安全與合作': { hex: '#27AE60', rgb: '39, 174, 96' },
+      '滿意度':   { hex: '#0EA5E9', rgb: '14, 165, 233' } // Default fallback
+    };
+
     const CONFIG = {
       // 您的 CSV 連結
       csvUrl: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTgTfRnGpcG3QWZikSNGSi70k4ipyukVO_7-FgLxqKmeQUrQuBSSxvngRJHa48OK4ZvfDPcrtz8taF4/pub?output=csv',
@@ -853,10 +859,11 @@
         "sat_13": "[滿意度] 13. 心理安全與開放空間"
       },
 
+      // Updated to include future explicitly
       textCols: {
         takeaway: ['open_sat_1'],
-        improvement: ['open_sat_2'],
-        future: ['open_sat_3']
+        improvement: ['open_sat_2'], // Only improvement
+        future: ['open_sat_3']         // Future only
       },
 
       keywordRules: [
@@ -877,9 +884,9 @@
       ],
 
       satisfactionGroups: [
-        { label: '整體安排', cols: ['sat_1','sat_4'] },
-        { label: '議程內容', cols: ['sat_2','sat_5','sat_6','sat_7','sat_8'] },
-        { label: '學習需求', cols: ['sat_10','sat_11','sat_3','sat_9'] }, 
+        { label: '整體安排', cols: ['sat_1','sat_2', 'sat_3', 'sat_4'] },
+        { label: '議程內容', cols: ['sat_5','sat_6','sat_7','sat_8', 'sat_9'] },
+        { label: '學習需求', cols: ['sat_10','sat_11'] }, 
         { label: '心理安全與合作', cols: ['sat_12','sat_13'] }
       ],
 
@@ -899,6 +906,27 @@
       improvement: [],
       future: []
     };
+
+    // Helper functions defined at root
+    function getCategoryColor(key) {
+      for (const g of CONFIG.coreGroups) {
+        if (g.cols.includes(key)) return PALETTE[g.label] || PALETTE['滿意度'];
+      }
+      for (const g of CONFIG.satisfactionGroups) {
+        if (g.cols.includes(key)) return PALETTE[g.label] || PALETTE['滿意度'];
+      }
+      return PALETTE['滿意度'];
+    }
+
+    function getCategoryColorForGroup(groupLabel) {
+       return PALETTE[groupLabel] || PALETTE['滿意度'];
+    }
+
+    function getQuestionGroupLabel(key) {
+      for (const g of CONFIG.coreGroups) { if (g.cols.includes(key)) return g.label; }
+      for (const g of CONFIG.satisfactionGroups) { if (g.cols.includes(key)) return g.label; }
+      return "其他";
+    }
 
     function calculateOneSampleTTest(values, testValue) {
       const n = values.length;
@@ -976,12 +1004,6 @@
       return count === 0 ? null : sum / count;
     }
 
-    function getQuestionGroupLabel(key) {
-      for (const g of CONFIG.coreGroups) { if (g.cols.includes(key)) return g.label; }
-      for (const g of CONFIG.satisfactionGroups) { if (g.cols.includes(key)) return g.label; }
-      return "其他";
-    }
-
     function analyzeQualitativeData() {
       // Initialize
       parsedTexts = { takeaway: [], improvement: [], future: [] };
@@ -989,6 +1011,7 @@
       const suggestions = []; 
       
       const collectText = (cols, targetArray) => {
+        if (!cols || !Array.isArray(cols)) return;
         cols.forEach(col => {
            rawData.forEach(row => {
              if (row[col] && row[col].trim().length > 1) {
@@ -1002,7 +1025,7 @@
       collectText(CONFIG.textCols.improvement, parsedTexts.improvement);
       collectText(CONFIG.textCols.future, parsedTexts.future); 
 
-      // Keyword Matching
+      // Keyword Matching only on Improvement texts
       CONFIG.keywordRules.forEach(rule => {
         let count = 0;
         parsedTexts.improvement.forEach(text => {
@@ -1016,8 +1039,8 @@
         }
       });
 
-      // Render Cloud
       const cloudContainer = document.getElementById('keyword-cloud');
+      
       if (cloudContainer) {
         cloudContainer.innerHTML = '';
         if (Object.keys(keywordsCount).length === 0) {
@@ -1071,6 +1094,7 @@
       const N = rawData.length;
       document.getElementById('hero-n').innerText = N;
       document.getElementById('stat-n').innerText = N;
+      document.getElementById('grid-n').innerText = N;
       
       // Update LHS Data Col explicitly
       const lhsN = document.getElementById('lhs-n');
@@ -1184,14 +1208,33 @@
         }
       }
       
-      renderChart('effectivenessChart', coreStats, '#2A5F8E', '學習成效'); 
-      renderChart('satisfactionChart', satStats, '#7D6586', '滿意度');   
+      // Update Summary Charts with distinct colors
+      const coreColors = coreStats.map(s => getCategoryColorForGroup(s.label).hex);
+      renderChart('effectivenessChart', coreStats, coreColors, '學習成效'); 
+      
+      const satColors = satStats.map(s => getCategoryColorForGroup(s.label).hex);
+      renderChart('satisfactionChart', satStats, satColors, '滿意度');   
       
       initLikertGrid();
       
       const infoBar = document.getElementById('question-explorer-info');
       if (infoBar) {
-        infoBar.innerHTML = `<i class="fa-solid fa-circle-info"></i> 顯示所有 28 題的詳細分佈 (有效樣本數 N = ${N})。藍色系為學習成效，紫色系為活動滿意度。`;
+        infoBar.innerHTML = `
+          <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
+            <i class="fa-solid fa-circle-info"></i> 顯示所有 28 題的詳細分佈 (有效樣本數 N = <span id="grid-n">${N}</span>)
+          </div>
+          <div class="color-legend">
+            <div class="legend-item"><span class="legend-dot" style="background:#2A5F8E"></span>學習收穫</div>
+            <div class="legend-item"><span class="legend-dot" style="background:#7D6586"></span>反思轉化</div>
+            <div class="legend-item"><span class="legend-dot" style="background:#A65E4E"></span>行為意向</div>
+            <div class="legend-item"><span class="legend-dot" style="background:#D4A017"></span>組織變革</div>
+            <div class="legend-item"><span class="legend-dot" style="background:#5D9C59"></span>組織認同</div>
+            <div class="legend-item"><span class="legend-dot" style="background:#546E7A"></span>整體安排</div>
+            <div class="legend-item"><span class="legend-dot" style="background:#8E44AD"></span>議程內容</div>
+            <div class="legend-item"><span class="legend-dot" style="background:#D35400"></span>學習需求</div>
+            <div class="legend-item"><span class="legend-dot" style="background:#27AE60"></span>心理安全與合作</div>
+          </div>
+        `;
       }
     }
 
@@ -1237,10 +1280,11 @@
       container.innerHTML = html;
     }
 
-    function renderChart(canvasId, stats, color, labelName) {
+    function renderChart(canvasId, stats, colors, labelName) {
       const labels = stats.map(s => s.label);
       const data = stats.map(s => s.mean.toFixed(2));
       const fullStats = stats; 
+      
       const ctx = document.getElementById(canvasId).getContext('2d');
       new Chart(ctx, {
         type: 'bar',
@@ -1249,7 +1293,7 @@
           datasets: [{
             label: `${labelName} (Mean)`,
             data: data,
-            backgroundColor: color,
+            backgroundColor: colors, 
             borderRadius: 4,
             barPercentage: 0.5,
             categoryPercentage: 0.7,
@@ -1277,7 +1321,7 @@
                 }
               },
               backgroundColor: 'rgba(255, 255, 255, 0.95)',
-              titleColor: color,
+              titleColor: '#4A403A', // Default dark color since background colors vary
               bodyColor: '#4A403A',
               borderColor: '#E0D8D0',
               borderWidth: 1,
@@ -1298,15 +1342,20 @@
       Object.entries(likertStats).forEach(([key, stats]) => {
         const card = document.createElement('div');
         card.className = 'likert-card';
-        const isSat = key.startsWith('sat_');
-        const baseColor = isSat ? '#7D6586' : '#2A5F8E';
-        const rgb = isSat ? '125, 101, 134' : '42, 95, 142';
+        
+        const colorConfig = getCategoryColor(key);
+        const rgb = colorConfig.rgb;
+        const hex = colorConfig.hex;
+
         const titleDiv = document.createElement('div');
         titleDiv.className = 'likert-title';
         titleDiv.textContent = stats.label;
         const subtitleDiv = document.createElement('div');
         subtitleDiv.className = 'likert-subtitle';
-        subtitleDiv.innerHTML = `<span class="question-group-pill" style="background: rgba(${rgb}, 0.1); color: rgb(${rgb});">${getQuestionGroupLabel(key)}</span><span class="pill-info-solid">平均 ${stats.mean.toFixed(2)} / 5</span>`;
+        
+        // Apply color to pill
+        subtitleDiv.innerHTML = `<span class="question-group-pill" style="background: rgba(${rgb}, 0.1); color: ${hex};">${getQuestionGroupLabel(key)}</span><span class="pill-info-solid">平均 ${stats.mean.toFixed(2)} / 5</span>`;
+        
         const chartDiv = document.createElement('div');
         chartDiv.className = 'mini-chart-container';
         const canvas = document.createElement('canvas');
@@ -1315,19 +1364,21 @@
         card.appendChild(subtitleDiv);
         card.appendChild(chartDiv);
         grid.appendChild(card);
+        
         new Chart(canvas.getContext('2d'), {
           type: 'bar',
           data: {
             labels: ['1分', '2分', '3分', '4分', '5分'],
             datasets: [{
               data: stats.dist,
+              // Gradient opacity using the specific color for this category
               backgroundColor: [`rgba(${rgb}, 0.2)`, `rgba(${rgb}, 0.4)`, `rgba(${rgb}, 0.6)`, `rgba(${rgb}, 0.8)`, `rgba(${rgb}, 1.0)`],
               borderRadius: 6, borderWidth: 0
             }]
           },
           options: {
             responsive: true, maintainAspectRatio: false,
-            plugins: { legend: { display: false }, tooltip: { callbacks: { label: (ctx) => ` ${ctx.formattedValue} 人` }, backgroundColor: '#fff', titleColor: baseColor, bodyColor: '#4A403A', borderColor: '#E0D8D0', borderWidth: 1, padding: 16, titleFont: { family: "'Microsoft JhengHei', sans-serif" }, bodyFont: { family: "'Microsoft JhengHei', sans-serif" } } },
+            plugins: { legend: { display: false }, tooltip: { callbacks: { label: (ctx) => ` ${ctx.formattedValue} 人` }, backgroundColor: '#fff', titleColor: hex, bodyColor: '#4A403A', borderColor: '#E0D8D0', borderWidth: 1, padding: 16, titleFont: { family: "'Microsoft JhengHei', sans-serif" }, bodyFont: { family: "'Microsoft JhengHei', sans-serif" } } },
             scales: { y: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { color: '#8C8279', precision: 0 } }, x: { grid: { display: false }, ticks: { color: '#4A403A' } } }
           }
         });
